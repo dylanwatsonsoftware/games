@@ -1,0 +1,2533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Charlie's Beastmaster Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #090b12;
+      color: #f8fafc;
+      font-family: 'Press Start 2P', monospace;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #game-wrapper {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at center, #141a29 0%, #07090f 100%);
+    }
+    #phaser-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #phaser-container canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      box-shadow: 0 0 40px rgba(0, 229, 255, 0.18), 0 0 0 3px #273043;
+      border-radius: 6px;
+    }
+
+    /* Overlay Screens */
+    .ui-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(7, 10, 18, 0.84);
+      backdrop-filter: blur(3px);
+      z-index: 20;
+      padding: 16px;
+    }
+    .hidden {
+      display: none !important;
+    }
+
+    .pixel-panel {
+      background: #131926;
+      border: 4px solid #3c4a64;
+      box-shadow: inset 0 0 0 4px #0c1018, 0 12px 32px rgba(0,0,0,0.85);
+      border-radius: 8px;
+      padding: 20px 24px;
+      max-width: 920px;
+      width: 100%;
+      max-height: 94vh;
+      overflow-y: auto;
+    }
+
+    .title-banner {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .title-banner h1 {
+      font-size: clamp(16px, 2.7vw, 28px);
+      color: #ff9f1c;
+      text-shadow: 3px 3px 0 #7c2d12, 0 0 18px rgba(255, 159, 28, 0.5);
+      margin: 0 0 8px 0;
+      line-height: 1.3;
+    }
+    .subtitle-tag {
+      display: inline-block;
+      background: #1e293b;
+      border: 2px solid #38bdf8;
+      color: #38bdf8;
+      font-size: clamp(9px, 1.3vw, 11px);
+      padding: 6px 12px;
+      border-radius: 4px;
+    }
+
+    .setup-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 760px) {
+      .setup-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .section-box {
+      background: #0d121c;
+      border: 3px solid #2b364c;
+      border-radius: 6px;
+      padding: 14px;
+    }
+    .section-title {
+      font-size: 11px;
+      color: #38bdf8;
+      margin: 0 0 12px 0;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Country Grid */
+    .country-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .country-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #182030;
+      border: 3px solid #2e3b52;
+      color: #e2e8f0;
+      padding: 8px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      transition: transform 0.08s, border-color 0.12s, background 0.12s;
+      text-align: left;
+    }
+    .country-btn:hover {
+      background: #212c42;
+      border-color: #64748b;
+    }
+    .country-btn.selected {
+      background: #1d3557;
+      border-color: #22c55e;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.35);
+      color: #ffffff;
+    }
+    .flag-canvas {
+      width: 28px;
+      height: 18px;
+      image-rendering: pixelated;
+      border: 1px solid #000;
+      flex-shrink: 0;
+    }
+
+    /* Athlete Grid */
+    .athlete-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    @media (max-width: 480px) {
+      .athlete-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .athlete-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #182030;
+      border: 3px solid #2e3b52;
+      color: #e2e8f0;
+      padding: 12px 6px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      transition: transform 0.08s, border-color 0.12s;
+    }
+    .athlete-btn:hover {
+      background: #212c42;
+    }
+    .athlete-btn.selected {
+      background: #1a2e26;
+      border-color: #22c55e;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+    }
+    .portrait-canvas {
+      width: 48px;
+      height: 48px;
+      image-rendering: pixelated;
+      background: #0a0e17;
+      border: 2px solid #475569;
+    }
+
+    /* Rules & Round Info */
+    .rules-strip {
+      background: #101622;
+      border: 2px solid #334155;
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: 9px;
+      line-height: 1.7;
+      color: #cbd5e1;
+      margin-bottom: 16px;
+    }
+    .rules-strip span.hl-yellow { color: #facc15; }
+    .rules-strip span.hl-cyan { color: #38bdf8; }
+    .rules-strip span.hl-red { color: #f87171; }
+    .rules-strip span.hl-green { color: #4ade80; }
+
+    /* Arcade Buttons */
+    .arcade-btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(11px, 1.5vw, 14px);
+      padding: 14px 22px;
+      border-radius: 6px;
+      border: 3px solid #fff;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: transform 0.08s, filter 0.12s;
+      box-shadow: 0 5px 0 #090d16;
+    }
+    .arcade-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #090d16;
+    }
+    .arcade-btn:hover {
+      filter: brightness(1.1);
+    }
+    .btn-green {
+      background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
+      border-color: #86efac;
+      color: #ffffff;
+      text-shadow: 2px 2px 0 #052e16;
+    }
+    .btn-amber {
+      background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%);
+      border-color: #fde68a;
+      color: #ffffff;
+      text-shadow: 2px 2px 0 #451a03;
+    }
+    .btn-red {
+      background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%);
+      border-color: #fca5a5;
+      color: #ffffff;
+      text-shadow: 2px 2px 0 #450a0a;
+    }
+    .btn-cyan {
+      background: linear-gradient(180deg, #06b6d4 0%, #0e7490 100%);
+      border-color: #a5f3fc;
+      color: #ffffff;
+      text-shadow: 2px 2px 0 #083344;
+    }
+
+    /* Scoreboard Rows */
+    .score-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 10px;
+    }
+    .score-table td {
+      padding: 9px 10px;
+      border-bottom: 2px solid #1e293b;
+    }
+    .score-table td:last-child {
+      text-align: right;
+      color: #facc15;
+    }
+    .score-table tr.total-row td {
+      border-top: 3px solid #475569;
+      border-bottom: none;
+      font-size: 13px;
+      color: #4ade80;
+      padding-top: 14px;
+    }
+
+    /* Touch Controls for Mobile/Tablet */
+    #touch-controls {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      display: none;
+      justify-content: space-between;
+      pointer-events: none;
+      z-index: 15;
+    }
+    @media (pointer: coarse) {
+      #touch-controls {
+        display: flex;
+      }
+    }
+    .touch-cluster {
+      display: flex;
+      gap: 12px;
+      pointer-events: auto;
+    }
+    .touch-btn {
+      width: 62px;
+      height: 62px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 3px solid rgba(56, 189, 248, 0.75);
+      border-radius: 12px;
+      color: #f8fafc;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+    }
+    .touch-btn:active, .touch-btn.pressed {
+      background: rgba(56, 189, 248, 0.45);
+      transform: scale(0.95);
+    }
+
+    /* Top Right Quick Audio / Do-Over Floating Controls */
+    #hud-top-actions {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      display: flex;
+      gap: 8px;
+      z-index: 16;
+    }
+    .mini-hud-btn {
+      background: rgba(15, 23, 42, 0.88);
+      border: 2px solid #475569;
+      color: #e2e8f0;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      padding: 8px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .mini-hud-btn:hover {
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+    .mini-hud-btn.danger {
+      border-color: #f59e0b;
+      color: #fbbf24;
+    }
+    .mini-hud-btn.danger:hover {
+      background: rgba(180, 83, 9, 0.35);
+    }
+  </style>
+</head>
+<body>
+  <div id="game-wrapper">
+    <div id="phaser-container"></div>
+
+    <!-- Floating Quick Controls during active run -->
+    <div id="hud-top-actions" class="hidden">
+      <button id="btn-manual-doover" class="mini-hud-btn danger" title="Trigger Extra Life Do-Over (2nd run counts no matter what!)">DO-OVER (1 LEFT)</button>
+      <button id="btn-mute-toggle" class="mini-hud-btn">SFX: ON</button>
+    </div>
+
+    <!-- Mobile Touch Pad -->
+    <div id="touch-controls">
+      <div class="touch-cluster">
+        <button class="touch-btn" id="touch-left">◀</button>
+        <button class="touch-btn" id="touch-right">▶</button>
+      </div>
+      <div class="touch-cluster">
+        <button class="touch-btn" id="touch-up">▲</button>
+        <button class="touch-btn" id="touch-jump">JMP</button>
+      </div>
+    </div>
+
+    <!-- PRE-RUN SETUP / CHARACTER & COUNTRY SELECT -->
+    <div id="screen-setup" class="ui-overlay">
+      <div class="pixel-panel">
+        <div class="title-banner">
+          <h1>CHARLIE'S BEASTMASTER GAME</h1>
+          <div class="subtitle-tag" id="setup-round-badge">ROUND 1 • QUALIFYING TARGET: 85 PTS</div>
+        </div>
+
+        <div class="setup-grid">
+          <!-- Country Select -->
+          <div class="section-box">
+            <div class="section-title">
+              <span>1. SELECT COUNTRY TEAM</span>
+              <span id="selected-country-code" style="color:#4ade80;">AUS</span>
+            </div>
+            <div class="country-grid" id="country-grid"></div>
+          </div>
+
+          <!-- Character Select -->
+          <div class="section-box">
+            <div class="section-title">
+              <span>2. FAMILY SELECT</span>
+              <span id="selected-athlete-name" style="color:#4ade80;">CHARLIE</span>
+            </div>
+            <div class="athlete-grid" id="athlete-grid"></div>
+          </div>
+        </div>
+
+        <div class="rules-strip">
+          <div>• <span class="hl-cyan">TRIANGLE BUTTONS:</span> +5 PTS each across upper & lower stunt routes.</div>
+          <div>• <span class="hl-yellow">2 MEGA THRUSTERS:</span> Hit them fast! Faster arrival = bigger speed bonus + boost!</div>
+          <div>• <span class="hl-red">EXTRA LIFE / DO-OVER:</span> 1 retry per round—but your <span class="hl-red">2ND RUN COUNTS NO MATTER WHAT!</span></div>
+          <div>• <span class="hl-green">CONTROLS:</span> A/D or ◀/▶ Run • W/▲ Climb Ropes & Ladders • SPACE/W/▲ Jump</div>
+        </div>
+
+        <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap;">
+          <button id="btn-start-run" class="arcade-btn btn-green">ENTER THE ARENA ▶</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MID-ROUND DECISION MODAL (After Run 1 completes or falls in) -->
+    <div id="screen-run1-decision" class="ui-overlay hidden">
+      <div class="pixel-panel" style="max-width: 680px;">
+        <div class="title-banner">
+          <h1 id="decision-title" style="color:#38bdf8;">RUN 1 COMPLETE!</h1>
+          <div class="subtitle-tag" id="decision-subtitle">EXTRA LIFE AVAILABLE</div>
+        </div>
+
+        <table class="score-table" id="decision-score-table"></table>
+
+        <div class="rules-strip" style="border-color:#f59e0b; background:#1c140d;">
+          <strong style="color:#fbbf24;">⚠️ BEASTMASTER DO-OVER RULE:</strong><br/>
+          If you use your Extra Life Do-Over, <span class="hl-red">RUN 1 IS ERASED</span> and your <span class="hl-red">2ND RUN COUNTS NO MATTER WHAT</span>—even if you score lower or fall in the water!
+        </div>
+
+        <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-top:14px;">
+          <button id="btn-lock-run1" class="arcade-btn btn-green">LOCK IN SCORE ✔</button>
+          <button id="btn-take-doover" class="arcade-btn btn-amber">USE DO-OVER (RISKY!) ↻</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINAL ROUND SUMMARY MODAL -->
+    <div id="screen-round-end" class="ui-overlay hidden">
+      <div class="pixel-panel" style="max-width: 680px;">
+        <div class="title-banner">
+          <h1 id="round-end-title">ROUND 1 RESULTS</h1>
+          <div class="subtitle-tag" id="round-end-badge">TEAM AUSTRALIA • CHARLIE</div>
+        </div>
+
+        <table class="score-table" id="final-score-table"></table>
+
+        <div id="round-verdict-box" class="rules-strip" style="text-align:center; font-size:10px;"></div>
+
+        <div id="family-leaderboard-box" class="section-box" style="margin-top:10px; padding:10px 12px;">
+          <div class="section-title" style="margin-bottom:8px;">
+            <span>🏆 FAMILY & COUNTRY HALL OF FAME</span>
+          </div>
+          <div id="family-leaderboard-list" style="font-size:8px; line-height:1.9; color:#cbd5e1;"></div>
+        </div>
+
+        <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-top:14px;">
+          <button id="btn-next-round" class="arcade-btn btn-green">NEXT ROUND (HARDER!) ▶</button>
+          <button id="btn-restart-campaign" class="arcade-btn btn-cyan">NEW TOURNAMENT ↺</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/**
+ * ============================================================================
+ * CHARLIE'S BEASTMASTER GAME
+ * Built with Phaser 3 + Procedural 16-bit Pixel Art + Web Audio Chiptune Synth
+ * ============================================================================
+ */
+
+// ----------------------------------------------------------------------------
+// 1. RETRO WEB AUDIO SYNTHESIZER (No external audio files required)
+// ----------------------------------------------------------------------------
+class RetroAudio {
+  constructor() {
+    this.ctx = null;
+    this.muted = false;
+  }
+
+  ensureContext() {
+    if (!this.ctx) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AudioCtx();
+    }
+    if (this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+  }
+
+  toggleMute() {
+    this.muted = !this.muted;
+    return this.muted;
+  }
+
+  playTone(freq, endFreq, duration, type = 'square', gainVal = 0.14, delay = 0) {
+    if (this.muted) return;
+    this.ensureContext();
+    const now = this.ctx.currentTime + delay;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, now);
+    if (endFreq !== freq) {
+      osc.frequency.exponentialRampToValueAtTime(Math.max(20, endFreq), now + duration);
+    }
+    gain.gain.setValueAtTime(gainVal, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + duration);
+  }
+
+  playNoise(duration, gainVal = 0.18, filterFreq = 900) {
+    if (this.muted) return;
+    this.ensureContext();
+    const now = this.ctx.currentTime;
+    const bufferSize = Math.floor(this.ctx.sampleRate * duration);
+    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+    const noise = this.ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(filterFreq, now);
+
+    const gain = this.ctx.createGain();
+    gain.gain.setValueAtTime(gainVal, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+    noise.start(now);
+  }
+
+  jump() {
+    this.playTone(190, 480, 0.14, 'square', 0.11);
+  }
+
+  springBounce() {
+    this.playTone(150, 740, 0.24, 'sawtooth', 0.15);
+    this.playTone(300, 920, 0.20, 'square', 0.09, 0.04);
+  }
+
+  triangleHit() {
+    this.playTone(660, 660, 0.07, 'square', 0.12, 0);
+    this.playTone(990, 1320, 0.14, 'triangle', 0.15, 0.06);
+  }
+
+  megaThruster() {
+    this.playNoise(0.38, 0.22, 1400);
+    this.playTone(220, 440, 0.12, 'sawtooth', 0.16, 0);
+    this.playTone(330, 660, 0.14, 'sawtooth', 0.16, 0.09);
+    this.playTone(550, 1100, 0.25, 'square', 0.18, 0.18);
+  }
+
+  splash() {
+    this.playNoise(0.55, 0.28, 650);
+    this.playTone(240, 65, 0.42, 'sawtooth', 0.16);
+  }
+
+  buzzer() {
+    // Classic Beastmaster finish horn + victory arpeggio
+    this.playTone(140, 135, 0.35, 'sawtooth', 0.2, 0);
+    this.playTone(523.25, 523.25, 0.12, 'square', 0.14, 0.18);
+    this.playTone(659.25, 659.25, 0.12, 'square', 0.14, 0.30);
+    this.playTone(783.99, 783.99, 0.12, 'square', 0.14, 0.42);
+    this.playTone(1046.5, 1046.5, 0.32, 'square', 0.18, 0.54);
+  }
+
+  doOverWarning() {
+    this.playTone(440, 311, 0.16, 'sawtooth', 0.15, 0);
+    this.playTone(311, 220, 0.24, 'sawtooth', 0.15, 0.16);
+  }
+}
+
+const SFX = new RetroAudio();
+
+// ----------------------------------------------------------------------------
+// 2. COUNTRIES & ATHLETE ROSTER DATA
+// ----------------------------------------------------------------------------
+const COUNTRIES = [
+  { code: 'AUS', name: 'AUSTRALIA', primary: '#15803d', secondary: '#facc15', flagType: 'aus' },
+  { code: 'USA', name: 'USA',       primary: '#1d4ed8', secondary: '#ef4444', flagType: 'usa' },
+  { code: 'JPN', name: 'JAPAN',     primary: '#f8fafc', secondary: '#dc2626', flagType: 'jpn' },
+  { code: 'GBR', name: 'UK',        primary: '#1e3a8a', secondary: '#ef4444', flagType: 'gbr' },
+  { code: 'BRA', name: 'BRAZIL',    primary: '#16a34a', secondary: '#facc15', flagType: 'bra' },
+  { code: 'GER', name: 'GERMANY',   primary: '#18181b', secondary: '#eab308', flagType: 'ger' },
+  { code: 'CAN', name: 'CANADA',    primary: '#dc2626', secondary: '#f8fafc', flagType: 'can' },
+  { code: 'KOR', name: 'S. KOREA',  primary: '#f8fafc', secondary: '#2563eb', flagType: 'kor' }
+];
+
+const ATHLETES = [
+  {
+    id: 0,
+    name: 'CHARLIE',
+    role: '7YR BOY',
+    type: 'kid',
+    heightScale: 0.84,
+    skin: '#f1c27d',
+    hair: '#5c3818',
+    hairStyle: 'spiky',
+    headband: true,
+    beard: false
+  },
+  {
+    id: 1,
+    name: 'SAMIRA',
+    role: '5YR GIRL',
+    type: 'kid',
+    heightScale: 0.76,
+    skin: '#d99b66',
+    hair: '#1c1917',
+    hairStyle: 'pigtails',
+    headband: false,
+    beard: false
+  },
+  {
+    id: 2,
+    name: 'FREDDIE',
+    role: '3YR BOY',
+    type: 'toddler',
+    heightScale: 0.68,
+    skin: '#ffdbac',
+    hair: '#855832',
+    hairStyle: 'curly',
+    headband: false,
+    beard: false
+  },
+  {
+    id: 3,
+    name: 'DYLAN',
+    role: 'DAD',
+    type: 'adult',
+    heightScale: 1.0,
+    skin: '#eab676',
+    hair: '#4a2e16',
+    hairStyle: 'crop',
+    headband: false,
+    beard: true
+  },
+  {
+    id: 4,
+    name: 'THERESA',
+    role: 'MUM',
+    type: 'adult',
+    heightScale: 0.95,
+    skin: '#f3c697',
+    hair: '#3b2314',
+    hairStyle: 'ponytail',
+    headband: false,
+    beard: false
+  },
+  {
+    id: 5,
+    name: 'FRANKIE',
+    role: 'DACHSHUND',
+    type: 'dog',
+    heightScale: 0.65,
+    coatBlack: '#14171f',
+    coatTan: '#c27838',
+    furHighlight: '#2c3342'
+  }
+];
+
+// Global Tournament State
+const GameState = {
+  round: 1,
+  totalTournamentScore: 0,
+  selectedCountry: COUNTRIES[0],
+  selectedAthlete: ATHLETES[0],
+  attemptNumber: 1,       // 1 = First Run, 2 = Extra Life Do-Over Run
+  run1Data: null,         // Saved Run 1 result if completed cleanly
+  finalRunData: null,
+  leaderboard: []         // Tracks best runs by family member & country
+};
+
+// Render mini pixel flag onto any canvas
+function drawPixelFlag(canvas, flagType) {
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  const w = canvas.width;
+  const h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+
+  if (flagType === 'aus') {
+    ctx.fillStyle = '#00247d';
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 2, 7, 2);
+    ctx.fillRect(3, 0, 2, 6);
+    ctx.fillStyle = '#cf142b';
+    ctx.fillRect(0, 2.5, 7, 1);
+    ctx.fillRect(3.5, 0, 1, 6);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(3, 8, 2, 2);
+    ctx.fillRect(10, 3, 1, 1);
+    ctx.fillRect(12, 5, 1, 1);
+    ctx.fillRect(9, 6, 1, 1);
+    ctx.fillRect(11, 8, 1, 1);
+  } else if (flagType === 'usa') {
+    for (let y = 0; y < h; y++) {
+      ctx.fillStyle = y % 2 === 0 ? '#dc2626' : '#ffffff';
+      ctx.fillRect(0, y, w, 1);
+    }
+    ctx.fillStyle = '#1e3a8a';
+    ctx.fillRect(0, 0, 7, 6);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(1, 1, 1, 1);
+    ctx.fillRect(4, 2, 1, 1);
+    ctx.fillRect(2, 4, 1, 1);
+  } else if (flagType === 'jpn') {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#dc2626';
+    ctx.beginPath();
+    ctx.arc(w / 2, h / 2, 3, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (flagType === 'gbr') {
+    ctx.fillStyle = '#012169';
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 4, w, 3);
+    ctx.fillRect(6, 0, 3, h);
+    ctx.fillStyle = '#c8102e';
+    ctx.fillRect(0, 5, w, 1);
+    ctx.fillRect(7, 0, 1, h);
+  } else if (flagType === 'bra') {
+    ctx.fillStyle = '#16a34a';
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#facc15';
+    ctx.beginPath();
+    ctx.moveTo(w / 2, 1);
+    ctx.lineTo(w - 2, h / 2);
+    ctx.lineTo(w / 2, h - 1);
+    ctx.lineTo(2, h / 2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#1d4ed8';
+    ctx.fillRect(w / 2 - 2, h / 2 - 2, 4, 4);
+  } else if (flagType === 'ger') {
+    ctx.fillStyle = '#09090b';
+    ctx.fillRect(0, 0, w, 4);
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(0, 4, w, 4);
+    ctx.fillStyle = '#facc15';
+    ctx.fillRect(0, 8, w, 4);
+  } else if (flagType === 'can') {
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(0, 0, 4, h);
+    ctx.fillRect(w - 4, 0, 4, h);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(4, 0, w - 8, h);
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(6, 4, 4, 3);
+    ctx.fillRect(7, 3, 2, 6);
+  } else if (flagType === 'kor') {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(6, 3, 4, 3);
+    ctx.fillStyle = '#1d4ed8';
+    ctx.fillRect(6, 6, 4, 3);
+    ctx.fillStyle = '#09090b';
+    ctx.fillRect(2, 2, 2, 2);
+    ctx.fillRect(12, 2, 2, 2);
+    ctx.fillRect(2, 8, 2, 2);
+    ctx.fillRect(12, 8, 2, 2);
+  }
+}
+
+// Render 16x16 pixel portrait for Character Select screen
+function drawAthletePortrait(canvas, athlete, country) {
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  ctx.clearRect(0, 0, 16, 16);
+
+  // Special pixel portrait for Frankie (Black & Tan Long-Haired Dachshund)
+  if (athlete.type === 'dog') {
+    // Team bandana collar at bottom
+    ctx.fillStyle = country.primary;
+    ctx.fillRect(3, 12, 10, 4);
+    ctx.fillStyle = country.secondary;
+    ctx.fillRect(6, 13, 4, 3);
+
+    // Head crown (black)
+    ctx.fillStyle = athlete.coatBlack;
+    ctx.fillRect(4, 3, 8, 7);
+
+    // Long feathered floppy ears on both sides
+    ctx.fillStyle = athlete.coatBlack;
+    ctx.fillRect(2, 4, 2, 8);
+    ctx.fillRect(12, 4, 2, 8);
+    ctx.fillStyle = athlete.coatTan;
+    ctx.fillRect(2, 9, 2, 3);
+    ctx.fillRect(12, 9, 2, 3);
+
+    // Tan eyebrows & muzzle
+    ctx.fillStyle = athlete.coatTan;
+    ctx.fillRect(5, 5, 2, 1);
+    ctx.fillRect(9, 5, 2, 1);
+    ctx.fillRect(5, 8, 6, 4);
+
+    // Big expressive eyes & shiny black nose
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(5, 6, 2, 2);
+    ctx.fillRect(9, 6, 2, 2);
+    ctx.fillStyle = '#090d16';
+    ctx.fillRect(6, 6, 1, 2);
+    ctx.fillRect(9, 6, 1, 2);
+    ctx.fillRect(7, 9, 2, 2);
+    return;
+  }
+
+  // Human Family Members
+  // Jersey shoulders
+  ctx.fillStyle = country.primary;
+  ctx.fillRect(3, 12, 10, 4);
+  ctx.fillStyle = country.secondary;
+  ctx.fillRect(6, 12, 4, 4);
+
+  // Neck & Head
+  ctx.fillStyle = athlete.skin;
+  ctx.fillRect(6, 10, 4, 2);
+  ctx.fillRect(4, 3, 8, 8);
+
+  // Hair & Accessories
+  ctx.fillStyle = athlete.hair;
+  ctx.fillRect(4, 2, 8, 2);
+  if (athlete.hairStyle === 'spiky') {
+    ctx.fillRect(4, 1, 2, 1);
+    ctx.fillRect(7, 0, 2, 2);
+    ctx.fillRect(10, 1, 2, 1);
+  } else if (athlete.hairStyle === 'pigtails') {
+    ctx.fillRect(2, 3, 2, 4);
+    ctx.fillRect(12, 3, 2, 4);
+    ctx.fillStyle = country.secondary;
+    ctx.fillRect(2, 3, 2, 1);
+    ctx.fillRect(12, 3, 2, 1);
+  } else if (athlete.hairStyle === 'curly') {
+    ctx.fillRect(5, 1, 6, 2);
+    ctx.fillRect(3, 2, 10, 2);
+  } else if (athlete.hairStyle === 'ponytail') {
+    ctx.fillRect(3, 3, 1, 6);
+    ctx.fillRect(12, 3, 1, 6);
+    ctx.fillRect(12, 1, 2, 3);
+  }
+
+  if (athlete.headband) {
+    ctx.fillStyle = country.secondary;
+    ctx.fillRect(4, 4, 8, 1);
+  }
+
+  // Eyes
+  ctx.fillStyle = '#0f172a';
+  ctx.fillRect(5, 6, 2, 2);
+  ctx.fillRect(9, 6, 2, 2);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(5, 6, 1, 1);
+  ctx.fillRect(9, 6, 1, 1);
+
+  // Mouth / Stubble Beard
+  if (athlete.beard) {
+    ctx.fillStyle = athlete.hair;
+    ctx.fillRect(4, 9, 8, 2);
+    ctx.fillRect(6, 8, 4, 1);
+  }
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(7, 9, 2, 1);
+}
+
+// ----------------------------------------------------------------------------
+// 3. PROCEDURAL PIXEL-ART TEXTURE GENERATOR FOR PHASER
+// ----------------------------------------------------------------------------
+function generatePixelTextures(scene, athlete, country) {
+  const makeTex = (key, w, h, drawFn) => {
+    if (scene.textures.exists(key)) {
+      scene.textures.remove(key);
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    drawFn(ctx, w, h);
+    scene.textures.addCanvas(key, canvas);
+  };
+
+  // A1. Quadruped Long-Haired Dachshund Sprites for Frankie (24x16 pixel art)
+  const drawDachshund = (frame) => (ctx) => {
+    const black = athlete.coatBlack;
+    const tan = athlete.coatTan;
+    const hi = athlete.furHighlight;
+
+    // Wagging feathered tail (left side)
+    ctx.fillStyle = black;
+    if (frame === 'run1' || frame === 'jump') {
+      ctx.fillRect(0, 4, 3, 2);
+      ctx.fillRect(2, 5, 2, 2);
+    } else {
+      ctx.fillRect(0, 6, 3, 2);
+      ctx.fillRect(2, 6, 2, 2);
+    }
+    ctx.fillStyle = tan;
+    ctx.fillRect(0, frame === 'run1' ? 5 : 7, 2, 1);
+
+    // Long low-slung dachshund torso
+    ctx.fillStyle = black;
+    ctx.fillRect(4, 6, 13, 5);
+    // Long-haired feathery belly fringe
+    ctx.fillStyle = hi;
+    ctx.fillRect(5, 11, 11, 1);
+    ctx.fillStyle = tan;
+    ctx.fillRect(14, 8, 3, 3); // Tan chest
+
+    // Miniature Country Team Vest / Bandana
+    ctx.fillStyle = country.primary;
+    ctx.fillRect(9, 6, 5, 5);
+    ctx.fillStyle = country.secondary;
+    ctx.fillRect(11, 6, 2, 5);
+
+    // Head & Snout (facing right)
+    ctx.fillStyle = black;
+    ctx.fillRect(15, 2, 6, 6);
+    // Long tan snout
+    ctx.fillStyle = tan;
+    ctx.fillRect(20, 5, 4, 3);
+    // Nose & Eye
+    ctx.fillStyle = '#090d16';
+    ctx.fillRect(23, 5, 1, 1);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(18, 3, 1, 1);
+
+    // Floppy long-haired ear
+    ctx.fillStyle = black;
+    ctx.fillRect(15, 4, 3, 5);
+    ctx.fillStyle = tan;
+    ctx.fillRect(15, 8, 3, 2);
+
+    // 4 Short Dachshund Paws animated by frame
+    ctx.fillStyle = tan;
+    if (frame === 'idle') {
+      ctx.fillRect(5, 12, 2, 3);
+      ctx.fillRect(8, 12, 2, 3);
+      ctx.fillRect(13, 12, 2, 3);
+      ctx.fillRect(16, 12, 2, 3);
+    } else if (frame === 'run1') {
+      ctx.fillRect(3, 12, 2, 3);
+      ctx.fillRect(7, 11, 2, 3);
+      ctx.fillRect(14, 11, 2, 3);
+      ctx.fillRect(18, 12, 2, 3);
+    } else if (frame === 'run2') {
+      ctx.fillRect(6, 12, 2, 3);
+      ctx.fillRect(9, 12, 2, 3);
+      ctx.fillRect(12, 12, 2, 3);
+      ctx.fillRect(15, 12, 2, 3);
+    } else if (frame === 'jump') {
+      ctx.fillRect(2, 11, 3, 2);
+      ctx.fillRect(6, 12, 2, 2);
+      ctx.fillRect(15, 12, 2, 2);
+      ctx.fillRect(18, 10, 3, 2);
+    } else if (frame === 'climb') {
+      ctx.fillRect(4, 10, 2, 4);
+      ctx.fillRect(8, 12, 2, 3);
+      ctx.fillRect(13, 10, 2, 4);
+      ctx.fillRect(17, 12, 2, 3);
+    }
+  };
+
+  // A2. Human Athlete Sprites (Idle, Run1, Run2, Jump, Climb) - 16x24 pixel art
+  const drawRunner = (frame) => (ctx) => {
+    // Hair
+    ctx.fillStyle = athlete.hair;
+    ctx.fillRect(5, 1, 6, 3);
+    if (athlete.hairStyle === 'spiky') {
+      ctx.fillRect(5, 0, 2, 1);
+      ctx.fillRect(9, 0, 2, 1);
+    } else if (athlete.hairStyle === 'pigtails') {
+      ctx.fillRect(3, 2, 2, 4);
+      ctx.fillRect(11, 2, 2, 4);
+    } else if (athlete.hairStyle === 'curly') {
+      ctx.fillRect(4, 0, 8, 2);
+    } else if (athlete.hairStyle === 'ponytail') {
+      ctx.fillRect(3, 2, 2, 5);
+    }
+
+    // Head
+    ctx.fillStyle = athlete.skin;
+    ctx.fillRect(5, 3, 6, 5);
+
+    if (athlete.headband) {
+      ctx.fillStyle = country.secondary;
+      ctx.fillRect(5, 3, 6, 1);
+    }
+
+    // Eye
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(9, 4, 1, 2);
+    if (athlete.beard) {
+      ctx.fillStyle = athlete.hair;
+      ctx.fillRect(6, 7, 5, 1);
+    }
+    // Tank top (Team Country Colors)
+    ctx.fillStyle = country.primary;
+    ctx.fillRect(5, 8, 6, 6);
+    ctx.fillStyle = country.secondary;
+    ctx.fillRect(7, 8, 2, 6);
+
+    // Arms & Legs by frame
+    ctx.fillStyle = athlete.skin;
+    if (frame === 'idle') {
+      ctx.fillRect(4, 9, 1, 5);
+      ctx.fillRect(11, 9, 1, 5);
+      ctx.fillStyle = '#1e293b'; // Shorts
+      ctx.fillRect(5, 14, 6, 3);
+      ctx.fillStyle = athlete.skin;
+      ctx.fillRect(5, 17, 2, 4);
+      ctx.fillRect(9, 17, 2, 4);
+      ctx.fillStyle = '#38bdf8'; // Sneakers
+      ctx.fillRect(5, 21, 3, 2);
+      ctx.fillRect(9, 21, 3, 2);
+    } else if (frame === 'run1') {
+      ctx.fillRect(3, 8, 2, 4);
+      ctx.fillRect(11, 10, 2, 4);
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(5, 14, 6, 3);
+      ctx.fillStyle = athlete.skin;
+      ctx.fillRect(3, 17, 3, 4);
+      ctx.fillRect(10, 16, 3, 4);
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(2, 21, 3, 2);
+      ctx.fillRect(11, 20, 3, 2);
+    } else if (frame === 'run2') {
+      ctx.fillRect(11, 8, 2, 4);
+      ctx.fillRect(3, 10, 2, 4);
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(5, 14, 6, 3);
+      ctx.fillStyle = athlete.skin;
+      ctx.fillRect(9, 17, 3, 4);
+      ctx.fillRect(4, 16, 3, 4);
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(10, 21, 3, 2);
+      ctx.fillRect(3, 20, 3, 2);
+    } else if (frame === 'jump') {
+      ctx.fillRect(3, 5, 2, 4);
+      ctx.fillRect(11, 6, 2, 4);
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(5, 14, 6, 3);
+      ctx.fillStyle = athlete.skin;
+      ctx.fillRect(4, 16, 3, 3);
+      ctx.fillRect(9, 17, 3, 4);
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(3, 19, 3, 2);
+      ctx.fillRect(10, 21, 3, 2);
+    } else if (frame === 'climb') {
+      ctx.fillRect(3, 4, 2, 5);
+      ctx.fillRect(11, 7, 2, 5);
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(5, 14, 6, 3);
+      ctx.fillStyle = athlete.skin;
+      ctx.fillRect(4, 17, 2, 4);
+      ctx.fillRect(10, 15, 2, 4);
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(4, 21, 2, 2);
+      ctx.fillRect(10, 19, 2, 2);
+    }
+  };
+
+  if (athlete.type === 'dog') {
+    makeTex('player_idle', 24, 16, drawDachshund('idle'));
+    makeTex('player_run1', 24, 16, drawDachshund('run1'));
+    makeTex('player_run2', 24, 16, drawDachshund('run2'));
+    makeTex('player_jump', 24, 16, drawDachshund('jump'));
+    makeTex('player_climb', 24, 16, drawDachshund('climb'));
+  } else {
+    makeTex('player_idle', 16, 24, drawRunner('idle'));
+    makeTex('player_run1', 16, 24, drawRunner('run1'));
+    makeTex('player_run2', 16, 24, drawRunner('run2'));
+    makeTex('player_jump', 16, 24, drawRunner('jump'));
+    makeTex('player_climb', 16, 24, drawRunner('climb'));
+  }
+
+  // B. Industrial Platform Tile (32x32) with yellow/black hazard stripe
+  makeTex('plat_industrial', 32, 32, (ctx) => {
+    ctx.fillStyle = '#334155';
+    ctx.fillRect(0, 0, 32, 32);
+    // Top concrete/steel deck
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillRect(0, 0, 32, 4);
+    // Hazard stripes
+    ctx.fillStyle = '#eab308';
+    ctx.fillRect(0, 4, 32, 6);
+    ctx.fillStyle = '#0f172a';
+    for (let x = -8; x < 32; x += 8) {
+      ctx.beginPath();
+      ctx.moveTo(x, 10);
+      ctx.lineTo(x + 4, 4);
+      ctx.lineTo(x + 8, 4);
+      ctx.lineTo(x + 4, 10);
+      ctx.closePath();
+      ctx.fill();
+    }
+    // Rusted steel panels & rivets
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(2, 12, 13, 18);
+    ctx.fillRect(17, 12, 13, 18);
+    ctx.fillStyle = '#7c2d12';
+    ctx.fillRect(3, 24, 6, 5);
+    ctx.fillRect(22, 14, 5, 4);
+    ctx.fillStyle = '#cbd5e1';
+    ctx.fillRect(3, 13, 1, 1);
+    ctx.fillRect(13, 13, 1, 1);
+    ctx.fillRect(18, 13, 1, 1);
+    ctx.fillRect(28, 13, 1, 1);
+  });
+
+  // C. Tilted "CHRAMP" Spring Pad (48x48)
+  makeTex('chramp_pad', 48, 48, (ctx) => {
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(4, 4, 40, 40);
+    ctx.strokeStyle = '#eab308';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(4, 4, 40, 40);
+    // Black hazard ticks
+    ctx.fillStyle = '#090d16';
+    for (let i = 2; i < 44; i += 8) {
+      ctx.fillRect(i, 2, 4, 4);
+      ctx.fillRect(i, 42, 4, 4);
+    }
+    // Glowing cyan/lime dome button in center
+    ctx.fillStyle = '#0ea5e9';
+    ctx.beginPath();
+    ctx.arc(24, 24, 13, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#bef264';
+    ctx.beginPath();
+    ctx.arc(24, 24, 9, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(20, 19, 4, 3);
+  });
+
+  // D. Crag Rock Block (32x32)
+  makeTex('rock_block', 32, 32, (ctx) => {
+    ctx.fillStyle = '#5c4033';
+    ctx.fillRect(0, 0, 32, 32);
+    ctx.fillStyle = '#785543';
+    ctx.fillRect(2, 2, 14, 12);
+    ctx.fillRect(18, 14, 12, 14);
+    ctx.fillStyle = '#3e2723';
+    ctx.fillRect(0, 26, 32, 6);
+    ctx.fillRect(14, 4, 4, 18);
+    ctx.fillStyle = '#9c7865';
+    ctx.fillRect(4, 3, 8, 3);
+  });
+
+  // E. Wooden Scaffolding / Bridge Plank (32x12)
+  makeTex('wood_plank', 32, 12, (ctx) => {
+    ctx.fillStyle = '#78350f';
+    ctx.fillRect(0, 0, 32, 12);
+    ctx.fillStyle = '#b45309';
+    ctx.fillRect(1, 1, 30, 4);
+    ctx.fillStyle = '#451a03';
+    ctx.fillRect(0, 9, 32, 3);
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillRect(3, 2, 2, 2);
+    ctx.fillRect(27, 2, 2, 2);
+  });
+
+  // F. Climbable Rope / Ladder Segment (16x32)
+  makeTex('climb_rope', 16, 32, (ctx) => {
+    ctx.fillStyle = '#d97706';
+    ctx.fillRect(6, 0, 4, 32);
+    ctx.fillStyle = '#fbbf24';
+    for (let y = 0; y < 32; y += 6) {
+      ctx.fillRect(6, y, 2, 3);
+      ctx.fillRect(8, y + 3, 2, 3);
+    }
+  });
+
+  // G. Sinking Toob Drum (56x84)
+  makeTex('sinking_toob', 56, 84, (ctx) => {
+    // Rusted barrel body
+    ctx.fillStyle = '#9a3412';
+    ctx.fillRect(4, 4, 48, 76);
+    // Highlight left & shadow right for cylindrical 16-bit look
+    ctx.fillStyle = '#c2410c';
+    ctx.fillRect(8, 4, 14, 76);
+    ctx.fillStyle = '#431407';
+    ctx.fillRect(40, 4, 12, 76);
+    // Steel ribs
+    ctx.fillStyle = '#64748b';
+    ctx.fillRect(2, 2, 52, 6);
+    ctx.fillRect(2, 28, 52, 5);
+    ctx.fillRect(2, 54, 52, 5);
+    ctx.fillRect(2, 76, 52, 6);
+    // Rivets
+    ctx.fillStyle = '#e2e8f0';
+    for (let x = 6; x < 50; x += 8) {
+      ctx.fillRect(x, 4, 2, 2);
+      ctx.fillRect(x, 78, 2, 2);
+    }
+  });
+
+  // H. Triangle Point Button (24x24) - Unlit & Lit
+  makeTex('tri_off', 24, 24, (ctx) => {
+    ctx.fillStyle = '#1e293b';
+    ctx.beginPath();
+    ctx.moveTo(12, 2);
+    ctx.lineTo(22, 21);
+    ctx.lineTo(2, 21);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = '#0284c7';
+    ctx.beginPath();
+    ctx.moveTo(12, 7);
+    ctx.lineTo(17, 18);
+    ctx.lineTo(7, 18);
+    ctx.closePath();
+    ctx.fill();
+  });
+
+  makeTex('tri_on', 24, 24, (ctx) => {
+    ctx.fillStyle = '#facc15';
+    ctx.beginPath();
+    ctx.moveTo(12, 1);
+    ctx.lineTo(23, 22);
+    ctx.lineTo(1, 22);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = '#fef08a';
+    ctx.beginPath();
+    ctx.moveTo(12, 7);
+    ctx.lineTo(17, 18);
+    ctx.lineTo(7, 18);
+    ctx.closePath();
+    ctx.fill();
+  });
+
+  // I. Mega Thruster (36x36) - Ready & Activated
+  makeTex('thruster_ready', 36, 36, (ctx) => {
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(2, 4, 32, 30);
+    ctx.strokeStyle = '#f97316';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(2, 4, 32, 30);
+    // Glowing core
+    ctx.fillStyle = '#ef4444';
+    ctx.beginPath();
+    ctx.arc(18, 19, 10, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#facc15';
+    ctx.beginPath();
+    ctx.arc(18, 19, 6, 0, Math.PI * 2);
+    ctx.fill();
+    // Upward thruster chevrons
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(16, 14, 4, 2);
+    ctx.fillRect(14, 17, 8, 2);
+  });
+
+  makeTex('thruster_done', 36, 36, (ctx) => {
+    ctx.fillStyle = '#064e3b';
+    ctx.fillRect(2, 4, 32, 30);
+    ctx.strokeStyle = '#4ade80';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(2, 4, 32, 30);
+    ctx.fillStyle = '#22c55e';
+    ctx.beginPath();
+    ctx.arc(18, 19, 9, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // J. Finish Slam Buzzer (44x32)
+  makeTex('finish_buzzer', 44, 32, (ctx) => {
+    // Metal base
+    ctx.fillStyle = '#64748b';
+    ctx.fillRect(4, 20, 36, 12);
+    ctx.fillStyle = '#334155';
+    ctx.fillRect(6, 24, 32, 8);
+    // Big red dome
+    ctx.fillStyle = '#dc2626';
+    ctx.beginPath();
+    ctx.arc(22, 20, 14, Math.PI, 0);
+    ctx.fill();
+    ctx.fillStyle = '#f87171';
+    ctx.fillRect(14, 10, 6, 4);
+  });
+}
+
+// ----------------------------------------------------------------------------
+// 4. MAIN PHASER GAME SCENE
+// ----------------------------------------------------------------------------
+class BeastmasterScene extends Phaser.Scene {
+  constructor() {
+    super('BeastmasterScene');
+  }
+
+  create() {
+    const round = GameState.round;
+    const diff = this.getDifficultyParams(round);
+
+    // World bounds (long epic obstacle course)
+    this.worldWidth = 3850;
+    this.worldHeight = 640;
+    this.waterSurfaceY = 558;
+
+    this.physics.world.setBounds(0, 0, this.worldWidth, this.worldHeight + 120);
+    this.physics.world.gravity.y = 1180;
+
+    // Generate crisp pixel-art textures for selected athlete & country
+    generatePixelTextures(this, GameState.selectedAthlete, GameState.selectedCountry);
+
+    // Run state variables
+    this.runStarted = false;
+    this.runFinished = false;
+    this.runFailed = false;
+    this.elapsedTime = 0;
+    this.trianglesCollected = 0;
+    this.totalTriangles = 0;
+    this.thruster1Points = 0;
+    this.thruster2Points = 0;
+    this.thruster1Time = null;
+    this.thruster2Time = null;
+    this.boostTimer = 0;
+    this.coyoteTimer = 0;
+    this.jumpBufferTimer = 0;
+    this.onTreadmillSpeed = 0;
+
+    // 1. Draw Parallax Dark Industrial Stadium Background
+    this.createStadiumBackdrop();
+
+    // 2. Build Course Obstacles & Platforms
+    this.staticPlatforms = this.physics.add.staticGroup();
+    this.climbZones = this.physics.add.staticGroup();
+    this.trianglesGroup = this.physics.add.staticGroup();
+    this.thrustersGroup = this.physics.add.staticGroup();
+    this.sinkingTubes = [];
+    this.treadmills = [];
+    this.bridgePlanks = [];
+    this.springPads = [];
+
+    this.buildCourse(diff);
+
+    // 3. Create Player Athlete (scaled to family member's real proportions!)
+    const athlete = GameState.selectedAthlete;
+    this.player = this.physics.add.sprite(110, 410, 'player_idle');
+    if (athlete.type === 'dog') {
+      this.player.setScale(1.85);
+      this.player.body.setSize(18, 12);
+      this.player.body.setOffset(3, 3);
+    } else {
+      const s = 2 * athlete.heightScale;
+      this.player.setScale(s);
+      this.player.body.setSize(10, 21);
+      this.player.body.setOffset(3, 3);
+    }
+    this.player.setCollideWorldBounds(true);
+    this.player.setDepth(10);
+
+    // Colliders & Overlaps
+    this.physics.add.collider(this.player, this.staticPlatforms);
+
+    this.springPads.forEach(pad => {
+      this.physics.add.collider(this.player, pad.zone, () => this.handleSpringBounce(pad), null, this);
+    });
+
+    this.sinkingTubes.forEach(tube => {
+      this.physics.add.collider(this.player, tube.bodyObj, () => {
+        tube.beingSteppedOn = true;
+      }, null, this);
+    });
+
+    this.treadmills.forEach(tm => {
+      this.physics.add.collider(this.player, tm.platform, () => {
+        if (this.player.body.touching.down) {
+          this.onTreadmillSpeed = -tm.beltSpeed;
+        }
+      }, null, this);
+    });
+
+    this.bridgePlanks.forEach(bp => {
+      this.physics.add.collider(this.player, bp.sprite, () => {
+        if (this.player.body.touching.down) {
+          bp.stepped = true;
+        }
+      }, null, this);
+    });
+
+    this.physics.add.overlap(this.player, this.trianglesGroup, this.collectTriangle, null, this);
+    this.physics.add.overlap(this.player, this.thrustersGroup, this.activateThruster, null, this);
+    this.physics.add.overlap(this.player, this.finishZone, this.completeCourse, null, this);
+
+    // 4. Foreground Animated Churning Water Hazard
+    this.createWaterHazard(diff);
+
+    // 5. Camera Setup
+    this.cameras.main.setBounds(0, 0, this.worldWidth, this.worldHeight);
+    this.cameras.main.startFollow(this.player, true, 0.12, 0.12, -160, 40);
+
+    // 6. Fixed Screen-Space Arcade HUD
+    this.createArcadeHUD(diff);
+
+    // 7. Input Setup
+    this.cursors = this.input.keyboard.createCursorKeys();
+    this.keys = this.input.keyboard.addKeys({
+      W: Phaser.Input.Keyboard.KeyCodes.W,
+      A: Phaser.Input.Keyboard.KeyCodes.A,
+      S: Phaser.Input.Keyboard.KeyCodes.S,
+      D: Phaser.Input.Keyboard.KeyCodes.D,
+      SPACE: Phaser.Input.Keyboard.KeyCodes.SPACE
+    });
+
+    // Show "GO!" banner and start timer immediately when scene starts
+    this.showFloatingBanner(
+      GameState.attemptNumber === 1
+        ? `ROUND ${round} — RUN 1! GO!`
+        : `DO-OVER RUN! THIS ONE COUNTS!`,
+      GameState.attemptNumber === 1 ? '#4ade80' : '#f59e0b'
+    );
+    this.runStarted = true;
+  }
+
+  getDifficultyParams(round) {
+    // Progressive scaling across rounds while remaining fair & beaten by skill
+    const r = Math.min(round - 1, 6);
+    return {
+      treadmillSpeed: 125 + r * 26,
+      tubeSinkSpeed: 46 + r * 14,
+      bridgeDropDelay: Math.max(0.22, 0.55 - r * 0.06),
+      waterWaveAmp: 6 + r * 1.8,
+      targetScore: 85 + (round - 1) * 20,
+      thrusterMultiplier: 1.4 + r * 0.2
+    };
+  }
+
+  // --------------------------------------------------------------------------
+  // BACKGROUND STADIUM & JUMBOTRON ("DON'T GO IN THE WATER!")
+  // --------------------------------------------------------------------------
+  createStadiumBackdrop() {
+    // Deep night industrial sky
+    const sky = this.add.graphics();
+    sky.fillGradientStyle(0x0b0f1d, 0x0b0f1d, 0x182238, 0x182238, 1);
+    sky.fillRect(0, 0, this.worldWidth, this.worldHeight);
+    sky.setScrollFactor(0.1);
+
+    // Distant factory skyline & smokestacks (Parallax 0.2)
+    const skyline = this.add.graphics();
+    skyline.setScrollFactor(0.2);
+    skyline.fillStyle(0x131a2b, 1);
+    for (let x = 0; x < 1400; x += 110) {
+      const h = 140 + ((x * 37) % 120);
+      skyline.fillRect(x, 460 - h, 95, h + 100);
+      if (x % 220 === 0) {
+        // Smokestack with glowing furnace top
+        skyline.fillRect(x + 25, 460 - h - 65, 16, 65);
+        skyline.fillStyle(0xf97316, 0.85);
+        skyline.fillRect(x + 27, 460 - h - 68, 12, 5);
+        skyline.fillStyle(0x131a2b, 1);
+      }
+    }
+
+    // Looming Silhouetted Beastmaster Colossus in the background fog
+    const beast = this.add.graphics();
+    beast.setScrollFactor(0.15);
+    beast.fillStyle(0x0e1320, 0.92);
+    // Giant shoulders, horns, and towering torso
+    beast.fillRect(460, 150, 170, 290);
+    beast.fillRect(420, 180, 250, 110);
+    beast.fillRect(435, 105, 24, 55); // Left horn/smoke stack
+    beast.fillRect(630, 105, 24, 55); // Right horn/smoke stack
+    beast.fillRect(505, 110, 80, 45);  // Head
+    // Glowing red beast eyes
+    beast.fillStyle(0xef4444, 0.9);
+    beast.fillRect(525, 128, 10, 5);
+    beast.fillRect(555, 128, 10, 5);
+
+    // Stadium Spotlight Beams & Trusses (Parallax 0.45)
+    const trusses = this.add.graphics();
+    trusses.setScrollFactor(0.45);
+    for (let x = 80; x < 2400; x += 460) {
+      // Vertical steel tower
+      trusses.fillStyle(0x1e293b, 0.95);
+      trusses.fillRect(x, 0, 14, 520);
+      trusses.fillRect(x + 56, 0, 14, 520);
+      trusses.lineStyle(3, 0x334155, 0.9);
+      for (let y = 20; y < 500; y += 44) {
+        trusses.strokeLineShape(new Phaser.Geom.Line(x + 7, y, x + 63, y + 44));
+        trusses.strokeLineShape(new Phaser.Geom.Line(x + 63, y, x + 7, y + 44));
+      }
+
+      // Spotlight bank
+      trusses.fillStyle(0x334155, 1);
+      trusses.fillRect(x - 10, 75, 90, 48);
+      trusses.fillStyle(0xfef9c3, 0.95);
+      for (let lx = 0; lx < 4; lx++) {
+        for (let ly = 0; ly < 3; ly++) {
+          trusses.fillRect(x - 2 + lx * 20, 82 + ly * 13, 12, 8);
+        }
+      }
+      // Volumetric light cone
+      trusses.fillStyle(0xfef08a, 0.05);
+      trusses.fillTriangle(x + 35, 120, x - 140, 540, x + 210, 540);
+    }
+
+    // Neon Crowd Silhouettes cheering along stadium bleachers (Parallax 0.55)
+    const crowd = this.add.graphics();
+    crowd.setScrollFactor(0.55);
+    crowd.fillStyle(0x0f172a, 1);
+    crowd.fillRect(0, 395, 2600, 170);
+    const neonColors = [0x38bdf8, 0xe879f9, 0xfacc15, 0x4ade80];
+    for (let x = 20; x < 2550; x += 28) {
+      const h = 24 + ((x * 19) % 14);
+      crowd.fillStyle(0x1e293b, 1);
+      crowd.fillRect(x, 425 - h, 16, h + 25);
+      crowd.fillCircle(x + 8, 420 - h, 6);
+      // Glowing neon foam fingers / signs
+      if (x % 56 === 0) {
+        const col = neonColors[(x / 56) % neonColors.length];
+        crowd.lineStyle(2, col, 0.85);
+        crowd.strokeRect(x + 12, 392 - (x % 12), 18, 12);
+      }
+    }
+
+    // Iconic Jumbotron Signs: "DON'T GO IN THE WATER!"
+    const jumbotronPositions = [310, 1180, 2050];
+    jumbotronPositions.forEach(jx => {
+      const board = this.add.graphics();
+      board.setScrollFactor(0.5);
+      board.fillStyle(0x1e293b, 1);
+      board.fillRect(jx - 6, 154, 332, 86);
+      board.fillStyle(0x090d16, 1);
+      board.fillRect(jx, 160, 320, 74);
+      board.lineStyle(3, 0x475569, 1);
+      board.strokeRect(jx, 160, 320, 74);
+
+      const signText = this.add.text(jx + 160, 197, "DON'T GO IN\nTHE WATER!", {
+        fontFamily: '"Press Start 2P"',
+        fontSize: '16px',
+        color: '#fb923c',
+        align: 'center',
+        lineSpacing: 8
+      }).setOrigin(0.5).setScrollFactor(0.5);
+      signText.setShadow(0, 0, '#ea580c', 8, true, true);
+    });
+  }
+
+  // --------------------------------------------------------------------------
+  // OBSTACLE COURSE CONSTRUCTION (Matching the Concept & Gameplay)
+  // --------------------------------------------------------------------------
+  buildCourse(diff) {
+    // Helper: Add tiled industrial platform block
+    const addPlatBlock = (x, y, cols, rows = 2) => {
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+          const px = x + c * 32 + 16;
+          const py = y + r * 32 + 16;
+          const tile = this.staticPlatforms.create(px, py, 'plat_industrial');
+          tile.refreshBody();
+        }
+      }
+    };
+
+    // Helper: Add Triangle Button (+5 pts)
+    const addTriangle = (x, y) => {
+      const tri = this.trianglesGroup.create(x, y, 'tri_off');
+      tri.setScale(1.25);
+      tri.refreshBody();
+      tri.collected = false;
+      this.totalTriangles++;
+      // Gentle bobbing tween
+      this.tweens.add({
+        targets: tri,
+        y: y - 5,
+        duration: 750 + (x % 300),
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut'
+      });
+      return tri;
+    };
+
+    // Helper: Add Mega Thruster (Speed Bonus Milestone)
+    const addMegaThruster = (x, y, id) => {
+      const th = this.thrustersGroup.create(x, y, 'thruster_ready');
+      th.setScale(1.35);
+      th.refreshBody();
+      th.thrusterId = id;
+      th.activated = false;
+      this.add.text(x, y - 34, `MEGA\nTHRUSTER ${id}`, {
+        fontFamily: '"Press Start 2P"',
+        fontSize: '8px',
+        color: '#fdba74',
+        align: 'center'
+      }).setOrigin(0.5);
+      return th;
+    };
+
+    // Helper: Add Climbable Rope/Ladder Zone
+    const addClimbRope = (x, topY, bottomY) => {
+      for (let y = topY; y < bottomY; y += 32) {
+        this.add.image(x, y + 16, 'climb_rope').setScale(1.3);
+      }
+      const height = bottomY - topY;
+      const zone = this.add.zone(x, topY + height / 2, 26, height);
+      this.physics.add.existing(zone, true);
+      this.climbZones.add(zone);
+    };
+
+    // Helper: World Diegetic Sign Label (like START, CHRAMP, JUMP/CLIME, etc.)
+    const addCourseSign = (x, y, label, color = '#fde047') => {
+      this.add.text(x, y, label, {
+        fontFamily: '"Press Start 2P"',
+        fontSize: '12px',
+        color: color,
+        stroke: '#090d16',
+        strokeThickness: 4,
+        align: 'center'
+      }).setOrigin(0.5);
+    };
+
+    // ========================================================================
+    // SECTION 1: START GATE & LAUNCH DECK (x: 0 -> 280)
+    // ========================================================================
+    addPlatBlock(0, 456, 8, 4);
+    // Cyan Neon Truss Start Arch
+    const startArch = this.add.graphics();
+    startArch.lineStyle(4, 0x22d3ee, 1);
+    startArch.strokeRect(75, 326, 12, 130);
+    startArch.strokeRect(165, 326, 12, 130);
+    startArch.strokeRect(75, 326, 102, 24);
+    addCourseSign(126, 304, 'START', '#fde047');
+
+    // Warm-up triangle above start jump
+    addTriangle(285, 395);
+
+    // ========================================================================
+    // SECTION 2: TILTED "CHRAMP" BOUNCE PAD (x: 360)
+    // ========================================================================
+    const chrampSprite = this.add.sprite(385, 452, 'chramp_pad').setScale(1.45);
+    chrampSprite.setAngle(-22);
+    const chrampZone = this.add.zone(385, 444, 66, 44);
+    this.physics.add.existing(chrampZone, true);
+    this.springPads.push({ sprite: chrampSprite, zone: chrampZone, vx: 330, vy: -690 });
+    addCourseSign(385, 382, 'CHRAMP', '#fde047');
+
+    // High arc triangles launched from Chramp
+    addTriangle(455, 285);
+    addTriangle(515, 225);
+
+    // ========================================================================
+    // SECTION 3: CLIMBING CRAG / ROPE & LADDERS (x: 560 -> 880)
+    // ========================================================================
+    addCourseSign(715, 175, 'JUMP / CLIME', '#fde047');
+    // Stepped pyramid rock crag
+    for (let row = 0; row < 8; row++) {
+      const cols = 10 - row;
+      const startX = 560 + Math.floor(row * 16);
+      const y = 528 - row * 32;
+      for (let c = 0; c < cols; c++) {
+        const block = this.staticPlatforms.create(startX + c * 32 + 16, y + 16, 'rock_block');
+        block.refreshBody();
+      }
+    }
+    // Wooden mid-ledge & top summit deck
+    const midDeck = this.staticPlatforms.create(575, 395, 'wood_plank').setScale(2, 1.2);
+    midDeck.refreshBody();
+    const summitDeck = this.staticPlatforms.create(720, 268, 'wood_plank').setScale(3.5, 1.2);
+    summitDeck.refreshBody();
+
+    // Climbable ropes on left & right of Crag
+    addClimbRope(610, 268, 450);
+    addClimbRope(825, 268, 460);
+
+    // Triangles & MEGA THRUSTER #1 on the Crag Summit!
+    addTriangle(575, 355);
+    addTriangle(670, 228);
+    addMegaThruster(735, 228, 1);
+    addTriangle(795, 228);
+
+    // ========================================================================
+    // SECTION 4: DOUBLE SINKING TOOBS (x: 980 -> 1340)
+    // ========================================================================
+    addCourseSign(1040, 225, 'SINKING\nTOOB', '#fde047');
+    const createSinkingToob = (x, baseY) => {
+      // Overhead steel chains
+      const chainGfx = this.add.graphics();
+      const tube = this.physics.add.sprite(x, baseY, 'sinking_toob').setScale(1.35);
+      tube.body.setImmovable(true);
+      tube.body.setAllowGravity(false);
+      tube.refreshBody();
+
+      const item = {
+        bodyObj: tube,
+        chainGfx: chainGfx,
+        x: x,
+        baseY: baseY,
+        beingSteppedOn: false,
+        sinkSpeed: diff.tubeSinkSpeed
+      };
+      this.sinkingTubes.push(item);
+      return item;
+    };
+
+    createSinkingToob(1015, 395);
+    addTriangle(1015, 305);
+    addTriangle(1135, 325);
+    createSinkingToob(1255, 415);
+    addTriangle(1255, 325);
+
+    // ========================================================================
+    // SECTION 5: HIGH-SPEED TREADMILL GAUNTLET (x: 1410 -> 1820)
+    // ========================================================================
+    addCourseSign(1580, 315, 'TREADMILL', '#fde047');
+    const createTreadmill = (x, y, widthBlocks, speed) => {
+      // Support tower under water
+      addPlatBlock(x, y + 32, widthBlocks, 4);
+      // Conveyor belt top
+      const beltWidth = widthBlocks * 32;
+      const belt = this.add.tileSprite(x + beltWidth / 2, y + 16, beltWidth, 32, 'plat_industrial');
+      const zone = this.physics.add.staticSprite(x + beltWidth / 2, y + 16, 'plat_industrial');
+      zone.setDisplaySize(beltWidth, 32);
+      zone.setAlpha(0);
+      zone.refreshBody();
+
+      // Rotating gear visuals at ends
+      const gearL = this.add.circle(x + 14, y + 16, 11, 0x94a3b8).setStrokeStyle(3, 0x0f172a);
+      const gearR = this.add.circle(x + beltWidth - 14, y + 16, 11, 0x94a3b8).setStrokeStyle(3, 0x0f172a);
+
+      this.treadmills.push({
+        beltSprite: belt,
+        platform: zone,
+        gearL,
+        gearR,
+        beltSpeed: speed
+      });
+    };
+
+    createTreadmill(1410, 416, 6, diff.treadmillSpeed);
+    addTriangle(1470, 375);
+    addTriangle(1555, 375);
+
+    // Upper risk-reward scaffold above treadmill
+    const highScaffold = this.staticPlatforms.create(1660, 290, 'wood_plank').setScale(3.5, 1.1);
+    highScaffold.refreshBody();
+    addClimbRope(1615, 290, 416);
+    addTriangle(1660, 250);
+    addTriangle(1710, 250);
+
+    // ========================================================================
+    // SECTION 6: SECOND CHRAMP + SKY TRIANGLE RUN + MEGA THRUSTER #2
+    // ========================================================================
+    addPlatBlock(1790, 446, 4, 4);
+    const chramp2Sprite = this.add.sprite(1865, 434, 'chramp_pad').setScale(1.45);
+    chramp2Sprite.setAngle(-20);
+    const chramp2Zone = this.add.zone(1865, 426, 66, 44);
+    this.physics.add.existing(chramp2Zone, true);
+    this.springPads.push({ sprite: chramp2Sprite, zone: chramp2Zone, vx: 370, vy: -720 });
+    addCourseSign(1865, 366, 'MEGA LAUNCH!', '#38bdf8');
+
+    // Sky triangle arc leading to Sky Deck
+    addTriangle(1965, 260);
+    addTriangle(2045, 210);
+    addTriangle(2125, 240);
+
+    // Mid-air Sky Platform holding MEGA THRUSTER #2!
+    addPlatBlock(2180, 315, 5, 1);
+    addMegaThruster(2260, 272, 2);
+    addTriangle(2320, 272);
+
+    // Lower safe fallback stepping islands below sky deck
+    addPlatBlock(1980, 466, 3, 3);
+    addPlatBlock(2160, 466, 3, 3);
+    addTriangle(2208, 425);
+
+    // ========================================================================
+    // SECTION 7: CRUMBLING ROPE BRIDGE ("JUMP / BRIG") (x: 2420 -> 2820)
+    // ========================================================================
+    addCourseSign(2620, 345, 'JUMP / BRIG', '#fde047');
+    addPlatBlock(2380, 446, 3, 4);
+
+    const plankCount = 9;
+    for (let i = 0; i < plankCount; i++) {
+      const px = 2500 + i * 38;
+      const sag = Math.sin((i / (plankCount - 1)) * Math.PI) * 18;
+      const py = 446 + sag;
+      const plank = this.physics.add.sprite(px, py, 'wood_plank').setScale(1.1, 1.1);
+      plank.body.setImmovable(true);
+      plank.body.setAllowGravity(false);
+      plank.refreshBody();
+
+      this.bridgePlanks.push({
+        sprite: plank,
+        origY: py,
+        stepped: false,
+        timer: 0,
+        falling: false,
+        dropDelay: diff.bridgeDropDelay
+      });
+
+      if (i % 2 === 1) {
+        addTriangle(px, py - 42);
+      }
+    }
+
+    // ========================================================================
+    // SECTION 8: FINAL SPRINT & FINISH SLAM BUZZER (x: 2880 -> 3350)
+    // ========================================================================
+    addPlatBlock(2870, 436, 4, 4);
+    addTriangle(2934, 395);
+
+    // Final fast treadmill before finish platform
+    createTreadmill(3050, 426, 4, diff.treadmillSpeed * 1.1);
+    addTriangle(3114, 370);
+
+    // Finish Deck
+    addPlatBlock(3230, 416, 9, 5);
+
+    // Magenta Neon Truss Finish Arch
+    const finArch = this.add.graphics();
+    finArch.lineStyle(4, 0xe879f9, 1);
+    finArch.strokeRect(3310, 276, 14, 140);
+    finArch.strokeRect(3445, 276, 14, 140);
+    finArch.strokeRect(3310, 276, 149, 26);
+    addCourseSign(3385, 252, 'FINISH', '#fde047');
+
+    // Glowing Red Slam Buzzer
+    const buzzer = this.add.sprite(3385, 396, 'finish_buzzer').setScale(1.3);
+    this.tweens.add({
+      targets: buzzer,
+      scaleX: 1.4,
+      scaleY: 1.24,
+      duration: 320,
+      yoyo: true,
+      repeat: -1
+    });
+
+    this.finishZone = this.add.zone(3385, 385, 64, 68);
+    this.physics.add.existing(this.finishZone, true);
+  }
+
+  // --------------------------------------------------------------------------
+  // ANIMATED CHURNING WATER HAZARD
+  // --------------------------------------------------------------------------
+  createWaterHazard(diff) {
+    this.waterGraphics = this.add.graphics().setDepth(20);
+    this.waterWaveOffset = 0;
+    this.waterWaveAmp = diff.waterWaveAmp;
+  }
+
+  updateWaterHazard(time) {
+    const g = this.waterGraphics;
+    g.clear();
+    const camLeft = this.cameras.main.scrollX - 40;
+    const camRight = camLeft + this.cameras.main.width + 80;
+    const baseY = this.waterSurfaceY;
+
+    // Deep blue water body
+    g.fillStyle(0x0284c7, 0.88);
+    g.fillRect(camLeft, baseY + 6, camRight - camLeft, 140);
+
+    // Animated pixel wave crests & white foam
+    for (let x = Math.floor(camLeft / 16) * 16; x < camRight; x += 16) {
+      const wave = Math.sin(x * 0.045 + time * 0.0055) * this.waterWaveAmp;
+      const wy = Math.round(baseY + wave);
+      g.fillStyle(0x38bdf8, 0.95);
+      g.fillRect(x, wy, 16, 12);
+      g.fillStyle(0xffffff, 0.95);
+      g.fillRect(x + 2, wy, 10, 4);
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // FIXED SCREEN-SPACE ARCADE HUD
+  // --------------------------------------------------------------------------
+  createArcadeHUD(diff) {
+    const hudBg = this.add.graphics().setScrollFactor(0).setDepth(30);
+    hudBg.fillStyle(0x090d16, 0.82);
+    hudBg.fillRect(10, 10, 650, 66);
+    hudBg.lineStyle(3, 0x38bdf8, 0.9);
+    hudBg.strokeRect(10, 10, 650, 66);
+
+    const c = GameState.selectedCountry;
+    const a = GameState.selectedAthlete;
+    const runLabel = GameState.attemptNumber === 1 ? 'RUN 1 (1 DO-OVER LEFT)' : 'RUN 2 (COUNTS NO MATTER WHAT!)';
+    const runColor = GameState.attemptNumber === 1 ? '#4ade80' : '#fbbf24';
+
+    this.hudHeaderText = this.add.text(22, 18, `ROUND ${GameState.round} • ${c.name} (${a.name}) • ${runLabel}`, {
+      fontFamily: '"Press Start 2P"',
+      fontSize: '9px',
+      color: runColor
+    }).setScrollFactor(0).setDepth(31);
+
+    this.hudStatsText = this.add.text(22, 42, '', {
+      fontFamily: '"Press Start 2P"',
+      fontSize: '11px',
+      color: '#f8fafc'
+    }).setScrollFactor(0).setDepth(31);
+
+    this.hudTargetText = this.add.text(22, 60, `QUALIFYING TARGET: ${diff.targetScore} PTS`, {
+      fontFamily: '"Press Start 2P"',
+      fontSize: '8px',
+      color: '#94a3b8'
+    }).setScrollFactor(0).setDepth(31);
+  }
+
+  updateHUD() {
+    const triPts = this.trianglesCollected * 5;
+    const t1 = this.thruster1Points > 0 ? `+${this.thruster1Points}` : 'READY';
+    const t2 = this.thruster2Points > 0 ? `+${this.thruster2Points}` : 'READY';
+    this.hudStatsText.setText(
+      `TIME:${this.elapsedTime.toFixed(1)}s  ▲:${this.trianglesCollected}/${this.totalTriangles}(${triPts})  T1:${t1}  T2:${t2}`
+    );
+  }
+
+  // --------------------------------------------------------------------------
+  // OBSTACLE & SCORING INTERACTIONS
+  // --------------------------------------------------------------------------
+  handleSpringBounce(pad) {
+    if (this.player.body.velocity.y >= -50) {
+      SFX.springBounce();
+      this.player.setVelocity(pad.vx, pad.vy);
+      this.boostTimer = 0.35;
+      this.tweens.add({
+        targets: pad.sprite,
+        scaleX: 1.75,
+        scaleY: 1.15,
+        duration: 90,
+        yoyo: true
+      });
+      this.spawnPopupText(pad.sprite.x, pad.sprite.y - 30, 'BOING!', '#bef264');
+    }
+  }
+
+  collectTriangle(player, tri) {
+    if (tri.collected) return;
+    tri.collected = true;
+    tri.setTexture('tri_on');
+    this.trianglesCollected++;
+    SFX.triangleHit();
+    this.spawnPopupText(tri.x, tri.y - 16, '+5', '#facc15');
+    this.tweens.add({
+      targets: tri,
+      scaleX: 1.7,
+      scaleY: 1.7,
+      alpha: 0.45,
+      duration: 240
+    });
+  }
+
+  activateThruster(player, thruster) {
+    if (thruster.activated) return;
+    thruster.activated = true;
+    thruster.setTexture('thruster_done');
+
+    const diff = this.getDifficultyParams(GameState.round);
+    // Faster you reach the Mega Thruster, the higher your speed bonus!
+    const speedBonus = Math.max(10, Math.round(55 - this.elapsedTime * diff.thrusterMultiplier));
+
+    if (thruster.thrusterId === 1) {
+      this.thruster1Points = speedBonus;
+      this.thruster1Time = this.elapsedTime;
+    } else {
+      this.thruster2Points = speedBonus;
+      this.thruster2Time = this.elapsedTime;
+    }
+
+    // Grant exhilarating turbo surge!
+    this.boostTimer = 1.35;
+    this.player.setVelocityY(-440);
+    SFX.megaThruster();
+    this.cameras.main.shake(180, 0.008);
+    this.spawnPopupText(thruster.x, thruster.y - 26, `MEGA THRUSTER!\n+${speedBonus} SPEED PTS!`, '#fb923c');
+  }
+
+  spawnPopupText(x, y, msg, color = '#ffffff') {
+    const txt = this.add.text(x, y, msg, {
+      fontFamily: '"Press Start 2P"',
+      fontSize: '10px',
+      color: color,
+      stroke: '#090d16',
+      strokeThickness: 4,
+      align: 'center'
+    }).setOrigin(0.5).setDepth(25);
+
+    this.tweens.add({
+      targets: txt,
+      y: y - 42,
+      alpha: 0,
+      duration: 950,
+      ease: 'Cubic.easeOut',
+      onComplete: () => txt.destroy()
+    });
+  }
+
+  showFloatingBanner(msg, color = '#4ade80') {
+    const banner = this.add.text(this.cameras.main.width / 2, 125, msg, {
+      fontFamily: '"Press Start 2P"',
+      fontSize: '15px',
+      color: color,
+      backgroundColor: '#090d16cc',
+      padding: { x: 14, y: 10 },
+      stroke: '#000000',
+      strokeThickness: 4
+    }).setOrigin(0.5).setScrollFactor(0).setDepth(40);
+
+    this.tweens.add({
+      targets: banner,
+      alpha: 0,
+      y: 105,
+      delay: 1400,
+      duration: 600,
+      onComplete: () => banner.destroy()
+    });
+  }
+
+  // --------------------------------------------------------------------------
+  // SCORE CALCULATION & RUN COMPLETION / WATER WIPEOUT
+  // --------------------------------------------------------------------------
+  calculateScoreBreakdown(completed) {
+    const trianglePts = this.trianglesCollected * 5;
+    const thruster1Pts = this.thruster1Points;
+    const thruster2Pts = this.thruster2Points;
+    // Time bonus: up to 60 pts for fast runs (only awarded if buzzer reached)
+    const timeBonus = completed ? Math.max(0, Math.round(65 - this.elapsedTime * 1.35)) : 0;
+    const total = trianglePts + thruster1Pts + thruster2Pts + timeBonus;
+
+    return {
+      completed,
+      time: this.elapsedTime,
+      trianglesCount: this.trianglesCollected,
+      totalTriangles: this.totalTriangles,
+      trianglePts,
+      thruster1Pts,
+      thruster2Pts,
+      timeBonus,
+      total
+    };
+  }
+
+  completeCourse() {
+    if (this.runFinished || this.runFailed) return;
+    this.runFinished = true;
+    this.player.setVelocity(0, 0);
+    SFX.buzzer();
+    this.cameras.main.flash(280, 255, 255, 255);
+    this.spawnPopupText(this.player.x, this.player.y - 40, 'BUZZER SLAMMED!', '#4ade80');
+
+    const result = this.calculateScoreBreakdown(true);
+    this.time.delayedCall(750, () => {
+      window.onRunEnded(result);
+    });
+  }
+
+  triggerWaterWipeout() {
+    if (this.runFinished || this.runFailed) return;
+    this.runFailed = true;
+    SFX.splash();
+    this.cameras.main.shake(240, 0.012);
+    this.spawnPopupText(this.player.x, this.waterSurfaceY - 24, 'SPLASH! IN THE WATER!', '#38bdf8');
+
+    const result = this.calculateScoreBreakdown(false);
+    this.time.delayedCall(850, () => {
+      window.onRunEnded(result);
+    });
+  }
+
+  // --------------------------------------------------------------------------
+  // FRAME UPDATE LOOP
+  // --------------------------------------------------------------------------
+  update(time, delta) {
+    const dt = delta / 1000;
+    this.updateWaterHazard(time);
+
+    // Update Sinking Toobs
+    this.sinkingTubes.forEach(tube => {
+      if (tube.beingSteppedOn) {
+        tube.bodyObj.y += tube.sinkSpeed * dt;
+      } else if (tube.bodyObj.y > tube.baseY) {
+        tube.bodyObj.y = Math.max(tube.baseY, tube.bodyObj.y - 36 * dt);
+      }
+      tube.bodyObj.refreshBody();
+      tube.beingSteppedOn = false;
+
+      // Redraw overhead chains
+      tube.chainGfx.clear();
+      tube.chainGfx.lineStyle(4, 0x64748b, 1);
+      tube.chainGfx.strokeLineShape(new Phaser.Geom.Line(tube.x - 22, 0, tube.x - 22, tube.bodyObj.y - 45));
+      tube.chainGfx.strokeLineShape(new Phaser.Geom.Line(tube.x + 22, 0, tube.x + 22, tube.bodyObj.y - 45));
+    });
+
+    // Update Treadmill Belts & Gears
+    this.treadmills.forEach(tm => {
+      tm.beltSprite.tilePositionX += tm.beltSpeed * dt;
+      tm.gearL.rotation -= 4 * dt;
+      tm.gearR.rotation -= 4 * dt;
+    });
+
+    // Update Crumbling Rope Bridge Planks
+    this.bridgePlanks.forEach(bp => {
+      if (bp.stepped && !bp.falling) {
+        bp.timer += dt;
+        bp.sprite.y = bp.origY + Math.sin(time * 0.06) * 3;
+        if (bp.timer >= bp.dropDelay) {
+          bp.falling = true;
+        }
+      }
+      if (bp.falling) {
+        bp.sprite.y += 280 * dt;
+        bp.sprite.refreshBody();
+      }
+    });
+
+    if (!this.runStarted || this.runFinished || this.runFailed) {
+      this.updateHUD();
+      return;
+    }
+
+    // Advance run clock
+    this.elapsedTime += dt;
+    if (this.boostTimer > 0) this.boostTimer -= dt;
+
+    // Input aggregation (Keyboard + Mobile Touch)
+    const left = this.cursors.left.isDown || this.keys.A.isDown || TouchInput.left;
+    const right = this.cursors.right.isDown || this.keys.D.isDown || TouchInput.right;
+    const up = this.cursors.up.isDown || this.keys.W.isDown || TouchInput.up;
+    const down = this.cursors.down.isDown || this.keys.S.isDown;
+    const jumpJustPressed =
+      Phaser.Input.Keyboard.JustDown(this.cursors.space) ||
+      Phaser.Input.Keyboard.JustDown(this.cursors.up) ||
+      Phaser.Input.Keyboard.JustDown(this.keys.W) ||
+      TouchInput.jumpJustPressed;
+    TouchInput.jumpJustPressed = false;
+
+    // Check Climbable Rope / Ladder Overlap
+    const onClimbZone = this.physics.overlap(this.player, this.climbZones);
+
+    // Coyote time & Jump buffer for responsive platforming
+    if (this.player.body.touching.down) {
+      this.coyoteTimer = 0.11;
+    } else {
+      this.coyoteTimer -= dt;
+    }
+
+    if (jumpJustPressed) {
+      this.jumpBufferTimer = 0.12;
+    } else {
+      this.jumpBufferTimer -= dt;
+    }
+
+    // Horizontal Movement
+    const baseRunSpeed = this.boostTimer > 0 ? 355 : 255;
+    let vx = this.onTreadmillSpeed;
+    if (left) {
+      vx += -baseRunSpeed;
+      this.player.setFlipX(true);
+    } else if (right) {
+      vx += baseRunSpeed;
+      this.player.setFlipX(false);
+    }
+    this.player.setVelocityX(vx);
+    this.onTreadmillSpeed = 0;
+
+    // Vertical Movement (Climbing vs Jumping)
+    if (onClimbZone && (up || down)) {
+      this.player.body.setAllowGravity(false);
+      this.player.setVelocityY(up ? -210 : 210);
+      this.player.setTexture('player_climb');
+    } else {
+      this.player.body.setAllowGravity(true);
+
+      if (this.jumpBufferTimer > 0 && (this.coyoteTimer > 0 || onClimbZone)) {
+        this.player.setVelocityY(-515);
+        this.jumpBufferTimer = 0;
+        this.coyoteTimer = 0;
+        SFX.jump();
+      }
+
+      // Animation state
+      if (!this.player.body.touching.down) {
+        this.player.setTexture('player_jump');
+      } else if (Math.abs(vx) > 15) {
+        const runFrame = Math.floor(time / 95) % 2 === 0 ? 'player_run1' : 'player_run2';
+        this.player.setTexture(runFrame);
+      } else {
+        this.player.setTexture('player_idle');
+      }
+    }
+
+    // Check Water Hazard Contact ("DON'T GO IN THE WATER!")
+    if (this.player.y + 18 >= this.waterSurfaceY + 8) {
+      this.triggerWaterWipeout();
+    }
+
+    this.updateHUD();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// 5. HTML UI FLOW & PHASER INITIALIZATION
+// ----------------------------------------------------------------------------
+const TouchInput = {
+  left: false,
+  right: false,
+  up: false,
+  jumpJustPressed: false
+};
+
+let phaserGame = null;
+
+function initSetupUI() {
+  const countryGrid = document.getElementById('country-grid');
+  const athleteGrid = document.getElementById('athlete-grid');
+
+  // Populate Countries
+  COUNTRIES.forEach((country) => {
+    const btn = document.createElement('button');
+    btn.className = 'country-btn' + (country.code === GameState.selectedCountry.code ? ' selected' : '');
+    const flagCanvas = document.createElement('canvas');
+    flagCanvas.width = 16;
+    flagCanvas.height = 12;
+    flagCanvas.className = 'flag-canvas';
+    drawPixelFlag(flagCanvas, country.flagType);
+
+    const label = document.createElement('span');
+    label.textContent = country.name;
+
+    btn.appendChild(flagCanvas);
+    btn.appendChild(label);
+
+    btn.addEventListener('click', () => {
+      GameState.selectedCountry = country;
+      document.getElementById('selected-country-code').textContent = country.code;
+      document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      refreshAthletePortraits();
+    });
+
+    countryGrid.appendChild(btn);
+  });
+
+  // Populate Family Athletes
+  ATHLETES.forEach((athlete) => {
+    const btn = document.createElement('button');
+    btn.className = 'athlete-btn' + (athlete.id === GameState.selectedAthlete.id ? ' selected' : '');
+    const portrait = document.createElement('canvas');
+    portrait.width = 16;
+    portrait.height = 16;
+    portrait.className = 'portrait-canvas';
+    portrait.dataset.athleteId = athlete.id;
+    drawAthletePortrait(portrait, athlete, GameState.selectedCountry);
+
+    const label = document.createElement('span');
+    label.textContent = athlete.name;
+
+    btn.appendChild(portrait);
+    btn.appendChild(label);
+
+    btn.addEventListener('click', () => {
+      GameState.selectedAthlete = athlete;
+      document.getElementById('selected-athlete-name').textContent = athlete.name;
+      document.querySelectorAll('.athlete-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+
+    athleteGrid.appendChild(btn);
+  });
+}
+
+function refreshAthletePortraits() {
+  document.querySelectorAll('.portrait-canvas').forEach((canvas) => {
+    const id = parseInt(canvas.dataset.athleteId, 10);
+    const athlete = ATHLETES.find(a => a.id === id);
+    drawAthletePortrait(canvas, athlete, GameState.selectedCountry);
+  });
+}
+
+function buildScoreTableHTML(res) {
+  const statusText = res.completed ? `${res.time.toFixed(2)}s (FINISHED!)` : `WIPEOUT (${res.time.toFixed(2)}s)`;
+  return `
+    <tr><td>COURSE STATUS</td><td>${statusText}</td></tr>
+    <tr><td>TRIANGLE BUTTONS (${res.trianglesCount}/${res.totalTriangles} × 5 PTS)</td><td>+${res.trianglePts} PTS</td></tr>
+    <tr><td>MEGA THRUSTER #1 SPEED BONUS</td><td>+${res.thruster1Pts} PTS</td></tr>
+    <tr><td>MEGA THRUSTER #2 SPEED BONUS</td><td>+${res.thruster2Pts} PTS</td></tr>
+    <tr><td>FINISH TIME BONUS</td><td>+${res.timeBonus} PTS</td></tr>
+    <tr class="total-row"><td>RUN SCORE</td><td>${res.total} PTS</td></tr>
+  `;
+}
+
+function startActiveRun(attemptNum) {
+  GameState.attemptNumber = attemptNum;
+  document.getElementById('screen-setup').classList.add('hidden');
+  document.getElementById('screen-run1-decision').classList.add('hidden');
+  document.getElementById('screen-round-end').classList.add('hidden');
+
+  const topActions = document.getElementById('hud-top-actions');
+  topActions.classList.remove('hidden');
+
+  const doOverBtn = document.getElementById('btn-manual-doover');
+  if (attemptNum === 1) {
+    doOverBtn.classList.remove('hidden');
+    doOverBtn.textContent = 'DO-OVER (1 LEFT)';
+  } else {
+    doOverBtn.classList.add('hidden');
+  }
+
+  if (!phaserGame) {
+    phaserGame = new Phaser.Game({
+      type: Phaser.AUTO,
+      parent: 'phaser-container',
+      width: 1120,
+      height: 640,
+      pixelArt: true,
+      backgroundColor: '#090d16',
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+      },
+      physics: {
+        default: 'arcade',
+        arcade: {
+          gravity: { y: 1180 },
+          debug: false
+        }
+      },
+      scene: [BeastmasterScene]
+    });
+  } else {
+    phaserGame.scene.start('BeastmasterScene');
+  }
+}
+
+// Called by Phaser Scene when a run ends (either buzzer or water splash)
+window.onRunEnded = function (result) {
+  document.getElementById('hud-top-actions').classList.add('hidden');
+
+  if (GameState.attemptNumber === 1) {
+    GameState.run1Data = result;
+    const modal = document.getElementById('screen-run1-decision');
+    const titleEl = document.getElementById('decision-title');
+    const subEl = document.getElementById('decision-subtitle');
+    const lockBtn = document.getElementById('btn-lock-run1');
+
+    if (result.completed) {
+      titleEl.textContent = 'RUN 1 COMPLETE!';
+      titleEl.style.color = '#4ade80';
+      subEl.textContent = 'KEEP THIS SCORE OR GAMBLE YOUR EXTRA LIFE?';
+      lockBtn.classList.remove('hidden');
+    } else {
+      titleEl.textContent = 'FELL IN THE WATER!';
+      titleEl.style.color = '#38bdf8';
+      subEl.textContent = 'RUN 1 WIPED OUT — USE YOUR EXTRA LIFE DO-OVER!';
+      lockBtn.classList.add('hidden');
+    }
+
+    document.getElementById('decision-score-table').innerHTML = buildScoreTableHTML(result);
+    modal.classList.remove('hidden');
+  } else {
+    // Attempt 2: Counts NO MATTER WHAT!
+    GameState.finalRunData = result;
+    showFinalRoundSummary(result, true);
+  }
+};
+
+function showFinalRoundSummary(result, usedDoOver) {
+  document.getElementById('screen-run1-decision').classList.add('hidden');
+  const modal = document.getElementById('screen-round-end');
+  const targetScore = 85 + (GameState.round - 1) * 20;
+  const passed = result.completed && result.total >= targetScore;
+
+  GameState.totalTournamentScore += result.total;
+
+  // Record entry in Family & Country Hall of Fame
+  GameState.leaderboard.push({
+    athlete: GameState.selectedAthlete.name,
+    role: GameState.selectedAthlete.role,
+    country: GameState.selectedCountry.code,
+    round: GameState.round,
+    score: result.total,
+    completed: result.completed
+  });
+  GameState.leaderboard.sort((a, b) => b.score - a.score);
+  const topEntries = GameState.leaderboard.slice(0, 5);
+  const lbEl = document.getElementById('family-leaderboard-list');
+  lbEl.innerHTML = topEntries.map((entry, idx) =>
+    `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #1e293b; padding:3px 0;">
+      <span>#${idx + 1} ${entry.athlete} (${entry.country}) - R${entry.round}</span>
+      <span style="color:#facc15;">${entry.score} PTS</span>
+    </div>`
+  ).join('');
+
+  document.getElementById('round-end-title').textContent = passed
+    ? `ROUND ${GameState.round} CLEARED!`
+    : `ROUND ${GameState.round} OVER!`;
+  document.getElementById('round-end-title').style.color = passed ? '#4ade80' : '#f87171';
+
+  document.getElementById('round-end-badge').textContent =
+    `TEAM ${GameState.selectedCountry.name} • ${GameState.selectedAthlete.name} • ${usedDoOver ? 'DO-OVER RUN LOCKED' : 'RUN 1 LOCKED'}`;
+
+  document.getElementById('final-score-table').innerHTML = buildScoreTableHTML(result);
+
+  const verdictBox = document.getElementById('round-verdict-box');
+  if (passed) {
+    verdictBox.innerHTML = `
+      <span class="hl-green">QUALIFIED!</span> (${result.total} PTS vs ${targetScore} PTS Target)<br/>
+      TOTAL TOURNAMENT SCORE: <span class="hl-yellow">${GameState.totalTournamentScore} PTS</span><br/>
+      Ready for Round ${GameState.round + 1}? Obstacles get FASTER & TOUGHER!
+    `;
+    document.getElementById('btn-next-round').classList.remove('hidden');
+  } else {
+    const reason = !result.completed
+      ? 'Fell in the water on your Do-Over Run!'
+      : `Needed ${targetScore} PTS to advance (Scored ${result.total} PTS).`;
+    verdictBox.innerHTML = `
+      <span class="hl-red">ELIMINATED IN ROUND ${GameState.round}!</span><br/>
+      ${reason}<br/>
+      FINAL TOURNAMENT SCORE: <span class="hl-yellow">${GameState.totalTournamentScore} PTS</span>
+    `;
+    document.getElementById('btn-next-round').classList.add('hidden');
+  }
+
+  modal.classList.remove('hidden');
+}
+
+// Wire up all DOM buttons
+window.addEventListener('DOMContentLoaded', () => {
+  initSetupUI();
+
+  document.getElementById('btn-start-run').addEventListener('click', () => {
+    SFX.ensureContext();
+    SFX.triangleHit();
+    GameState.run1Data = null;
+    startActiveRun(1);
+  });
+
+  // Keyboard shortcut: Press Enter on setup screen to start immediately
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !document.getElementById('screen-setup').classList.contains('hidden')) {
+      document.getElementById('btn-start-run').click();
+    }
+  });
+
+  document.getElementById('btn-lock-run1').addEventListener('click', () => {
+    SFX.buzzer();
+    showFinalRoundSummary(GameState.run1Data, false);
+  });
+
+  document.getElementById('btn-take-doover').addEventListener('click', () => {
+    SFX.doOverWarning();
+    startActiveRun(2);
+  });
+
+  document.getElementById('btn-manual-doover').addEventListener('click', () => {
+    if (GameState.attemptNumber === 1) {
+      SFX.doOverWarning();
+      startActiveRun(2);
+    }
+  });
+
+  document.getElementById('btn-next-round').addEventListener('click', () => {
+    GameState.round++;
+    GameState.run1Data = null;
+    startActiveRun(1);
+  });
+
+  document.getElementById('btn-restart-campaign').addEventListener('click', () => {
+    GameState.round = 1;
+    GameState.totalTournamentScore = 0;
+    GameState.run1Data = null;
+    document.getElementById('setup-round-badge').textContent = 'ROUND 1 • QUALIFYING TARGET: 85 PTS';
+    document.getElementById('screen-round-end').classList.add('hidden');
+    document.getElementById('screen-setup').classList.remove('hidden');
+  });
+
+  document.getElementById('btn-mute-toggle').addEventListener('click', (e) => {
+    const muted = SFX.toggleMute();
+    e.target.textContent = muted ? 'SFX: OFF' : 'SFX: ON';
+  });
+
+  // Mobile Touch Controls
+  const bindTouch = (id, key, isJump = false) => {
+    const el = document.getElementById(id);
+    el.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      SFX.ensureContext();
+      el.classList.add('pressed');
+      if (isJump) TouchInput.jumpJustPressed = true;
+      else TouchInput[key] = true;
+    });
+    el.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      el.classList.remove('pressed');
+      if (!isJump) TouchInput[key] = false;
+    });
+  };
+  bindTouch('touch-left', 'left');
+  bindTouch('touch-right', 'right');
+  bindTouch('touch-up', 'up');
+  bindTouch('touch-jump', null, true);
+});
+</script>
+</body>
+</html>
