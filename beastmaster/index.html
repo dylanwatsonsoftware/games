@@ -79,12 +79,12 @@
     .pixel-panel {
       background: #131926;
       border: 4px solid #3c4a64;
-      box-shadow: inset 0 0 0 4px #0c1018, 0 12px 32px rgba(0,0,0,0.85);
+      box-shadow: inset 0 0 0 4px #0c1018, 0 12px 32px rgba(0, 0, 0, 0.85);
       border-radius: 10px;
-      padding: 16px 20px;
+      padding: 14px 18px;
       max-width: 960px;
       width: 100%;
-      max-height: calc(100dvh - 20px);
+      max-height: calc(100dvh - 16px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -97,7 +97,7 @@
       margin-bottom: 10px;
     }
     .title-banner h1 {
-      font-size: clamp(14px, 2.4vw, 24px);
+      font-size: clamp(13px, 2.3vw, 23px);
       color: #ff9f1c;
       text-shadow: 3px 3px 0 #7c2d12, 0 0 18px rgba(255, 159, 28, 0.5);
       margin: 0 0 6px 0;
@@ -173,6 +173,7 @@
       image-rendering: pixelated;
       border: 1px solid #000;
       flex-shrink: 0;
+      pointer-events: none;
     }
 
     /* Athlete Grid */
@@ -211,53 +212,54 @@
       image-rendering: pixelated;
       background: #0a0e17;
       border: 2px solid #475569;
+      pointer-events: none;
     }
 
-    /* Compact Landscape Media Queries so Android & iPad fit 100% without scrolling */
-    @media (max-height: 540px), (max-width: 920px) and (orientation: landscape) {
+    /* Zero-Scroll Landscape Media Queries for Android & iPad */
+    @media (max-height: 540px), (max-width: 940px) and (orientation: landscape) {
       .ui-overlay {
         padding: 6px 10px;
       }
       .pixel-panel {
-        padding: 10px 14px;
+        padding: 9px 12px;
         border-width: 3px;
-        max-height: calc(100dvh - 12px);
+        max-height: calc(100dvh - 10px);
       }
       .title-banner {
-        margin-bottom: 6px;
+        margin-bottom: 5px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
+        gap: 8px;
         padding-right: 44px;
       }
       .title-banner h1 {
-        font-size: clamp(11px, 2vw, 17px);
+        font-size: clamp(10px, 1.9vw, 16px);
         margin: 0;
         text-align: left;
       }
       .subtitle-tag {
-        font-size: 8px;
-        padding: 4px 8px;
+        font-size: 7.5px;
+        padding: 4px 7px;
         white-space: nowrap;
       }
       .setup-grid {
         grid-template-columns: 1.15fr 1fr;
         gap: 8px;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
       }
       .section-box {
-        padding: 7px 8px;
+        padding: 6px 8px;
       }
       .section-title {
-        font-size: 8px;
-        margin-bottom: 6px;
+        font-size: 7.5px;
+        margin-bottom: 5px;
       }
       .country-grid {
         gap: 4px;
       }
       .country-btn {
-        padding: 5px 6px;
+        padding: 4px 6px;
         font-size: 7px;
         gap: 6px;
       }
@@ -266,25 +268,25 @@
         height: 13px;
       }
       .athlete-grid {
-        gap: 5px;
+        gap: 4px;
       }
       .athlete-btn {
-        padding: 5px 4px;
+        padding: 4px 3px;
         gap: 4px;
         font-size: 7px;
       }
       .portrait-canvas {
-        width: 34px;
-        height: 34px;
+        width: 32px;
+        height: 32px;
       }
       .quick-legend {
-        padding: 5px 8px;
-        font-size: 7.5px;
-        margin-bottom: 8px;
+        padding: 4px 8px;
+        font-size: 7px;
+        margin-bottom: 6px;
       }
       .arcade-btn {
-        padding: 10px 18px;
-        font-size: 11px;
+        padding: 9px 18px;
+        font-size: 10px;
       }
     }
 
@@ -303,8 +305,8 @@
       background: #101622;
       border: 2px solid #334155;
       border-radius: 6px;
-      padding: 8px 10px;
-      font-size: 8.5px;
+      padding: 7px 10px;
+      font-size: 8px;
       color: #e2e8f0;
       margin-bottom: 10px;
       text-align: center;
@@ -317,7 +319,7 @@
       font-size: 8.5px;
       line-height: 1.6;
       color: #cbd5e1;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .hl-yellow { color: #facc15; }
     .hl-cyan { color: #38bdf8; }
@@ -329,32 +331,32 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin: 8px 0;
+      margin: 6px 0;
     }
     .compare-card {
       background: #0d121c;
       border: 3px solid #334155;
       border-radius: 8px;
-      padding: 9px 8px;
+      padding: 8px;
       text-align: center;
     }
     .compare-card .label {
       font-size: 8px;
       color: #94a3b8;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
     .compare-card .big-num {
-      font-size: clamp(16px, 2.8vw, 22px);
+      font-size: clamp(15px, 2.6vw, 21px);
       color: #facc15;
     }
     .goal-bar-wrap {
       width: 100%;
-      height: 14px;
+      height: 13px;
       background: #090d16;
       border: 2px solid #475569;
       border-radius: 6px;
       overflow: hidden;
-      margin: 6px 0;
+      margin: 5px 0;
     }
     .goal-bar-fill {
       height: 100%;
@@ -364,9 +366,9 @@
     }
     .stamp-badge {
       display: inline-block;
-      padding: 6px 10px;
+      padding: 5px 10px;
       border-radius: 6px;
-      font-size: 10px;
+      font-size: 9.5px;
       margin-top: 2px;
     }
     .stamp-pass {
@@ -384,7 +386,7 @@
     .arcade-btn {
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(10px, 1.4vw, 13px);
-      padding: 12px 20px;
+      padding: 12px 22px;
       border-radius: 8px;
       border: 3px solid #fff;
       cursor: pointer;
@@ -411,11 +413,12 @@
       color: #ffffff;
       text-shadow: 2px 2px 0 #451a03;
     }
-    /* Subtle Secondary Reset Button */
+
+    /* Subtle Secondary Reset Button + Confirmation Bar */
     .btn-subtle-reset {
       font-family: 'Press Start 2P', monospace;
       font-size: 8px;
-      padding: 8px 12px;
+      padding: 7px 12px;
       border-radius: 6px;
       background: #1e293b;
       border: 2px solid #475569;
@@ -436,15 +439,15 @@
       background: #291216;
       border: 2px solid #ef4444;
       border-radius: 6px;
-      padding: 7px 10px;
+      padding: 6px 10px;
       font-size: 8px;
       color: #fca5a5;
-      margin-top: 8px;
+      margin-top: 6px;
     }
     .btn-confirm-yes {
       font-family: 'Press Start 2P', monospace;
       font-size: 8px;
-      padding: 6px 10px;
+      padding: 5px 9px;
       border-radius: 5px;
       background: #dc2626;
       border: 2px solid #fca5a5;
@@ -454,7 +457,7 @@
     .btn-confirm-no {
       font-family: 'Press Start 2P', monospace;
       font-size: 8px;
-      padding: 6px 10px;
+      padding: 5px 9px;
       border-radius: 5px;
       background: #1e293b;
       border: 2px solid #64748b;
@@ -466,11 +469,11 @@
     .score-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 6px 0;
+      margin: 4px 0;
       font-size: 8.5px;
     }
     .score-table td {
-      padding: 6px 8px;
+      padding: 5px 8px;
       border-bottom: 2px solid #1e293b;
     }
     .score-table td:last-child {
@@ -483,7 +486,7 @@
       position: fixed;
       left: max(18px, env(safe-area-inset-left, 18px));
       right: max(18px, env(safe-area-inset-right, 18px));
-      bottom: calc(34px + env(safe-area-inset-bottom, 16px));
+      bottom: calc(32px + env(safe-area-inset-bottom, 16px));
       display: none;
       justify-content: space-between;
       align-items: flex-end;
@@ -577,7 +580,6 @@
       opacity: 0.75;
     }
 
-    /* Subtle Fullscreen Toast */
     #fs-toast {
       position: fixed;
       top: 52px;
@@ -616,12 +618,12 @@
       </div>
     </div>
 
-    <!-- PRE-RUN SETUP / CHARACTER & COUNTRY SELECT (Fits 100% in Landscape without scroll) -->
+    <!-- PRE-RUN SETUP / CHARACTER & COUNTRY SELECT -->
     <div id="screen-setup" class="ui-overlay">
       <div class="pixel-panel">
         <div class="title-banner">
           <h1>CHARLIE'S BEASTMASTER GAME</h1>
-          <div class="subtitle-tag" id="setup-round-badge">ROUND 1 • GOAL: 180 PTS</div>
+          <div class="subtitle-tag" id="setup-round-badge">ROUND 1 • GOAL: 150 PTS</div>
         </div>
 
         <div class="setup-grid">
@@ -634,7 +636,7 @@
             <div class="country-grid" id="country-grid"></div>
           </div>
 
-          <!-- Character Select (Names only, no ages/roles) -->
+          <!-- Character Select (Names + Pixel Portraits ONLY, no age/role subtitles) -->
           <div class="section-box">
             <div class="section-title">
               <span>2. PLAYER</span>
@@ -691,8 +693,8 @@
 
         <div id="round-verdict-box" style="margin: 6px 0;"></div>
 
-        <div id="family-leaderboard-box" class="section-box" style="margin-top:8px; padding:8px 10px;">
-          <div class="section-title" style="margin-bottom:6px;">
+        <div id="family-leaderboard-box" class="section-box" style="margin-top:6px; padding:8px 10px;">
+          <div class="section-title" style="margin-bottom:5px;">
             <span>🏆 TOP SCORES</span>
           </div>
           <div id="family-leaderboard-list" style="font-size:8px; line-height:1.8; color:#cbd5e1;"></div>
@@ -736,10 +738,12 @@ class RetroAudio {
   ensureContext() {
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      this.ctx = new AudioCtx();
+      if (AudioCtx) {
+        this.ctx = new AudioCtx();
+      }
     }
-    if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume().catch(() => {});
     }
   }
 
@@ -751,6 +755,7 @@ class RetroAudio {
   playTone(freq, endFreq, duration, type = 'square', gainVal = 0.14, delay = 0) {
     if (this.muted) return;
     this.ensureContext();
+    if (!this.ctx) return;
     const now = this.ctx.currentTime + delay;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
@@ -770,6 +775,7 @@ class RetroAudio {
   playNoise(duration, gainVal = 0.18, filterFreq = 900) {
     if (this.muted) return;
     this.ensureContext();
+    if (!this.ctx) return;
     const now = this.ctx.currentTime;
     const bufferSize = Math.floor(this.ctx.sampleRate * duration);
     const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
@@ -841,7 +847,7 @@ class RetroAudio {
 const SFX = new RetroAudio();
 
 // ----------------------------------------------------------------------------
-// 2. COUNTRIES & FAMILY ATHLETE ROSTER DATA (No ages or role subtitles)
+// 2. COUNTRIES & FAMILY ATHLETE ROSTER DATA (Names only, no ages/roles)
 // ----------------------------------------------------------------------------
 const COUNTRIES = [
   { code: 'AUS', name: 'AUSTRALIA', primary: '#15803d', secondary: '#facc15', flagType: 'aus' },
@@ -921,7 +927,7 @@ const ATHLETES = [
   }
 ];
 
-const LEADERBOARD_STORAGE_KEY = 'charlies_beastmaster_leaderboard_v4';
+const LEADERBOARD_STORAGE_KEY = 'charlies_beastmaster_leaderboard_v5';
 
 function loadSavedLeaderboard() {
   try {
@@ -941,7 +947,19 @@ function saveLeaderboard(entries) {
 }
 
 function getRoundGoal(round) {
-  return 180 + (round - 1) * 35;
+  return 150 + (round - 1) * 35;
+}
+
+// Deterministic Mulberry32 PRNG seeded strictly by round number
+function createRoundRNG(round) {
+  let seed = (round * 2654435761) >>> 0;
+  return function () {
+    seed += 0x6D2B79F5;
+    let t = seed;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 }
 
 // Global Tournament State
@@ -950,10 +968,9 @@ const GameState = {
   totalTournamentScore: 0,
   selectedCountry: COUNTRIES[0],
   selectedAthlete: ATHLETES[0],
-  doOverAvailable: true,  // ONLY ONE Do-Over for the ENTIRE multi-round run!
+  sessionDoOverAvailable: true, // Strictly 1 Do-Over for the ENTIRE multi-round run
   isDoOverAttempt: false,
   run1Data: null,
-  finalRunData: null,
   leaderboard: loadSavedLeaderboard()
 };
 
@@ -1066,7 +1083,6 @@ function drawAthletePortrait(canvas, athlete, country) {
     ctx.fillStyle = athlete.coatBlack;
     ctx.fillRect(4, 3, 8, 7);
 
-    // Long feathered floppy ears
     ctx.fillStyle = athlete.coatBlack;
     ctx.fillRect(2, 4, 2, 8);
     ctx.fillRect(12, 4, 2, 8);
@@ -1074,13 +1090,11 @@ function drawAthletePortrait(canvas, athlete, country) {
     ctx.fillRect(2, 9, 2, 3);
     ctx.fillRect(12, 9, 2, 3);
 
-    // Tan eyebrows & muzzle
     ctx.fillStyle = athlete.coatTan;
     ctx.fillRect(5, 5, 2, 1);
     ctx.fillRect(9, 5, 2, 1);
     ctx.fillRect(5, 8, 6, 4);
 
-    // Eyes & nose
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(5, 6, 2, 2);
     ctx.fillRect(9, 6, 2, 2);
@@ -1159,7 +1173,7 @@ function generatePixelTextures(scene, athlete, country) {
     scene.textures.addCanvas(key, canvas);
   };
 
-  // A1. Quadruped Long-Haired Dachshund Sprites for Frankie (24x16 pixel art)
+  // A1. Frankie Quadruped Long-Haired Dachshund Sprites (24x16)
   const drawDachshund = (frame) => (ctx) => {
     const black = athlete.coatBlack;
     const tan = athlete.coatTan;
@@ -1231,7 +1245,7 @@ function generatePixelTextures(scene, athlete, country) {
     }
   };
 
-  // A2. Human Athlete Sprites (16x24 pixel art)
+  // A2. Human Athlete Sprites (16x24)
   const drawRunner = (frame) => (ctx) => {
     ctx.fillStyle = athlete.hair;
     ctx.fillRect(5, 1, 6, 3);
@@ -1433,21 +1447,21 @@ function generatePixelTextures(scene, athlete, country) {
     }
   });
 
-  // G. Sinking Toob Drum (68x84)
-  makeTex('sinking_toob', 68, 84, (ctx) => {
+  // G. Sinking Toob Drum (56x84)
+  makeTex('sinking_toob', 56, 84, (ctx) => {
     ctx.fillStyle = '#9a3412';
-    ctx.fillRect(4, 4, 60, 76);
+    ctx.fillRect(4, 4, 48, 76);
     ctx.fillStyle = '#c2410c';
-    ctx.fillRect(8, 4, 18, 76);
+    ctx.fillRect(8, 4, 14, 76);
     ctx.fillStyle = '#431407';
-    ctx.fillRect(48, 4, 16, 76);
+    ctx.fillRect(40, 4, 12, 76);
     ctx.fillStyle = '#64748b';
-    ctx.fillRect(2, 2, 64, 6);
-    ctx.fillRect(2, 28, 64, 5);
-    ctx.fillRect(2, 54, 64, 5);
-    ctx.fillRect(2, 76, 64, 6);
+    ctx.fillRect(2, 2, 52, 6);
+    ctx.fillRect(2, 28, 52, 5);
+    ctx.fillRect(2, 54, 52, 5);
+    ctx.fillRect(2, 76, 52, 6);
     ctx.fillStyle = '#e2e8f0';
-    for (let x = 6; x < 62; x += 8) {
+    for (let x = 6; x < 50; x += 8) {
       ctx.fillRect(x, 4, 2, 2);
       ctx.fillRect(x, 78, 2, 2);
     }
@@ -1541,6 +1555,54 @@ function generatePixelTextures(scene, athlete, country) {
     ctx.fillStyle = '#f87171';
     ctx.fillRect(14, 10, 6, 4);
   });
+
+  // K. Hydraulic Piston Bounce Pad (48x24)
+  makeTex('hydraulic_pad', 48, 24, (ctx) => {
+    ctx.fillStyle = '#334155';
+    ctx.fillRect(4, 14, 40, 10);
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillRect(18, 6, 12, 8);
+    ctx.fillStyle = '#22c55e';
+    ctx.fillRect(2, 2, 44, 6);
+    ctx.fillStyle = '#bef264';
+    ctx.fillRect(6, 2, 36, 2);
+  });
+
+  // L. Swinging Hammer Head (44x32)
+  makeTex('hammer_head', 44, 32, (ctx) => {
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(2, 4, 40, 24);
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillRect(4, 6, 36, 6);
+    ctx.fillStyle = '#eab308';
+    ctx.fillRect(0, 2, 6, 28);
+    ctx.fillRect(38, 2, 6, 28);
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(14, 12, 16, 8);
+  });
+
+  // M. Motorized Steel Ferry Barge (96x28)
+  makeTex('ferry_barge', 96, 28, (ctx) => {
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(4, 6, 88, 18);
+    ctx.fillStyle = '#38bdf8';
+    ctx.fillRect(0, 2, 96, 5);
+    ctx.fillStyle = '#eab308';
+    ctx.fillRect(8, 10, 80, 4);
+    ctx.fillStyle = '#f97316';
+    ctx.fillRect(12, 18, 12, 6);
+    ctx.fillRect(72, 18, 12, 6);
+  });
+
+  // N. Laser Emitter Pod (28x24)
+  makeTex('laser_emitter', 28, 24, (ctx) => {
+    ctx.fillStyle = '#334155';
+    ctx.fillRect(2, 0, 24, 16);
+    ctx.fillStyle = '#ef4444';
+    ctx.fillRect(8, 14, 12, 8);
+    ctx.fillStyle = '#fef08a';
+    ctx.fillRect(11, 18, 6, 4);
+  });
 }
 
 // ----------------------------------------------------------------------------
@@ -1553,25 +1615,45 @@ const TouchInput = {
   jumpJustPressed: false
 };
 
+const activePointers = {
+  left: new Set(),
+  right: new Set(),
+  jump: new Set()
+};
+
 function clearAllTouchInputs() {
+  activePointers.left.clear();
+  activePointers.right.clear();
+  activePointers.jump.clear();
   TouchInput.left = false;
   TouchInput.right = false;
   TouchInput.jumpHeld = false;
   TouchInput.jumpJustPressed = false;
-  document.querySelectorAll('.touch-btn').forEach(btn => btn.classList.remove('pressed'));
+  ['touch-left', 'touch-right', 'touch-jump'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('pressed');
+  });
 }
 
-window.addEventListener('blur', clearAllTouchInputs);
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) clearAllTouchInputs();
-});
-
 // ----------------------------------------------------------------------------
-// 5. MAIN PHASER GAME SCENE (1280x720 16:9 Landscape Resolution)
+// 5. MAIN PHASER GAME SCENE
 // ----------------------------------------------------------------------------
 class BeastmasterScene extends Phaser.Scene {
   constructor() {
     super('BeastmasterScene');
+  }
+
+  createPlatform(x, y, width, height) {
+    const cols = Math.max(1, Math.round(width / 32));
+    const rows = Math.max(1, Math.round(height / 32));
+    for (let c = 0; c < cols; c++) {
+      for (let r = 0; r < rows; r++) {
+        const px = x + c * 32 + 16;
+        const py = y + r * 32 + 16;
+        const tile = this.staticPlatforms.create(px, py, 'plat_industrial');
+        tile.refreshBody();
+      }
+    }
   }
 
   create() {
@@ -1580,7 +1662,7 @@ class BeastmasterScene extends Phaser.Scene {
 
     clearAllTouchInputs();
 
-    this.worldWidth = 5050;
+    this.worldWidth = 6400;
     this.worldHeight = 720;
     this.waterSurfaceY = 615;
 
@@ -1602,11 +1684,13 @@ class BeastmasterScene extends Phaser.Scene {
     this.coyoteTimer = 0;
     this.jumpBufferTimer = 0;
     this.onTreadmillSpeed = 0;
+    this.activeFerryDeltaX = 0;
+    this.laserZapCooldown = 0;
 
     // 1. Dark Industrial Stadium Background
     this.createStadiumBackdrop();
 
-    // 2. Build Complete Course from START (x=120) to FINISH (x=4500+)
+    // 2. Build Complete Deterministic Course
     this.staticPlatforms = this.physics.add.staticGroup();
     this.climbZones = this.physics.add.staticGroup();
     this.trianglesGroup = this.physics.add.staticGroup();
@@ -1615,18 +1699,23 @@ class BeastmasterScene extends Phaser.Scene {
     this.treadmills = [];
     this.bridgePlanks = [];
     this.springPads = [];
+    this.swingingHammers = [];
+    this.laserGates = [];
+    this.movingFerries = [];
 
-    this.buildCourse(diff);
+    const finishX = this.buildCourse(diff, round);
+    this.worldWidth = Math.max(4800, finishX + 450);
+    this.physics.world.setBounds(0, 0, this.worldWidth, this.worldHeight + 120);
 
     // 3. Spawn Player Safely on the START Platform (x=220, y=445)
     const athlete = GameState.selectedAthlete;
     this.player = this.physics.add.sprite(220, 445, 'player_idle');
     if (athlete.type === 'dog') {
-      this.player.setScale(1.95);
+      this.player.setScale(1.85);
       this.player.body.setSize(18, 12);
       this.player.body.setOffset(3, 3);
     } else {
-      const s = 2.1 * athlete.heightScale;
+      const s = 2 * athlete.heightScale;
       this.player.setScale(s);
       this.player.body.setSize(10, 21);
       this.player.body.setOffset(3, 3);
@@ -1637,17 +1726,17 @@ class BeastmasterScene extends Phaser.Scene {
     // Colliders & Overlaps
     this.physics.add.collider(this.player, this.staticPlatforms);
 
-    this.springPads.forEach(pad => {
+    this.springPads.forEach((pad) => {
       this.physics.add.collider(this.player, pad.zone, () => this.handleSpringBounce(pad), null, this);
     });
 
-    this.sinkingTubes.forEach(tube => {
+    this.sinkingTubes.forEach((tube) => {
       this.physics.add.collider(this.player, tube.bodyObj, () => {
         tube.beingSteppedOn = true;
       }, null, this);
     });
 
-    this.treadmills.forEach(tm => {
+    this.treadmills.forEach((tm) => {
       this.physics.add.collider(this.player, tm.platform, () => {
         if (this.player.body.touching.down) {
           this.onTreadmillSpeed = -tm.beltSpeed;
@@ -1655,10 +1744,18 @@ class BeastmasterScene extends Phaser.Scene {
       }, null, this);
     });
 
-    this.bridgePlanks.forEach(bp => {
+    this.bridgePlanks.forEach((bp) => {
       this.physics.add.collider(this.player, bp.sprite, () => {
         if (this.player.body.touching.down && !bp.solidOnly) {
           bp.stepped = true;
+        }
+      }, null, this);
+    });
+
+    this.movingFerries.forEach((ferry) => {
+      this.physics.add.collider(this.player, ferry.sprite, () => {
+        if (this.player.body.touching.down) {
+          this.activeFerryDeltaX = ferry.deltaX;
         }
       }, null, this);
     });
@@ -1667,24 +1764,23 @@ class BeastmasterScene extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.thrustersGroup, this.activateThruster, null, this);
     this.physics.add.overlap(this.player, this.finishZone, this.completeCourse, null, this);
 
-    // 4. Foreground Animated Water Hazard
+    // 4. Foreground Animated Churning Water Hazard
     this.createWaterHazard(diff);
 
-    // 5. Edge-to-Edge Responsive Camera & Adaptive Zoom Setup
+    // 5. Camera & Edge-to-Edge Viewport Scaling
     this.cameras.main.setBounds(0, 0, this.worldWidth, this.worldHeight);
-    this.cameras.main.startFollow(this.player, true, 0.14, 0.14, -220, 45);
+    this.cameras.main.startFollow(this.player, true, 0.14, 0.14, -140, 40);
 
-    // 6. Fixed Screen-Space Arcade HUD
+    // 6. Fixed Screen-Space Kid-Friendly HUD
     this.createArcadeHUD(diff);
 
-    // Apply initial edge-to-edge zoom & hook window/orientation resize
     this.applyResponsiveViewport();
     this.scale.on('resize', this.applyResponsiveViewport, this);
     this.events.once('shutdown', () => {
       this.scale.off('resize', this.applyResponsiveViewport, this);
     });
 
-    // 7. Input Setup
+    // 7. Keyboard Input Setup
     this.cursors = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys({
       W: Phaser.Input.Keyboard.KeyCodes.W,
@@ -1697,8 +1793,8 @@ class BeastmasterScene extends Phaser.Scene {
     const bannerText = GameState.isDoOverAttempt
       ? `ROUND ${round} — DO-OVER RUN! COUNTS!`
       : round === 1
-        ? `ROUND 1 — GOAL: ${diff.targetScore} PTS!`
-        : `ROUND ${round} — ${diff.roundFlavor} (GOAL: ${diff.targetScore})`;
+        ? `ROUND 1 — GOAL: ${diff.targetScore} PTS`
+        : `ROUND ${round} — ${diff.courseTitle} (GOAL: ${diff.targetScore})`;
 
     this.showFloatingBanner(
       bannerText,
@@ -1707,13 +1803,26 @@ class BeastmasterScene extends Phaser.Scene {
     this.runStarted = true;
   }
 
+  applyResponsiveViewport() {
+    if (!this.cameras || !this.cameras.main) return;
+    const w = this.scale.width || window.innerWidth;
+    const h = this.scale.height || window.innerHeight;
+    const zoom = Math.max(w / 1080, h / 620, 1.05);
+    this.cameras.main.setZoom(zoom);
+    this.cameras.main.setBounds(0, 0, this.worldWidth, this.worldHeight);
+    this.cameras.main.startFollow(this.player, true, 0.14, 0.14, -135, 35);
+    if (this.hudContainer) {
+      this.hudContainer.setScale(1 / zoom);
+    }
+  }
+
   getDifficultyParams(round) {
-    const r = Math.min(round - 1, 6);
+    const r = Math.min(round - 1, 7);
     const goal = getRoundGoal(round);
     if (round === 1) {
       return {
         isRound1: true,
-        gapScale: 0,
+        gapExtra: 0,
         stepRise: 0,
         treadmillSpeed: 68,
         tubeSinkSpeed: 20,
@@ -1721,38 +1830,45 @@ class BeastmasterScene extends Phaser.Scene {
         bridgeSolid: true,
         bridgeDropDelay: 99,
         plankScale: 1.2,
+        hammerSpeed: 2.0,
+        laserPeriod: 3.4,
+        ferrySpeed: 95,
         waterWaveAmp: 5,
         targetScore: goal,
         thrusterMultiplier: 2.1,
-        roundFlavor: 'WARM-UP'
+        courseTitle: 'CLASSIC ARENA'
       };
     }
 
-    const dropDelays = [1.0, 1.0, 0.65, 0.45, 0.35, 0.28, 0.24];
-    const flavors = [
+    const dropDelays = [1.0, 1.0, 0.72, 0.52, 0.40, 0.32, 0.26, 0.22];
+    const titles = [
       '',
-      'CRUMBLING BRIG!',
-      'FASTER TREADMILLS!',
-      'FAST SINKING TOOBS!',
-      'WIDE GAPS & HIGH SPEED!',
-      'EXTREME BEASTMASTER!',
-      'ULTIMATE GAUNTLET!'
+      'SHUFFLED GAUNTLET',
+      'HAMMER & LASER RUN',
+      'FERRY & PISTON TRIAL',
+      'HIGH-SPEED CHAOS',
+      'EXTREME BEASTMASTER',
+      'TITAN COURSE',
+      'ULTIMATE CHAMPIONSHIP'
     ];
 
     return {
       isRound1: false,
-      gapScale: Math.min(34, r * 7),
-      stepRise: Math.min(24, r * 5),
-      treadmillSpeed: 110 + (round - 1) * 35,
-      tubeSinkSpeed: 38 + (round - 1) * 14,
-      tubeRiseSpeed: Math.max(16, 36 - (round - 1) * 4),
+      gapExtra: Math.min(48, 12 + (r - 1) * 7),
+      stepRise: Math.min(26, 6 + (r - 1) * 4),
+      treadmillSpeed: 105 + (round - 1) * 30,
+      tubeSinkSpeed: 36 + (round - 1) * 12,
+      tubeRiseSpeed: Math.max(16, 36 - (round - 1) * 3),
       bridgeSolid: false,
       bridgeDropDelay: dropDelays[Math.min(round, dropDelays.length - 1)],
-      plankScale: Math.max(0.95, 1.18 - (round - 1) * 0.04),
-      waterWaveAmp: 6.5 + (r - 1) * 1.6,
+      plankScale: Math.max(0.95, 1.18 - (round - 1) * 0.035),
+      hammerSpeed: Math.min(3.8, 2.1 + (round - 1) * 0.25),
+      laserPeriod: Math.max(2.0, 3.3 - (round - 1) * 0.18),
+      ferrySpeed: Math.min(185, 100 + (round - 1) * 14),
+      waterWaveAmp: 6.5 + (r - 1) * 1.5,
       targetScore: goal,
-      thrusterMultiplier: 2.45 + (r - 1) * 0.3,
-      roundFlavor: flavors[Math.min(round, flavors.length - 1)]
+      thrusterMultiplier: 2.35 + (r - 1) * 0.25,
+      courseTitle: titles[Math.min(round, titles.length - 1)]
     };
   }
 
@@ -1768,9 +1884,9 @@ class BeastmasterScene extends Phaser.Scene {
     const skyline = this.add.graphics();
     skyline.setScrollFactor(0.2);
     skyline.fillStyle(0x131a2b, 1);
-    for (let x = 0; x < 1700; x += 110) {
-      const h = 150 + ((x * 37) % 130);
-      skyline.fillRect(x, 510 - h, 95, h + 110);
+    for (let x = 0; x < 1800; x += 110) {
+      const h = 140 + ((x * 37) % 120);
+      skyline.fillRect(x, 510 - h, 95, h + 100);
       if (x % 220 === 0) {
         skyline.fillRect(x + 25, 510 - h - 65, 16, 65);
         skyline.fillStyle(0xf97316, 0.85);
@@ -1779,23 +1895,23 @@ class BeastmasterScene extends Phaser.Scene {
       }
     }
 
-    // Looming Giant Beastmaster Boss Silhouette in the fog
+    // Looming Silhouetted Beastmaster Colossus in background fog
     const beast = this.add.graphics();
     beast.setScrollFactor(0.15);
     beast.fillStyle(0x0e1320, 0.92);
-    beast.fillRect(520, 175, 190, 320);
-    beast.fillRect(475, 210, 280, 120);
-    beast.fillRect(490, 125, 26, 60);
-    beast.fillRect(710, 125, 26, 60);
-    beast.fillRect(570, 130, 90, 50);
-    beast.fillStyle(0xef4444, 0.92);
-    beast.fillRect(595, 150, 12, 6);
-    beast.fillRect(628, 150, 12, 6);
+    beast.fillRect(460, 190, 170, 290);
+    beast.fillRect(420, 220, 250, 110);
+    beast.fillRect(435, 145, 24, 55);
+    beast.fillRect(630, 145, 24, 55);
+    beast.fillRect(505, 150, 80, 45);
+    beast.fillStyle(0xef4444, 0.9);
+    beast.fillRect(525, 168, 10, 5);
+    beast.fillRect(555, 168, 10, 5);
 
     // Stadium Spotlight Beams & Trusses
     const trusses = this.add.graphics();
     trusses.setScrollFactor(0.45);
-    for (let x = 80; x < 3100; x += 480) {
+    for (let x = 80; x < 3400; x += 460) {
       trusses.fillStyle(0x1e293b, 0.95);
       trusses.fillRect(x, 0, 14, 580);
       trusses.fillRect(x + 56, 0, 14, 580);
@@ -1806,24 +1922,24 @@ class BeastmasterScene extends Phaser.Scene {
       }
 
       trusses.fillStyle(0x334155, 1);
-      trusses.fillRect(x - 10, 85, 90, 48);
+      trusses.fillRect(x - 10, 95, 90, 48);
       trusses.fillStyle(0xfef9c3, 0.95);
       for (let lx = 0; lx < 4; lx++) {
         for (let ly = 0; ly < 3; ly++) {
-          trusses.fillRect(x - 2 + lx * 20, 92 + ly * 13, 12, 8);
+          trusses.fillRect(x - 2 + lx * 20, 102 + ly * 13, 12, 8);
         }
       }
       trusses.fillStyle(0xfef08a, 0.05);
-      trusses.fillTriangle(x + 35, 130, x - 150, 600, x + 220, 600);
+      trusses.fillTriangle(x + 35, 140, x - 140, 600, x + 210, 600);
     }
 
     // Neon Crowd Silhouettes
     const crowd = this.add.graphics();
     crowd.setScrollFactor(0.55);
     crowd.fillStyle(0x0f172a, 1);
-    crowd.fillRect(0, 445, 3200, 185);
+    crowd.fillRect(0, 445, 3600, 180);
     const neonColors = [0x38bdf8, 0xe879f9, 0xfacc15, 0x4ade80];
-    for (let x = 20; x < 3150; x += 28) {
+    for (let x = 20; x < 3550; x += 28) {
       const h = 24 + ((x * 19) % 14);
       crowd.fillStyle(0x1e293b, 1);
       crowd.fillRect(x, 475 - h, 16, h + 25);
@@ -1836,8 +1952,8 @@ class BeastmasterScene extends Phaser.Scene {
     }
 
     // Arena Jumbotron Signs: "DON'T GO IN THE WATER!"
-    const jumbotronPositions = [310, 1180, 2050, 2820];
-    jumbotronPositions.forEach(jx => {
+    const jumbotronPositions = [310, 1180, 2050, 2920, 3780];
+    jumbotronPositions.forEach((jx) => {
       const board = this.add.graphics();
       board.setScrollFactor(0.5);
       board.fillStyle(0x1e293b, 1);
@@ -1859,25 +1975,9 @@ class BeastmasterScene extends Phaser.Scene {
   }
 
   // --------------------------------------------------------------------------
-  // COMPLETE OBSTACLE COURSE CONSTRUCTION (Scales subtly by round)
+  // OBSTACLE COURSE CONSTRUCTION (Round 1 Classic + Rounds 2+ Seeded Generator)
   // --------------------------------------------------------------------------
-  createPlatform(x, y, w, h) {
-    const cols = Math.max(1, Math.round(w / 32));
-    const rows = Math.max(1, Math.round(h / 32));
-    for (let c = 0; c < cols; c++) {
-      for (let r = 0; r < rows; r++) {
-        const px = x + c * 32 + 16;
-        const py = y + r * 32 + 16;
-        const tile = this.staticPlatforms.create(px, py, 'plat_industrial');
-        tile.refreshBody();
-      }
-    }
-  }
-
-  buildCourse(diff) {
-    const g = diff.gapScale;   // Progressive gap widening across rounds (0 -> 34px)
-    const rise = diff.stepRise; // Progressive step elevation across rounds (0 -> 24px)
-
+  buildCourse(diff, round) {
     const addTriangle = (x, y) => {
       const tri = this.trianglesGroup.create(x, y, 'tri_off');
       tri.setScale(1.25);
@@ -1897,7 +1997,7 @@ class BeastmasterScene extends Phaser.Scene {
 
     const addMegaThruster = (x, y, id) => {
       const th = this.thrustersGroup.create(x, y, 'thruster_ready');
-      th.setScale(1.38);
+      th.setScale(1.35);
       th.refreshBody();
       th.thrusterId = id;
       th.activated = false;
@@ -1914,10 +2014,10 @@ class BeastmasterScene extends Phaser.Scene {
 
     const addClimbRope = (x, topY, bottomY) => {
       for (let y = topY; y < bottomY; y += 32) {
-        this.add.image(x, y + 16, 'climb_rope').setScale(1.35);
+        this.add.image(x, y + 16, 'climb_rope').setScale(1.3);
       }
       const height = bottomY - topY;
-      const zone = this.add.zone(x, topY + height / 2, 36, height + 18);
+      const zone = this.add.zone(x, topY + height / 2, 34, height);
       this.physics.add.existing(zone, true);
       this.climbZones.add(zone);
     };
@@ -1954,70 +2054,6 @@ class BeastmasterScene extends Phaser.Scene {
       });
     };
 
-    // ========================================================================
-    // SECTION 1: START DECK (x = 120, y = 500, w = 384, h = 224)
-    // ========================================================================
-    this.createPlatform(120, 500, 384, 224);
-
-    const startArch = this.add.graphics();
-    startArch.lineStyle(4, 0x22d3ee, 1);
-    startArch.strokeRect(165, 360, 12, 140);
-    startArch.strokeRect(275, 360, 12, 140);
-    startArch.strokeRect(165, 360, 122, 24);
-    addCourseSign(226, 336, 'START', '#fde047');
-
-    addTriangle(345, 458);
-    addTriangle(415, 458);
-
-    // ========================================================================
-    // SECTION 2: ANGLED "CHRAMP" LAUNCH PAD (x = 490, y = 475)
-    // ========================================================================
-    const chrampSprite = this.add.sprite(490, 480, 'chramp_pad').setScale(1.45);
-    chrampSprite.setAngle(-22);
-    const chrampZone = this.add.zone(490, 475, 72, 48);
-    this.physics.add.existing(chrampZone, true);
-    this.springPads.push({ sprite: chrampSprite, zone: chrampZone, vx: 345 + g * 0.6, vy: -715 });
-    addCourseSign(490, 412, 'CHRAMP', '#fde047');
-
-    addTriangle(580, 325);
-    addTriangle(665, 265);
-    addTriangle(750, 290);
-
-    // ========================================================================
-    // SECTION 3: "JUMP / CLIME" ROCKY MOUNTAIN CRAG & MEGA THRUSTER #1
-    // ========================================================================
-    const cragX = 760 + g;
-    addCourseSign(cragX + 210, 182, 'JUMP / CLIME', '#fde047');
-
-    for (let row = 0; row < 8; row++) {
-      const cols = 12 - row;
-      const startX = cragX + Math.floor(row * 16);
-      const y = 576 - row * 32;
-      for (let c = 0; c < cols; c++) {
-        const block = this.staticPlatforms.create(startX + c * 32 + 16, y + 16, 'rock_block');
-        block.refreshBody();
-      }
-    }
-
-    const midLedge = this.staticPlatforms.create(cragX + 15, 445, 'wood_plank').setScale(2.4, 1.2);
-    midLedge.refreshBody();
-    const summitDeck = this.staticPlatforms.create(cragX + 210, 320, 'wood_plank').setScale(4.2, 1.25);
-    summitDeck.refreshBody();
-
-    addClimbRope(cragX + 55, 320, 505);
-    addClimbRope(cragX + 365, 320, 505);
-
-    addTriangle(cragX + 15, 402);
-    addTriangle(cragX + 140, 278);
-    addMegaThruster(cragX + 210, 278, 1);
-    addTriangle(cragX + 280, 278);
-
-    // ========================================================================
-    // SECTION 4: "SINKING TOOB" SUSPENDED ON CHAINS
-    // ========================================================================
-    const toobBaseX = 1330 + g * 2;
-    addCourseSign(toobBaseX + 115, 255, 'SINKING TOOB', '#fde047');
-
     const createSinkingToob = (x, baseY) => {
       const chainGfx = this.add.graphics();
       const tube = this.physics.add.sprite(x, baseY, 'sinking_toob').setScale(1.4);
@@ -2038,141 +2074,472 @@ class BeastmasterScene extends Phaser.Scene {
       return item;
     };
 
-    createSinkingToob(toobBaseX, 445);
-    addTriangle(toobBaseX, 355);
-    addTriangle(toobBaseX + 118 + g * 0.4, 370);
-    createSinkingToob(toobBaseX + 235 + g * 0.8, 455 - rise * 0.4);
-    addTriangle(toobBaseX + 235 + g * 0.8, 365 - rise * 0.4);
+    const addSwingingHammer = (pivotX, pivotY, chainLen, maxAngleDeg, phaseOffset = 0) => {
+      const chainGfx = this.add.graphics().setDepth(9);
+      const pivotCap = this.add.circle(pivotX, pivotY, 8, 0x64748b).setStrokeStyle(3, 0x0f172a).setDepth(10);
+      const head = this.add.sprite(pivotX, pivotY + chainLen, 'hammer_head').setScale(1.25).setDepth(11);
+      this.swingingHammers.push({
+        pivotX,
+        pivotY,
+        chainLen,
+        maxAngleRad: Phaser.Math.DegToRad(maxAngleDeg),
+        phaseOffset,
+        speed: diff.hammerSpeed,
+        chainGfx,
+        pivotCap,
+        head,
+        hitCooldown: 0
+      });
+    };
 
-    // ========================================================================
-    // SECTION 5: "TREADMILL" CONVEYOR PLATFORM
-    // ========================================================================
-    const tmX = 1760 + g * 3;
-    const tmY = 460 - rise * 0.5;
-    addCourseSign(tmX + 170, tmY - 125, 'TREADMILL', '#fde047');
-    createTreadmill(tmX, tmY, 8, diff.treadmillSpeed);
-    addTriangle(tmX + 80, tmY - 45);
-    addTriangle(tmX + 180, tmY - 45);
+    const addHydraulicBouncePad = (x, y, vx, vy) => {
+      const padSprite = this.add.sprite(x, y, 'hydraulic_pad').setScale(1.35);
+      const padZone = this.add.zone(x, y - 2, 64, 28);
+      this.physics.add.existing(padZone, true);
+      this.springPads.push({ sprite: padSprite, zone: padZone, vx, vy, isHydraulic: true });
+    };
 
-    const highScaffold = this.staticPlatforms.create(tmX + 295, tmY - 125, 'wood_plank').setScale(3.8, 1.15);
-    highScaffold.refreshBody();
-    addClimbRope(tmX + 235, tmY - 125, tmY);
-    addTriangle(tmX + 285, tmY - 168);
-    addTriangle(tmX + 345, tmY - 168);
+    const addLaserGate = (x, topY, bottomY, phaseOffset = 0) => {
+      this.add.sprite(x, topY, 'laser_emitter').setScale(1.25).setDepth(12);
+      const beamGfx = this.add.graphics().setDepth(11);
+      this.laserGates.push({
+        x,
+        topY: topY + 12,
+        bottomY,
+        phaseOffset,
+        period: diff.laserPeriod,
+        beamGfx,
+        active: false
+      });
+    };
 
-    // ========================================================================
-    // SECTION 6: "MEGA CHRAMP!" & SKY DECK WITH MEGA THRUSTER #2
-    // ========================================================================
-    const deck2X = 2140 + g * 3.5;
-    this.createPlatform(deck2X, 480, 224, 240);
-    const chramp2X = deck2X + 145;
-    const chramp2Sprite = this.add.sprite(chramp2X, 468, 'chramp_pad').setScale(1.45);
-    chramp2Sprite.setAngle(-20);
-    const chramp2Zone = this.add.zone(chramp2X, 460, 74, 48);
-    this.physics.add.existing(chramp2Zone, true);
-    this.springPads.push({ sprite: chramp2Sprite, zone: chramp2Zone, vx: 375 + g * 0.6, vy: -725 });
-    addCourseSign(chramp2X, 398, 'MEGA CHRAMP!', '#38bdf8');
+    const addMovingFerry = (startX, endX, y, phaseOffset = 0) => {
+      const midX = (startX + endX) / 2;
+      const ferry = this.physics.add.sprite(midX, y, 'ferry_barge').setScale(1.3);
+      ferry.body.setImmovable(true);
+      ferry.body.setAllowGravity(false);
+      ferry.refreshBody();
+      this.movingFerries.push({
+        sprite: ferry,
+        startX,
+        endX,
+        y,
+        phaseOffset,
+        speed: diff.ferrySpeed,
+        prevX: midX,
+        deltaX: 0
+      });
+    };
 
-    addTriangle(chramp2X + 120, 300);
-    addTriangle(chramp2X + 220, 245);
-    addTriangle(chramp2X + 320, 270);
+    const buildFinishSection = (finDeckX) => {
+      this.createPlatform(finDeckX, 450, 384, 272);
 
-    // Elevated Sky Deck holding MEGA THRUSTER #2 (rises slightly on higher rounds)
-    const skyDeckX = deck2X + 540 + g * 0.5;
-    const skyDeckY = 345 - rise;
-    this.createPlatform(skyDeckX, skyDeckY, 256, 32);
-    addMegaThruster(skyDeckX + 105, skyDeckY - 43, 2);
-    addTriangle(skyDeckX + 185, skyDeckY - 43);
+      const finArch = this.add.graphics();
+      finArch.lineStyle(4, 0xe879f9, 1);
+      finArch.strokeRect(finDeckX + 100, 310, 14, 140);
+      finArch.strokeRect(finDeckX + 245, 310, 14, 140);
+      finArch.strokeRect(finDeckX + 100, 310, 159, 26);
+      addCourseSign(finDeckX + 180, 286, 'FINISH', '#fde047');
 
-    // Lower stepping islands below sky deck
-    this.createPlatform(deck2X + 310, 500, 160, 220);
-    this.createPlatform(deck2X + 570 + g * 0.5, 500 - rise * 0.5, 192, 225);
-    addTriangle(deck2X + 665 + g * 0.5, 458 - rise * 0.5);
+      const flagGfx = this.add.graphics();
+      flagGfx.fillStyle(0xe2e8f0, 1);
+      flagGfx.fillRect(finDeckX + 226, 378, 4, 72);
+      for (let fx = 0; fx < 4; fx++) {
+        for (let fy = 0; fy < 3; fy++) {
+          flagGfx.fillStyle((fx + fy) % 2 === 0 ? 0xffffff : 0x090d16, 1);
+          flagGfx.fillRect(finDeckX + 230 + fx * 6, 380 + fy * 6, 6, 6);
+        }
+      }
 
-    // Safe transition platform before Rope Bridge
-    const preBrigX = 3040 + g * 4.5;
-    this.createPlatform(preBrigX, 485, 192, 235);
-    addTriangle(preBrigX + 95, 442);
-
-    // ========================================================================
-    // SECTION 7: "JUMP / BRIG" WOODEN ROPE SUSPENSION BRIDGE
-    // ========================================================================
-    const brigStartX = preBrigX + 270 + g * 0.5;
-    addCourseSign(brigStartX + 340, 375, 'JUMP / BRIG', '#fde047');
-    this.createPlatform(brigStartX, 485, 128, 235);
-
-    const plankCount = 12;
-    for (let i = 0; i < plankCount; i++) {
-      const px = brigStartX + 165 + i * 38;
-      const sag = Math.sin((i / (plankCount - 1)) * Math.PI) * 16;
-      const py = 485 + sag;
-      const plank = this.physics.add.sprite(px, py, 'wood_plank').setScale(diff.plankScale, 1.18);
-      plank.body.setImmovable(true);
-      plank.body.setAllowGravity(false);
-      plank.refreshBody();
-
-      this.bridgePlanks.push({
-        sprite: plank,
-        origY: py,
-        stepped: false,
-        timer: 0,
-        falling: false,
-        solidOnly: diff.bridgeSolid,
-        dropDelay: diff.bridgeDropDelay
+      const buzzer = this.add.sprite(finDeckX + 175, 430, 'finish_buzzer').setScale(1.35);
+      this.tweens.add({
+        targets: buzzer,
+        scaleX: 1.45,
+        scaleY: 1.28,
+        duration: 320,
+        yoyo: true,
+        repeat: -1
       });
 
-      if (i % 3 === 1) {
-        addTriangle(px, py - 44);
+      this.finishZone = this.add.zone(finDeckX + 175, 418, 72, 76);
+      this.physics.add.existing(this.finishZone, true);
+      return finDeckX + 384;
+    };
+
+    // ========================================================================
+    // START DECK (Shared across all rounds: x = 120, y = 500)
+    // ========================================================================
+    this.createPlatform(120, 500, 384, 224);
+
+    const startArch = this.add.graphics();
+    startArch.lineStyle(4, 0x22d3ee, 1);
+    startArch.strokeRect(165, 360, 12, 140);
+    startArch.strokeRect(275, 360, 12, 140);
+    startArch.strokeRect(165, 360, 122, 24);
+    addCourseSign(226, 336, 'START', '#fde047');
+
+    addTriangle(345, 458);
+    addTriangle(415, 458);
+
+    // ========================================================================
+    // ROUND 1: CLASSIC WARM-UP COURSE
+    // ========================================================================
+    if (diff.isRound1) {
+      const chrampSprite = this.add.sprite(490, 480, 'chramp_pad').setScale(1.45);
+      chrampSprite.setAngle(-22);
+      const chrampZone = this.add.zone(490, 475, 72, 48);
+      this.physics.add.existing(chrampZone, true);
+      this.springPads.push({ sprite: chrampSprite, zone: chrampZone, vx: 345, vy: -715 });
+      addCourseSign(490, 412, 'CHRAMP', '#fde047');
+
+      addTriangle(580, 325);
+      addTriangle(665, 265);
+      addTriangle(750, 290);
+
+      const cragX = 760;
+      addCourseSign(cragX + 210, 182, 'JUMP / CLIME', '#fde047');
+      for (let row = 0; row < 8; row++) {
+        const cols = 12 - row;
+        const startX = cragX + Math.floor(row * 16);
+        const y = 576 - row * 32;
+        for (let c = 0; c < cols; c++) {
+          const block = this.staticPlatforms.create(startX + c * 32 + 16, y + 16, 'rock_block');
+          block.refreshBody();
+        }
       }
+
+      const midLedge = this.staticPlatforms.create(cragX + 15, 445, 'wood_plank').setScale(2.4, 1.2);
+      midLedge.refreshBody();
+      const summitDeck = this.staticPlatforms.create(cragX + 210, 320, 'wood_plank').setScale(4.2, 1.25);
+      summitDeck.refreshBody();
+
+      addClimbRope(cragX + 55, 320, 505);
+      addClimbRope(cragX + 365, 320, 505);
+
+      addTriangle(cragX + 15, 402);
+      addTriangle(cragX + 140, 278);
+      addMegaThruster(cragX + 210, 278, 1);
+      addTriangle(cragX + 280, 278);
+
+      const toobBaseX = 1330;
+      addCourseSign(toobBaseX + 115, 255, 'SINKING TOOB', '#fde047');
+      createSinkingToob(toobBaseX, 445);
+      addTriangle(toobBaseX, 355);
+      addTriangle(toobBaseX + 118, 370);
+      createSinkingToob(toobBaseX + 235, 455);
+      addTriangle(toobBaseX + 235, 365);
+
+      const tmX = 1760;
+      const tmY = 460;
+      addCourseSign(tmX + 170, tmY - 125, 'TREADMILL', '#fde047');
+      createTreadmill(tmX, tmY, 8, diff.treadmillSpeed);
+      addTriangle(tmX + 80, tmY - 45);
+      addTriangle(tmX + 180, tmY - 45);
+
+      const highScaffold = this.staticPlatforms.create(tmX + 295, tmY - 125, 'wood_plank').setScale(3.8, 1.15);
+      highScaffold.refreshBody();
+      addClimbRope(tmX + 235, tmY - 125, tmY);
+      addTriangle(tmX + 285, tmY - 168);
+      addTriangle(tmX + 345, tmY - 168);
+
+      const deck2X = 2140;
+      this.createPlatform(deck2X, 480, 224, 240);
+      const chramp2X = deck2X + 145;
+      const chramp2Sprite = this.add.sprite(chramp2X, 468, 'chramp_pad').setScale(1.45);
+      chramp2Sprite.setAngle(-20);
+      const chramp2Zone = this.add.zone(chramp2X, 460, 74, 48);
+      this.physics.add.existing(chramp2Zone, true);
+      this.springPads.push({ sprite: chramp2Sprite, zone: chramp2Zone, vx: 375, vy: -725 });
+      addCourseSign(chramp2X, 398, 'MEGA CHRAMP!', '#38bdf8');
+
+      addTriangle(chramp2X + 120, 300);
+      addTriangle(chramp2X + 220, 245);
+      addTriangle(chramp2X + 320, 270);
+
+      const skyDeckX = deck2X + 540;
+      const skyDeckY = 345;
+      this.createPlatform(skyDeckX, skyDeckY, 256, 32);
+      addMegaThruster(skyDeckX + 105, skyDeckY - 43, 2);
+      addTriangle(skyDeckX + 185, skyDeckY - 43);
+
+      this.createPlatform(deck2X + 310, 500, 160, 220);
+      this.createPlatform(deck2X + 570, 500, 192, 225);
+      addTriangle(deck2X + 665, 458);
+
+      const preBrigX = 3040;
+      this.createPlatform(preBrigX, 485, 192, 235);
+      addTriangle(preBrigX + 95, 442);
+
+      const brigStartX = preBrigX + 270;
+      addCourseSign(brigStartX + 340, 375, 'JUMP / BRIG', '#fde047');
+      this.createPlatform(brigStartX, 485, 128, 235);
+
+      const plankCount = 12;
+      for (let i = 0; i < plankCount; i++) {
+        const px = brigStartX + 165 + i * 38;
+        const sag = Math.sin((i / (plankCount - 1)) * Math.PI) * 16;
+        const py = 485 + sag;
+        const plank = this.physics.add.sprite(px, py, 'wood_plank').setScale(diff.plankScale, 1.18);
+        plank.body.setImmovable(true);
+        plank.body.setAllowGravity(false);
+        plank.refreshBody();
+
+        this.bridgePlanks.push({
+          sprite: plank,
+          origY: py,
+          stepped: false,
+          timer: 0,
+          falling: false,
+          solidOnly: true,
+          dropDelay: diff.bridgeDropDelay
+        });
+
+        if (i % 3 === 1) {
+          addTriangle(px, py - 44);
+        }
+      }
+
+      const sprintX = brigStartX + 670;
+      this.createPlatform(sprintX, 475, 160, 245);
+      addTriangle(sprintX + 80, 432);
+
+      const finalTmX = sprintX + 190;
+      createTreadmill(finalTmX, 465, 4, diff.treadmillSpeed * 1.05);
+      addTriangle(finalTmX + 64, 412);
+
+      return buildFinishSection(finalTmX + 170);
     }
 
     // ========================================================================
-    // SECTION 8: FINAL SPRINT & "FINISH" SLAM BUZZER
+    // ROUNDS 2+: DETERMINISTIC SEEDED COURSE GENERATOR
     // ========================================================================
-    const sprintX = brigStartX + 670 + g * 0.5;
-    this.createPlatform(sprintX, 475, 160, 245);
-    addTriangle(sprintX + 80, 432);
+    const rng = createRoundRNG(round);
+    const gap = diff.gapExtra;
+    const rise = diff.stepRise;
 
-    const finalTmX = sprintX + 190 + g * 0.4;
-    createTreadmill(finalTmX, 465 - rise * 0.4, 4, diff.treadmillSpeed * 1.05);
-    addTriangle(finalTmX + 64, 412 - rise * 0.4);
+    const chrampSprite = this.add.sprite(490, 480, 'chramp_pad').setScale(1.45);
+    chrampSprite.setAngle(-22);
+    const chrampZone = this.add.zone(490, 475, 72, 48);
+    this.physics.add.existing(chrampZone, true);
+    this.springPads.push({ sprite: chrampSprite, zone: chrampZone, vx: 365 + gap * 0.4, vy: -725 });
+    addCourseSign(490, 412, 'CHRAMP', '#fde047');
 
-    // Finish Deck
-    const finDeckX = finalTmX + 170 + g * 0.4;
-    this.createPlatform(finDeckX, 450, 384, 272);
+    addTriangle(585, 320);
+    addTriangle(675, 260);
 
-    // Magenta Neon Truss Finish Arch
-    const finArch = this.add.graphics();
-    finArch.lineStyle(4, 0xe879f9, 1);
-    finArch.strokeRect(finDeckX + 100, 310, 14, 140);
-    finArch.strokeRect(finDeckX + 245, 310, 14, 140);
-    finArch.strokeRect(finDeckX + 100, 310, 159, 26);
-    addCourseSign(finDeckX + 180, 286, 'FINISH', '#fde047');
+    const moduleBuilders = [
+      // Module 0: JUMP / CLIME Crag
+      (cursorX, hasThruster) => {
+        const cragX = cursorX + 55 + Math.round(gap * 0.5);
+        addCourseSign(cragX + 210, 182, 'JUMP / CLIME', '#fde047');
+        for (let row = 0; row < 8; row++) {
+          const cols = 12 - row;
+          const startX = cragX + Math.floor(row * 16);
+          const y = 576 - row * 32;
+          for (let c = 0; c < cols; c++) {
+            const block = this.staticPlatforms.create(startX + c * 32 + 16, y + 16, 'rock_block');
+            block.refreshBody();
+          }
+        }
+        const midLedge = this.staticPlatforms.create(cragX + 15, 445, 'wood_plank').setScale(2.4, 1.2);
+        midLedge.refreshBody();
+        const summitDeck = this.staticPlatforms.create(cragX + 210, 320, 'wood_plank').setScale(4.2, 1.25);
+        summitDeck.refreshBody();
 
-    // Checkered Flag Pole next to Slam Buzzer
-    const flagGfx = this.add.graphics();
-    flagGfx.fillStyle(0xe2e8f0, 1);
-    flagGfx.fillRect(finDeckX + 226, 378, 4, 72);
-    for (let fx = 0; fx < 4; fx++) {
-      for (let fy = 0; fy < 3; fy++) {
-        flagGfx.fillStyle((fx + fy) % 2 === 0 ? 0xffffff : 0x090d16, 1);
-        flagGfx.fillRect(finDeckX + 230 + fx * 6, 380 + fy * 6, 6, 6);
+        addClimbRope(cragX + 55, 320, 505);
+        addClimbRope(cragX + 365, 320, 505);
+
+        addTriangle(cragX + 15, 402);
+        addTriangle(cragX + 140, 278);
+        if (hasThruster > 0) {
+          addMegaThruster(cragX + 210, 278, hasThruster);
+        } else {
+          addTriangle(cragX + 210, 278);
+        }
+        addTriangle(cragX + 280, 278);
+        return cragX + 430;
+      },
+
+      // Module 1: SWINGING HAMMER!
+      (cursorX, hasThruster) => {
+        const deckX = cursorX + 85 + gap;
+        const deckW = 448;
+        this.createPlatform(deckX, 480, deckW, 240);
+        addCourseSign(deckX + deckW / 2, 220, 'SWINGING HAMMER!', '#f87171');
+
+        addSwingingHammer(deckX + 145, 250, 175, 46, 0);
+        addSwingingHammer(deckX + 315, 250, 175, 46, Math.PI);
+
+        addTriangle(deckX + 75, 435);
+        addTriangle(deckX + 225, 435);
+        if (hasThruster > 0) {
+          addMegaThruster(deckX + 385, 435, hasThruster);
+        } else {
+          addTriangle(deckX + 385, 435);
+        }
+        return deckX + deckW;
+      },
+
+      // Module 2: BOUNCE PAD! + Sky Catwalk
+      (cursorX, hasThruster) => {
+        const baseX = cursorX + 80 + gap;
+        this.createPlatform(baseX, 495, 192, 225);
+        addHydraulicBouncePad(baseX + 128, 486, 265, -735);
+        addCourseSign(baseX + 128, 415, 'BOUNCE PAD!', '#4ade80');
+
+        addTriangle(baseX + 210, 315);
+        addTriangle(baseX + 290, 260);
+
+        const skyX = baseX + 340 + Math.round(gap * 0.4);
+        const skyY = 335 - rise;
+        this.createPlatform(skyX, skyY, 256, 32);
+        if (hasThruster > 0) {
+          addMegaThruster(skyX + 115, skyY - 43, hasThruster);
+        } else {
+          addTriangle(skyX + 115, skyY - 43);
+        }
+        addTriangle(skyX + 195, skyY - 43);
+
+        this.createPlatform(baseX + 370, 500, 192, 220);
+        addTriangle(baseX + 465, 458);
+        return skyX + 270;
+      },
+
+      // Module 3: LASER GATE!
+      (cursorX, hasThruster) => {
+        const deckX = cursorX + 85 + gap;
+        const deckW = 480;
+        const deckY = 475;
+        this.createPlatform(deckX, deckY, deckW, 245);
+        addCourseSign(deckX + deckW / 2, 245, 'LASER GATE!', '#ef4444');
+
+        addLaserGate(deckX + 165, 290, deckY, 0);
+        addLaserGate(deckX + 345, 290, deckY, diff.laserPeriod * 0.5);
+
+        addTriangle(deckX + 85, deckY - 45);
+        addTriangle(deckX + 255, deckY - 45);
+        if (hasThruster > 0) {
+          addMegaThruster(deckX + 425, deckY - 45, hasThruster);
+        } else {
+          addTriangle(deckX + 425, deckY - 45);
+        }
+        return deckX + deckW;
+      },
+
+      // Module 4: MOVING FERRY!
+      (cursorX, hasThruster) => {
+        const pierX = cursorX + 75 + Math.round(gap * 0.6);
+        this.createPlatform(pierX, 485, 128, 235);
+        addCourseSign(pierX + 310, 345, 'MOVING FERRY!', '#38bdf8');
+
+        const ferry1Start = pierX + 185;
+        const ferry1End = ferry1Start + 185 + Math.round(gap * 0.5);
+        addMovingFerry(ferry1Start, ferry1End, 485, 0);
+        addTriangle((ferry1Start + ferry1End) / 2, 420);
+
+        const midPierX = ferry1End + 95;
+        this.createPlatform(midPierX, 475 - rise * 0.4, 160, 245);
+        if (hasThruster > 0) {
+          addMegaThruster(midPierX + 80, 430 - rise * 0.4, hasThruster);
+        } else {
+          addTriangle(midPierX + 80, 430 - rise * 0.4);
+        }
+        return midPierX + 160;
+      },
+
+      // Module 5: SINKING TOOB + TREADMILL
+      (cursorX, hasThruster) => {
+        const toob1X = cursorX + 115 + gap;
+        addCourseSign(toob1X + 115, 255, 'SINKING TOOB', '#fde047');
+        createSinkingToob(toob1X, 445);
+        addTriangle(toob1X, 355);
+
+        const toob2X = toob1X + 195 + Math.round(gap * 0.5);
+        createSinkingToob(toob2X, 455 - rise * 0.3);
+        addTriangle(toob2X, 365 - rise * 0.3);
+
+        const tmX = toob2X + 135 + Math.round(gap * 0.5);
+        const tmY = 465 - rise * 0.4;
+        addCourseSign(tmX + 128, tmY - 95, 'TREADMILL', '#fde047');
+        createTreadmill(tmX, tmY, 7, diff.treadmillSpeed);
+        addTriangle(tmX + 75, tmY - 45);
+        if (hasThruster > 0) {
+          addMegaThruster(tmX + 175, tmY - 45, hasThruster);
+        } else {
+          addTriangle(tmX + 175, tmY - 45);
+        }
+        return tmX + 224;
+      },
+
+      // Module 6: JUMP / BRIG
+      (cursorX, hasThruster) => {
+        const brigStartX = cursorX + 85 + gap;
+        addCourseSign(brigStartX + 310, 370, 'JUMP / BRIG', '#fde047');
+        this.createPlatform(brigStartX, 485, 128, 235);
+
+        const plankCount = 10;
+        for (let i = 0; i < plankCount; i++) {
+          const px = brigStartX + 165 + i * 38;
+          const sag = Math.sin((i / (plankCount - 1)) * Math.PI) * 16;
+          const py = 485 + sag;
+          const plank = this.physics.add.sprite(px, py, 'wood_plank').setScale(diff.plankScale, 1.18);
+          plank.body.setImmovable(true);
+          plank.body.setAllowGravity(false);
+          plank.refreshBody();
+
+          this.bridgePlanks.push({
+            sprite: plank,
+            origY: py,
+            stepped: false,
+            timer: 0,
+            falling: false,
+            solidOnly: diff.bridgeSolid,
+            dropDelay: diff.bridgeDropDelay
+          });
+
+          if (i % 3 === 1) {
+            addTriangle(px, py - 44);
+          }
+        }
+
+        const endDeckX = brigStartX + 165 + plankCount * 38 + 20;
+        this.createPlatform(endDeckX, 475, 160, 245);
+        if (hasThruster > 0) {
+          addMegaThruster(endDeckX + 80, 430, hasThruster);
+        } else {
+          addTriangle(endDeckX + 80, 430);
+        }
+        return endDeckX + 160;
+      }
+    ];
+
+    const indices = [0, 1, 2, 3, 4, 5, 6];
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    const chosen = indices.slice(0, 6);
+    const newCount = chosen.filter((idx) => idx >= 1 && idx <= 4).length;
+    if (newCount < 3) {
+      const missingNew = [1, 2, 3, 4].filter((idx) => !chosen.includes(idx));
+      for (let k = 0; k < chosen.length && missingNew.length > 0; k++) {
+        if (chosen[k] === 0 || chosen[k] >= 5) {
+          chosen[k] = missingNew.shift();
+        }
       }
     }
 
-    // Giant Red Slam Buzzer
-    const buzzer = this.add.sprite(finDeckX + 175, 430, 'finish_buzzer').setScale(1.35);
-    this.tweens.add({
-      targets: buzzer,
-      scaleX: 1.45,
-      scaleY: 1.28,
-      duration: 320,
-      yoyo: true,
-      repeat: -1
+    let cursorX = 690;
+    chosen.forEach((modIdx, step) => {
+      const thrusterNum = step === 1 ? 1 : (step === 4 ? 2 : 0);
+      cursorX = moduleBuilders[modIdx](cursorX, thrusterNum);
     });
 
-    this.finishZone = this.add.zone(finDeckX + 175, 418, 72, 76);
-    this.physics.add.existing(this.finishZone, true);
+    const finalSprintX = cursorX + 85 + gap;
+    this.createPlatform(finalSprintX, 470, 160, 250);
+    addTriangle(finalSprintX + 80, 426);
+
+    return buildFinishSection(finalSprintX + 245 + Math.round(gap * 0.5));
   }
 
   // --------------------------------------------------------------------------
@@ -2183,40 +2550,18 @@ class BeastmasterScene extends Phaser.Scene {
     this.waterWaveAmp = diff.waterWaveAmp;
   }
 
-  applyResponsiveViewport() {
-    if (!this.cameras || !this.cameras.main) return;
-    const w = this.scale.width;
-    const h = this.scale.height;
-
-    // Adaptive zoom fills the screen height edge-to-edge while showing extra horizontal course on ultra-wide screens
-    const baseZoom = Math.max(w / 1080, h / 620);
-    const clampedZoom = Phaser.Math.Clamp(baseZoom, 0.92, 1.85);
-    this.cameras.main.setZoom(clampedZoom);
-
-    // Offset camera follow slightly right on wide screens so the player sits comfortably left-of-center
-    const followOffsetX = -Math.round(w * 0.16);
-    this.cameras.main.setFollowOffset(followOffsetX, 42);
-
-    // Keep HUD box neatly framed inside safe left/top margins on any screen width
-    if (this.hudContainer) {
-      const hudScale = Phaser.Math.Clamp(w / 1180, 0.72, 1.05);
-      this.hudContainer.setScale(hudScale);
-      const leftMargin = w > 720 ? 54 : 14;
-      this.hudContainer.setPosition(leftMargin, 12);
-    }
-  }
-
   updateWaterHazard(time) {
     const g = this.waterGraphics;
     g.clear();
     const cam = this.cameras.main;
-    const viewW = cam.width / cam.zoom;
-    const camLeft = cam.scrollX - 160;
-    const camRight = camLeft + viewW + 320;
+    const zoom = cam.zoom || 1;
+    const viewW = cam.width / zoom;
+    const camLeft = cam.worldView.x - 48;
+    const camRight = camLeft + viewW + 96;
     const baseY = this.waterSurfaceY;
 
     g.fillStyle(0x0284c7, 0.88);
-    g.fillRect(camLeft, baseY + 6, camRight - camLeft, 220);
+    g.fillRect(camLeft, baseY + 6, camRight - camLeft, 180);
 
     for (let x = Math.floor(camLeft / 16) * 16; x < camRight; x += 16) {
       const wave = Math.sin(x * 0.045 + time * 0.0055) * this.waterWaveAmp;
@@ -2229,113 +2574,99 @@ class BeastmasterScene extends Phaser.Scene {
   }
 
   // --------------------------------------------------------------------------
-  // FIXED SCREEN-SPACE ARCADE HUD (Kid-Friendly Live PTS vs GOAL)
+  // KID-FRIENDLY LIVE HUD
   // --------------------------------------------------------------------------
   createArcadeHUD(diff) {
-    this.targetScore = diff.targetScore;
-    this.goalReachedCelebrated = false;
-
-    this.hudContainer = this.add.container(14, 12).setScrollFactor(0).setDepth(30);
+    this.hudContainer = this.add.container(0, 0).setScrollFactor(0).setDepth(30);
 
     const hudBg = this.add.graphics();
-    hudBg.fillStyle(0x090d16, 0.88);
-    hudBg.fillRect(0, 0, 560, 84);
-    hudBg.lineStyle(3, 0x38bdf8, 0.95);
-    hudBg.strokeRect(0, 0, 560, 84);
+    hudBg.fillStyle(0x090d16, 0.86);
+    hudBg.fillRoundedRect(10, 10, 430, 74, 8);
+    hudBg.lineStyle(3, 0x38bdf8, 0.9);
+    hudBg.strokeRoundedRect(10, 10, 430, 74, 8);
     this.hudContainer.add(hudBg);
 
     const c = GameState.selectedCountry;
     const a = GameState.selectedAthlete;
-    let doOverBadge = '❤️ 1 DO-OVER';
-    let badgeColor = '#4ade80';
-    if (GameState.isDoOverAttempt) {
-      doOverBadge = '⚠️ 2ND RUN!';
-      badgeColor = '#fbbf24';
-    } else if (!GameState.doOverAvailable) {
-      doOverBadge = '💔 USED';
-      badgeColor = '#f87171';
-    }
+    const lifeText = GameState.sessionDoOverAvailable ? '❤️ 1 DO-OVER' : '💔 USED';
+    const lifeColor = GameState.sessionDoOverAvailable ? '#4ade80' : '#f87171';
 
-    this.hudTopRow = this.add.text(12, 8, `R${GameState.round} • ${a.name} (${c.code})`, {
+    this.hudHeaderText = this.add.text(22, 18, `R${GameState.round} • ${a.name} (${c.code})`, {
       fontFamily: '"Press Start 2P"',
-      fontSize: '10px',
+      fontSize: '9px',
       color: '#cbd5e1'
     });
+    this.hudContainer.add(this.hudHeaderText);
 
-    this.hudDoOverText = this.add.text(285, 8, doOverBadge, {
+    this.hudLifeBadge = this.add.text(230, 18, lifeText, {
       fontFamily: '"Press Start 2P"',
-      fontSize: '10px',
-      color: badgeColor
+      fontSize: '8.5px',
+      color: lifeColor
     });
+    this.hudContainer.add(this.hudLifeBadge);
 
-    this.hudTimeText = this.add.text(448, 8, '⏱️ 0.0s', {
+    this.hudTimeText = this.add.text(365, 18, '⏱0.0s', {
       fontFamily: '"Press Start 2P"',
-      fontSize: '10px',
-      color: '#38bdf8'
+      fontSize: '8.5px',
+      color: '#94a3b8'
     });
+    this.hudContainer.add(this.hudTimeText);
 
-    this.hudScoreBigText = this.add.text(12, 30, `PTS 0 / ${this.targetScore} GOAL`, {
+    this.hudPtsText = this.add.text(22, 36, `PTS 0 / ${diff.targetScore} GOAL`, {
       fontFamily: '"Press Start 2P"',
-      fontSize: '15px',
+      fontSize: '12px',
       color: '#facc15'
     });
+    this.hudContainer.add(this.hudPtsText);
 
-    this.hudBarGraphics = this.add.graphics();
-    this.hudStarsText = this.add.text(452, 58, '☆☆☆', {
+    const barBg = this.add.graphics();
+    barBg.fillStyle(0x1e293b, 1);
+    barBg.fillRect(22, 58, 300, 14);
+    barBg.lineStyle(2, 0x475569, 1);
+    barBg.strokeRect(22, 58, 300, 14);
+    this.hudContainer.add(barBg);
+
+    this.hudBarFill = this.add.graphics();
+    this.hudContainer.add(this.hudBarFill);
+
+    this.hudStarsText = this.add.text(334, 58, '☆☆☆', {
       fontFamily: '"Press Start 2P"',
-      fontSize: '13px',
+      fontSize: '12px',
       color: '#facc15'
     });
+    this.hudContainer.add(this.hudStarsText);
 
-    this.hudContainer.add([
-      this.hudTopRow,
-      this.hudDoOverText,
-      this.hudTimeText,
-      this.hudScoreBigText,
-      this.hudBarGraphics,
-      this.hudStarsText
-    ]);
+    this.targetScore = diff.targetScore;
   }
 
   getLivePoints() {
-    return (this.trianglesCollected * 5) + this.thruster1Points + this.thruster2Points;
+    const triPts = this.trianglesCollected * 5;
+    return triPts + this.thruster1Points + this.thruster2Points;
   }
 
   updateHUD() {
+    if (!this.hudPtsText) return;
     const livePts = this.getLivePoints();
     const goal = this.targetScore;
-    const beatGoal = livePts >= goal;
+    const ratio = Math.min(1, livePts / Math.max(1, goal));
+    const goalBeaten = livePts >= goal;
 
-    this.hudTimeText.setText(`⏱️ ${this.elapsedTime.toFixed(1)}s`);
-    this.hudScoreBigText.setText(`PTS ${livePts} / ${goal} GOAL`);
-    this.hudScoreBigText.setColor(beatGoal ? '#4ade80' : '#facc15');
+    this.hudTimeText.setText(`⏱${this.elapsedTime.toFixed(1)}s`);
+    this.hudPtsText.setText(`PTS ${livePts} / ${goal} GOAL`);
+    this.hudPtsText.setColor(goalBeaten ? '#4ade80' : '#facc15');
 
-    let stars = '☆☆☆';
-    if (livePts >= goal + 70) stars = '★★★';
-    else if (livePts >= goal + 35) stars = '★★☆';
-    else if (beatGoal) stars = '★☆☆';
-    this.hudStarsText.setText(stars);
+    this.hudBarFill.clear();
+    this.hudBarFill.fillStyle(goalBeaten ? 0x22c55e : 0x38bdf8, 1);
+    this.hudBarFill.fillRect(24, 60, Math.round(296 * ratio), 10);
 
-    if (beatGoal && !this.goalReachedCelebrated && this.runStarted) {
-      this.goalReachedCelebrated = true;
-      this.showFloatingBanner(`★ GOAL BEAT! (${livePts} PTS) ★`, '#4ade80');
-    }
-
-    const g = this.hudBarGraphics;
-    g.clear();
-    const barX = 12;
-    const barY = 58;
-    const barW = 424;
-    const barH = 15;
-    g.fillStyle(0x1e293b, 1);
-    g.fillRect(barX, barY, barW, barH);
-    g.lineStyle(2, 0x475569, 1);
-    g.strokeRect(barX, barY, barW, barH);
-
-    const pct = Math.min(1, livePts / Math.max(1, goal));
-    if (pct > 0) {
-      g.fillStyle(beatGoal ? 0x4ade80 : 0x38bdf8, 1);
-      g.fillRect(barX + 2, barY + 2, Math.max(4, (barW - 4) * pct), barH - 4);
+    if (livePts >= goal + 45) {
+      this.hudStarsText.setText('★★★');
+    } else if (livePts >= goal) {
+      this.hudStarsText.setText('★★☆');
+    } else if (livePts >= goal * 0.5) {
+      this.hudStarsText.setText('★☆☆');
+    } else {
+      this.hudStarsText.setText('☆☆☆');
     }
   }
 
@@ -2346,7 +2677,7 @@ class BeastmasterScene extends Phaser.Scene {
     if (this.player.body.velocity.y >= -50) {
       SFX.springBounce();
       this.player.setVelocity(pad.vx, pad.vy);
-      this.boostTimer = 0.38;
+      this.boostTimer = 0.36;
       this.tweens.add({
         targets: pad.sprite,
         scaleX: 1.75,
@@ -2380,7 +2711,7 @@ class BeastmasterScene extends Phaser.Scene {
     thruster.setTexture('thruster_done');
 
     const diff = this.getDifficultyParams(GameState.round);
-    const speedBonus = Math.max(25, Math.min(150, Math.round(150 - this.elapsedTime * diff.thrusterMultiplier)));
+    const speedBonus = Math.max(15, Math.round(65 - this.elapsedTime * diff.thrusterMultiplier));
 
     if (thruster.thrusterId === 1) {
       this.thruster1Points = speedBonus;
@@ -2388,11 +2719,11 @@ class BeastmasterScene extends Phaser.Scene {
       this.thruster2Points = speedBonus;
     }
 
-    this.boostTimer = 1.45;
-    this.player.setVelocityY(-440);
+    this.boostTimer = 1.4;
+    this.player.setVelocityY(-450);
     SFX.megaThruster();
     this.cameras.main.shake(180, 0.008);
-    this.spawnPopupText(thruster.x, thruster.y - 26, `⚡ +${speedBonus} PTS!`, '#fb923c');
+    this.spawnPopupText(thruster.x, thruster.y - 26, `+${speedBonus} PTS!`, '#fb923c');
   }
 
   spawnPopupText(x, y, msg, color = '#ffffff') {
@@ -2407,7 +2738,7 @@ class BeastmasterScene extends Phaser.Scene {
 
     this.tweens.add({
       targets: txt,
-      y: y - 44,
+      y: y - 42,
       alpha: 0,
       duration: 950,
       ease: 'Cubic.easeOut',
@@ -2416,11 +2747,11 @@ class BeastmasterScene extends Phaser.Scene {
   }
 
   showFloatingBanner(msg, color = '#4ade80') {
-    const banner = this.add.text(this.cameras.main.width / 2, 135, msg, {
+    const banner = this.add.text(this.cameras.main.width / 2, 130, msg, {
       fontFamily: '"Press Start 2P"',
       fontSize: '14px',
       color: color,
-      backgroundColor: '#090d16cc',
+      backgroundColor: '#090d16dd',
       padding: { x: 14, y: 10 },
       stroke: '#000000',
       strokeThickness: 4
@@ -2429,8 +2760,8 @@ class BeastmasterScene extends Phaser.Scene {
     this.tweens.add({
       targets: banner,
       alpha: 0,
-      y: 112,
-      delay: 1450,
+      y: 110,
+      delay: 1400,
       duration: 600,
       onComplete: () => banner.destroy()
     });
@@ -2443,8 +2774,8 @@ class BeastmasterScene extends Phaser.Scene {
     const trianglePts = this.trianglesCollected * 5;
     const thruster1Pts = this.thruster1Points;
     const thruster2Pts = this.thruster2Points;
-    const timeBonus = completed ? Math.max(0, Math.round(80 - this.elapsedTime * 1.1)) : 0;
-    const total = completed ? (trianglePts + thruster1Pts + thruster2Pts + timeBonus) : 0;
+    const timeBonus = completed ? Math.max(0, Math.round(70 - this.elapsedTime * 1.15)) : 0;
+    const total = trianglePts + thruster1Pts + thruster2Pts + timeBonus;
 
     return {
       completed,
@@ -2459,30 +2790,6 @@ class BeastmasterScene extends Phaser.Scene {
     };
   }
 
-  spawnFireworks(cx, cy) {
-    const colors = [0xfacc15, 0x4ade80, 0x38bdf8, 0xf472b6, 0xfb923c];
-    for (let burst = 0; burst < 4; burst++) {
-      this.time.delayedCall(burst * 160, () => {
-        const bx = cx - 90 + burst * 60;
-        const by = cy - 90 - (burst % 2) * 45;
-        const col = colors[burst % colors.length];
-        for (let i = 0; i < 14; i++) {
-          const angle = (Math.PI * 2 * i) / 14;
-          const spark = this.add.rectangle(bx, by, 6, 6, col).setDepth(28);
-          this.tweens.add({
-            targets: spark,
-            x: bx + Math.cos(angle) * 75,
-            y: by + Math.sin(angle) * 75,
-            alpha: 0,
-            duration: 650,
-            ease: 'Cubic.easeOut',
-            onComplete: () => spark.destroy()
-          });
-        }
-      });
-    }
-  }
-
   completeCourse() {
     if (this.runFinished || this.runFailed) return;
     this.runFinished = true;
@@ -2490,11 +2797,29 @@ class BeastmasterScene extends Phaser.Scene {
     this.player.setVelocity(0, 0);
     SFX.buzzer();
     this.cameras.main.flash(280, 255, 255, 255);
-    this.spawnFireworks(this.player.x, this.player.y - 30);
-    this.spawnPopupText(this.player.x, this.player.y - 44, 'BUZZER SLAMMED!', '#4ade80');
+    this.spawnPopupText(this.player.x, this.player.y - 40, 'FINISH!', '#4ade80');
+
+    const colors = [0xfacc15, 0x38bdf8, 0x4ade80, 0xf472b6];
+    for (let i = 0; i < 24; i++) {
+      const spark = this.add.rectangle(
+        this.player.x + Phaser.Math.Between(-30, 30),
+        this.player.y - 20,
+        6,
+        6,
+        colors[i % colors.length]
+      ).setDepth(35);
+      this.tweens.add({
+        targets: spark,
+        x: spark.x + Phaser.Math.Between(-130, 130),
+        y: spark.y + Phaser.Math.Between(-140, 20),
+        alpha: 0,
+        duration: 750,
+        onComplete: () => spark.destroy()
+      });
+    }
 
     const result = this.calculateScoreBreakdown(true);
-    this.time.delayedCall(900, () => {
+    this.time.delayedCall(750, () => {
       window.onRunEnded(result);
     });
   }
@@ -2505,10 +2830,10 @@ class BeastmasterScene extends Phaser.Scene {
     clearAllTouchInputs();
     SFX.splash();
     this.cameras.main.shake(240, 0.012);
-    this.spawnPopupText(this.player.x, this.waterSurfaceY - 24, 'SPLASH! IN THE WATER!', '#38bdf8');
+    this.spawnPopupText(this.player.x, this.waterSurfaceY - 24, 'SPLASH!', '#38bdf8');
 
     const result = this.calculateScoreBreakdown(false);
-    this.time.delayedCall(850, () => {
+    this.time.delayedCall(800, () => {
       window.onRunEnded(result);
     });
   }
@@ -2521,7 +2846,7 @@ class BeastmasterScene extends Phaser.Scene {
     this.updateWaterHazard(time);
 
     // Update Sinking Toobs
-    this.sinkingTubes.forEach(tube => {
+    this.sinkingTubes.forEach((tube) => {
       if (tube.beingSteppedOn) {
         tube.bodyObj.y += tube.sinkSpeed * dt;
       } else if (tube.bodyObj.y > tube.baseY) {
@@ -2532,19 +2857,19 @@ class BeastmasterScene extends Phaser.Scene {
 
       tube.chainGfx.clear();
       tube.chainGfx.lineStyle(4, 0x64748b, 1);
-      tube.chainGfx.strokeLineShape(new Phaser.Geom.Line(tube.x - 24, 0, tube.x - 24, tube.bodyObj.y - 45));
-      tube.chainGfx.strokeLineShape(new Phaser.Geom.Line(tube.x + 24, 0, tube.x + 24, tube.bodyObj.y - 45));
+      tube.chainGfx.strokeLineShape(new Phaser.Geom.Line(tube.x - 22, 0, tube.x - 22, tube.bodyObj.y - 45));
+      tube.chainGfx.strokeLineShape(new Phaser.Geom.Line(tube.x + 22, 0, tube.x + 22, tube.bodyObj.y - 45));
     });
 
     // Update Treadmill Belts & Gears
-    this.treadmills.forEach(tm => {
+    this.treadmills.forEach((tm) => {
       tm.beltSprite.tilePositionX += tm.beltSpeed * dt;
       tm.gearL.rotation -= 4 * dt;
       tm.gearR.rotation -= 4 * dt;
     });
 
-    // Update Rope Bridge Planks (solid in Round 1, crumbling in Round 2+)
-    this.bridgePlanks.forEach(bp => {
+    // Update Crumbling Rope Bridge Planks
+    this.bridgePlanks.forEach((bp) => {
       if (!bp.solidOnly && bp.stepped && !bp.falling) {
         bp.timer += dt;
         bp.sprite.y = bp.origY + Math.sin(time * 0.06) * 3;
@@ -2565,6 +2890,78 @@ class BeastmasterScene extends Phaser.Scene {
 
     this.elapsedTime += dt;
     if (this.boostTimer > 0) this.boostTimer -= dt;
+    if (this.laserZapCooldown > 0) this.laserZapCooldown -= dt;
+
+    // Update Moving Ferries
+    this.movingFerries.forEach((ferry) => {
+      const span = (ferry.endX - ferry.startX) / 2;
+      const mid = (ferry.startX + ferry.endX) / 2;
+      const freq = ferry.speed / Math.max(40, span);
+      const newX = mid + Math.sin(this.elapsedTime * freq + ferry.phaseOffset) * span;
+      ferry.deltaX = newX - ferry.prevX;
+      ferry.prevX = newX;
+      ferry.sprite.x = newX;
+      ferry.sprite.refreshBody();
+    });
+
+    // Update Swinging Hammers & Check Knockback
+    this.swingingHammers.forEach((h) => {
+      if (h.hitCooldown > 0) h.hitCooldown -= dt;
+      const angle = Math.sin(this.elapsedTime * h.speed + h.phaseOffset) * h.maxAngleRad;
+      const hx = h.pivotX + Math.sin(angle) * h.chainLen;
+      const hy = h.pivotY + Math.cos(angle) * h.chainLen;
+      h.head.setPosition(hx, hy);
+      h.head.setRotation(-angle);
+
+      h.chainGfx.clear();
+      h.chainGfx.lineStyle(5, 0x94a3b8, 1);
+      h.chainGfx.strokeLineShape(new Phaser.Geom.Line(h.pivotX, h.pivotY, hx, hy));
+
+      if (h.hitCooldown <= 0 && Phaser.Math.Distance.Between(this.player.x, this.player.y, hx, hy) < 38) {
+        h.hitCooldown = 0.55;
+        SFX.doOverWarning();
+        this.cameras.main.shake(150, 0.009);
+        const knockDir = this.player.x < hx ? -1 : 1;
+        this.player.setVelocity(knockDir * 360, -340);
+        this.spawnPopupText(this.player.x, this.player.y - 34, 'BONK!', '#f87171');
+      }
+    });
+
+    // Update Timed Laser Gates & Check Pulse Zap
+    this.laserGates.forEach((lg) => {
+      const cycle = (this.elapsedTime + lg.phaseOffset) % lg.period;
+      const ratio = cycle / lg.period;
+      const g = lg.beamGfx;
+      g.clear();
+
+      if (ratio < 0.48) {
+        lg.active = false;
+      } else if (ratio < 0.72) {
+        lg.active = false;
+        const blink = Math.floor(this.elapsedTime * 18) % 2 === 0;
+        g.lineStyle(2, blink ? 0xfacc15 : 0xef4444, 0.85);
+        g.strokeLineShape(new Phaser.Geom.Line(lg.x, lg.topY, lg.x, lg.bottomY));
+      } else {
+        lg.active = true;
+        g.lineStyle(12, 0xef4444, 0.35);
+        g.strokeLineShape(new Phaser.Geom.Line(lg.x, lg.topY, lg.x, lg.bottomY));
+        g.lineStyle(4, 0xffffff, 0.95);
+        g.strokeLineShape(new Phaser.Geom.Line(lg.x, lg.topY, lg.x, lg.bottomY));
+
+        if (
+          this.laserZapCooldown <= 0 &&
+          Math.abs(this.player.x - lg.x) < 18 &&
+          this.player.y > lg.topY &&
+          this.player.y < lg.bottomY
+        ) {
+          this.laserZapCooldown = 0.65;
+          SFX.doOverWarning();
+          this.cameras.main.shake(160, 0.01);
+          this.player.setVelocity(-340, -350);
+          this.spawnPopupText(this.player.x, this.player.y - 34, 'ZAP!', '#ef4444');
+        }
+      }
+    });
 
     // Input aggregation (Keyboard + Mobile Touch)
     const left = this.cursors.left.isDown || this.keys.A.isDown || TouchInput.left;
@@ -2603,18 +3000,22 @@ class BeastmasterScene extends Phaser.Scene {
       this.player.setFlipX(false);
     }
     this.player.setVelocityX(vx);
+    if (this.activeFerryDeltaX !== 0) {
+      this.player.x += this.activeFerryDeltaX;
+      this.activeFerryDeltaX = 0;
+    }
     this.onTreadmillSpeed = 0;
 
     // Vertical Movement (Climbing vs Jumping)
     if (onClimbZone && (up || down)) {
       this.player.body.setAllowGravity(false);
-      this.player.setVelocityY(up ? -235 : 215);
+      this.player.setVelocityY(up ? -225 : 210);
       this.player.setTexture('player_climb');
     } else {
       this.player.body.setAllowGravity(true);
 
       if (this.jumpBufferTimer > 0 && (this.coyoteTimer > 0 || onClimbZone)) {
-        this.player.setVelocityY(-535);
+        this.player.setVelocityY(-530);
         this.jumpBufferTimer = 0;
         this.coyoteTimer = 0;
         SFX.jump();
@@ -2630,8 +3031,8 @@ class BeastmasterScene extends Phaser.Scene {
       }
     }
 
-    // Check Water Hazard Contact ("DON'T GO IN THE WATER!" at y >= 615)
-    if (this.player.y + 18 >= this.waterSurfaceY) {
+    // Check Water Hazard Contact ("DON'T GO IN THE WATER!")
+    if (this.player.y + 18 >= this.waterSurfaceY + 8) {
       this.triggerWaterWipeout();
     }
 
@@ -2640,57 +3041,98 @@ class BeastmasterScene extends Phaser.Scene {
 }
 
 // ----------------------------------------------------------------------------
-// 6. FULLSCREEN TOGGLE, HTML UI FLOW & PHASER INITIALIZATION
+// 6. HTML UI FLOW, FULLSCREEN & PHASER INITIALIZATION
 // ----------------------------------------------------------------------------
 let phaserGame = null;
-let fsToastTimeout = null;
+let setupInitialized = false;
 
-function showFullscreenToast(msg) {
+function showFsToast(msg) {
   const el = document.getElementById('fs-toast');
+  if (!el) return;
   el.textContent = msg;
   el.classList.remove('hidden');
-  clearTimeout(fsToastTimeout);
-  fsToastTimeout = setTimeout(() => el.classList.add('hidden'), 2400);
+  clearTimeout(el._hideTimer);
+  el._hideTimer = setTimeout(() => {
+    el.classList.add('hidden');
+  }, 2400);
 }
 
-function toggleFullscreen() {
-  const docEl = document.documentElement;
-  const isFs = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+function toggleFullScreen() {
+  SFX.tactileClick();
+  const doc = document;
+  const docEl = doc.documentElement;
+  const fsEl = doc.fullscreenElement || doc.webkitFullscreenElement || doc.msFullscreenElement;
 
-  if (!isFs) {
+  if (!fsEl) {
     const req = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.msRequestFullscreen;
     if (req) {
-      Promise.resolve(req.call(docEl)).catch(() => {
-        showFullscreenToast('USE BROWSER FULLSCREEN');
-      });
+      Promise.resolve(req.call(docEl))
+        .then(() => {
+          if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock('landscape').catch(() => {});
+          }
+        })
+        .catch(() => {
+          showFsToast('TIP: ADD TO HOME SCREEN FOR FULL SCREEN');
+        });
     } else {
-      window.scrollTo(0, 1);
-      showFullscreenToast('USE SHARE → ADD TO HOME SCREEN');
+      showFsToast('TIP: ADD TO HOME SCREEN FOR FULL SCREEN');
     }
   } else {
-    const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+    const exit = doc.exitFullscreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
     if (exit) {
-      Promise.resolve(exit.call(document)).catch(() => {});
+      Promise.resolve(exit.call(doc)).catch(() => {});
     }
   }
 }
 
-function updateFullscreenButtonIcon() {
+function updateFullScreenButtonIcon() {
   const btn = document.getElementById('btn-fullscreen-toggle');
-  const isFs = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+  if (!btn) return;
+  const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
   btn.textContent = isFs ? '🗗' : '⛶';
 }
 
-document.addEventListener('fullscreenchange', updateFullscreenButtonIcon);
-document.addEventListener('webkitfullscreenchange', updateFullscreenButtonIcon);
+function selectCountryByCode(code) {
+  const country = COUNTRIES.find((c) => c.code === code);
+  if (!country) return;
+  GameState.selectedCountry = country;
+  const codeBadge = document.getElementById('selected-country-code');
+  if (codeBadge) codeBadge.textContent = country.code;
+  document.querySelectorAll('.country-btn').forEach((b) => {
+    b.classList.toggle('selected', b.dataset.countryCode === code);
+  });
+  refreshAthletePortraits();
+}
+
+function selectAthleteById(id) {
+  const athlete = ATHLETES.find((a) => a.id === id);
+  if (!athlete) return;
+  GameState.selectedAthlete = athlete;
+  const nameBadge = document.getElementById('selected-athlete-name');
+  if (nameBadge) nameBadge.textContent = athlete.name;
+  document.querySelectorAll('.athlete-btn').forEach((b) => {
+    b.classList.toggle('selected', Number(b.dataset.athleteId) === id);
+  });
+}
 
 function initSetupUI() {
+  if (setupInitialized) return;
   const countryGrid = document.getElementById('country-grid');
   const athleteGrid = document.getElementById('athlete-grid');
+  if (!countryGrid || !athleteGrid) return;
 
+  setupInitialized = true;
+  countryGrid.innerHTML = '';
+  athleteGrid.innerHTML = '';
+
+  // Populate 8 Country Team buttons
   COUNTRIES.forEach((country) => {
     const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.dataset.countryCode = country.code;
     btn.className = 'country-btn' + (country.code === GameState.selectedCountry.code ? ' selected' : '');
+
     const flagCanvas = document.createElement('canvas');
     flagCanvas.width = 16;
     flagCanvas.height = 12;
@@ -2702,28 +3144,21 @@ function initSetupUI() {
 
     btn.appendChild(flagCanvas);
     btn.appendChild(label);
-
-    btn.addEventListener('click', () => {
-      SFX.ensureContext();
-      SFX.tactileClick();
-      GameState.selectedCountry = country;
-      document.getElementById('selected-country-code').textContent = country.code;
-      document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      refreshAthletePortraits();
-    });
-
     countryGrid.appendChild(btn);
   });
 
+  // Populate 6 Family Character buttons (Names + Portraits ONLY, no age/role subtitles)
   ATHLETES.forEach((athlete) => {
     const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.dataset.athleteId = String(athlete.id);
     btn.className = 'athlete-btn' + (athlete.id === GameState.selectedAthlete.id ? ' selected' : '');
+
     const portrait = document.createElement('canvas');
     portrait.width = 16;
     portrait.height = 16;
     portrait.className = 'portrait-canvas';
-    portrait.dataset.athleteId = athlete.id;
+    portrait.dataset.athleteId = String(athlete.id);
     drawAthletePortrait(portrait, athlete, GameState.selectedCountry);
 
     const label = document.createElement('span');
@@ -2731,65 +3166,68 @@ function initSetupUI() {
 
     btn.appendChild(portrait);
     btn.appendChild(label);
-
-    btn.addEventListener('click', () => {
-      SFX.ensureContext();
-      SFX.tactileClick();
-      GameState.selectedAthlete = athlete;
-      document.getElementById('selected-athlete-name').textContent = athlete.name;
-      document.querySelectorAll('.athlete-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-    });
-
     athleteGrid.appendChild(btn);
+  });
+
+  // Event delegation so clicks/taps always register cleanly
+  countryGrid.addEventListener('click', (e) => {
+    const btn = e.target.closest('.country-btn');
+    if (!btn) return;
+    SFX.tactileClick();
+    selectCountryByCode(btn.dataset.countryCode);
+  });
+
+  athleteGrid.addEventListener('click', (e) => {
+    const btn = e.target.closest('.athlete-btn');
+    if (!btn) return;
+    SFX.tactileClick();
+    selectAthleteById(Number(btn.dataset.athleteId));
   });
 }
 
 function refreshAthletePortraits() {
   document.querySelectorAll('.portrait-canvas').forEach((canvas) => {
     const id = parseInt(canvas.dataset.athleteId, 10);
-    const athlete = ATHLETES.find(a => a.id === id);
-    drawAthletePortrait(canvas, athlete, GameState.selectedCountry);
+    const athlete = ATHLETES.find((a) => a.id === id);
+    if (athlete) {
+      drawAthletePortrait(canvas, athlete, GameState.selectedCountry);
+    }
   });
 }
 
 function buildScoreTableHTML(res) {
+  const timeText = res.completed ? `⏱️ ${res.time.toFixed(1)}s` : `💦 SPLASH (${res.time.toFixed(1)}s)`;
   const thrusterTotal = res.thruster1Pts + res.thruster2Pts;
   return `
     <tr><td>🔺 TRIANGLES (${res.trianglesCount} × 5)</td><td>+${res.trianglePts}</td></tr>
     <tr><td>⚡ MEGA THRUSTERS</td><td>+${thrusterTotal}</td></tr>
-    <tr><td>⏱️ TIME BONUS (${res.time.toFixed(1)}s)</td><td>+${res.timeBonus}</td></tr>
+    <tr><td>${timeText} BONUS</td><td>+${res.timeBonus}</td></tr>
   `;
 }
 
-function buildCompareHTML(res, targetScore) {
-  const got = res.total;
-  const passed = res.completed && got >= targetScore;
-  const diff = Math.max(0, targetScore - got);
-  const pct = Math.min(100, Math.round((got / Math.max(1, targetScore)) * 100));
-
-  let stampHTML = '';
-  if (!res.completed) {
-    stampHTML = `<div class="stamp-badge stamp-fail">💦 IN THE WATER!</div>`;
-  } else if (passed) {
-    stampHTML = `<div class="stamp-badge stamp-pass">★ BEAT GOAL! ★</div>`;
-  } else {
-    stampHTML = `<div class="stamp-badge stamp-fail">SHORT BY ${diff} PTS</div>`;
-  }
+function buildCompareHTML(gotPts, targetPts, completed) {
+  const pct = Math.min(100, Math.round((gotPts / Math.max(1, targetPts)) * 100));
+  const beatGoal = completed && gotPts >= targetPts;
+  const diff = targetPts - gotPts;
+  const stampHTML = beatGoal
+    ? `<div class="stamp-badge stamp-pass">★ BEAT GOAL! ★</div>`
+    : !completed
+      ? `<div class="stamp-badge stamp-fail">💦 IN THE WATER!</div>`
+      : `<div class="stamp-badge stamp-fail">SHORT BY ${diff} PTS</div>`;
 
   return `
     <div class="big-compare-grid">
-      <div class="compare-card" style="border-color:${passed ? '#4ade80' : '#facc15'};">
+      <div class="compare-card" style="border-color:${beatGoal ? '#22c55e' : '#38bdf8'};">
         <div class="label">🏆 YOU GOT</div>
-        <div class="big-num" style="color:${passed ? '#4ade80' : '#facc15'};">${got}</div>
+        <div class="big-num" style="color:${beatGoal ? '#4ade80' : '#facc15'};">${gotPts} PTS</div>
       </div>
-      <div class="compare-card" style="border-color:#38bdf8;">
+      <div class="compare-card">
         <div class="label">🎯 NEEDED</div>
-        <div class="big-num" style="color:#38bdf8;">${targetScore}</div>
+        <div class="big-num" style="color:#38bdf8;">${targetPts} PTS</div>
       </div>
     </div>
     <div class="goal-bar-wrap">
-      <div class="goal-bar-fill" style="width:${pct}%; background:${passed ? '#4ade80' : '#facc15'};"></div>
+      <div class="goal-bar-fill" style="width:${pct}%; background:${beatGoal ? '#22c55e' : '#38bdf8'};"></div>
     </div>
     <div style="text-align:center;">${stampHTML}</div>
   `;
@@ -2797,15 +3235,18 @@ function buildCompareHTML(res, targetScore) {
 
 function updateTopDoOverButton() {
   const doOverBtn = document.getElementById('btn-manual-doover');
-  if (GameState.isDoOverAttempt) {
-    doOverBtn.textContent = '⚠️ 2ND RUN!';
-    doOverBtn.className = 'mini-hud-btn used';
-  } else if (GameState.doOverAvailable) {
+  if (!doOverBtn) return;
+  doOverBtn.classList.remove('hidden');
+  if (GameState.sessionDoOverAvailable && !GameState.isDoOverAttempt) {
+    doOverBtn.classList.remove('used');
+    doOverBtn.classList.add('danger');
     doOverBtn.textContent = '❤️ 1 DO-OVER';
-    doOverBtn.className = 'mini-hud-btn danger';
+    doOverBtn.disabled = false;
   } else {
+    doOverBtn.classList.remove('danger');
+    doOverBtn.classList.add('used');
     doOverBtn.textContent = '💔 USED';
-    doOverBtn.className = 'mini-hud-btn used';
+    doOverBtn.disabled = true;
   }
 }
 
@@ -2813,16 +3254,13 @@ function startActiveRun(isDoOver) {
   clearAllTouchInputs();
   GameState.isDoOverAttempt = isDoOver;
   if (isDoOver) {
-    GameState.doOverAvailable = false; // Consumed for the entire multi-round session!
+    GameState.sessionDoOverAvailable = false;
   }
 
   document.getElementById('screen-setup').classList.add('hidden');
   document.getElementById('screen-run1-decision').classList.add('hidden');
   document.getElementById('screen-round-end').classList.add('hidden');
-  document.getElementById('confirm-reset-bar').classList.add('hidden');
 
-  const doOverBtn = document.getElementById('btn-manual-doover');
-  doOverBtn.classList.remove('hidden');
   updateTopDoOverButton();
 
   if (!phaserGame) {
@@ -2835,7 +3273,7 @@ function startActiveRun(isDoOver) {
       backgroundColor: '#090d16',
       scale: {
         mode: Phaser.Scale.RESIZE,
-        autoCenter: Phaser.Scale.NO_CENTER
+        autoCenter: Phaser.Scale.CENTER_BOTH
       },
       physics: {
         default: 'arcade',
@@ -2854,37 +3292,40 @@ function startActiveRun(isDoOver) {
 window.onRunEnded = function (result) {
   clearAllTouchInputs();
   document.getElementById('btn-manual-doover').classList.add('hidden');
-  const targetScore = getRoundGoal(GameState.round);
 
-  if (!GameState.isDoOverAttempt && GameState.doOverAvailable) {
+  if (!GameState.isDoOverAttempt && GameState.sessionDoOverAvailable) {
     GameState.run1Data = result;
     const modal = document.getElementById('screen-run1-decision');
     const titleEl = document.getElementById('decision-title');
     const subEl = document.getElementById('decision-subtitle');
     const lockBtn = document.getElementById('btn-lock-run1');
+    const targetScore = getRoundGoal(GameState.round);
 
     if (result.completed) {
       titleEl.textContent = 'RUN 1 DONE!';
       titleEl.style.color = '#4ade80';
-      subEl.textContent = '❤️ 1 DO-OVER LEFT';
+      subEl.textContent = '❤️ 1 DO-OVER AVAILABLE';
       lockBtn.classList.remove('hidden');
     } else {
       titleEl.textContent = 'SPLASH!';
       titleEl.style.color = '#38bdf8';
-      subEl.textContent = '❤️ USE YOUR 1 DO-OVER!';
+      subEl.textContent = 'USE YOUR 1 DO-OVER?';
       lockBtn.classList.add('hidden');
     }
 
     document.getElementById('decision-score-table').innerHTML = buildScoreTableHTML(result);
-    document.getElementById('decision-compare-box').innerHTML = buildCompareHTML(result, targetScore);
+    document.getElementById('decision-compare-box').innerHTML = buildCompareHTML(
+      result.total,
+      targetScore,
+      result.completed
+    );
     modal.classList.remove('hidden');
   } else {
-    GameState.finalRunData = result;
-    showFinalRoundSummary(result);
+    showFinalRoundSummary(result, GameState.isDoOverAttempt);
   }
 };
 
-function showFinalRoundSummary(result) {
+function showFinalRoundSummary(result, usedDoOver) {
   clearAllTouchInputs();
   document.getElementById('screen-run1-decision').classList.add('hidden');
   document.getElementById('confirm-reset-bar').classList.add('hidden');
@@ -2894,46 +3335,43 @@ function showFinalRoundSummary(result) {
 
   GameState.totalTournamentScore += result.total;
 
-  if (result.total > 0) {
-    GameState.leaderboard.push({
-      athlete: GameState.selectedAthlete.name,
-      country: GameState.selectedCountry.code,
-      round: GameState.round,
-      score: result.total
-    });
-    GameState.leaderboard.sort((a, b) => b.score - a.score);
-    GameState.leaderboard = GameState.leaderboard.slice(0, 5);
-    saveLeaderboard(GameState.leaderboard);
-  }
+  GameState.leaderboard.push({
+    athlete: GameState.selectedAthlete.name,
+    country: GameState.selectedCountry.code,
+    round: GameState.round,
+    score: result.total
+  });
+  GameState.leaderboard.sort((a, b) => b.score - a.score);
+  saveLeaderboard(GameState.leaderboard);
 
+  const topEntries = GameState.leaderboard.slice(0, 4);
   const lbEl = document.getElementById('family-leaderboard-list');
-  if (GameState.leaderboard.length === 0) {
-    lbEl.innerHTML = `<div style="color:#64748b;">NO SCORES YET</div>`;
-  } else {
-    lbEl.innerHTML = GameState.leaderboard.map((entry, idx) =>
-      `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #1e293b; padding:2px 0;">
-        <span>#${idx + 1} ${entry.athlete} (${entry.country}) R${entry.round}</span>
-        <span style="color:#facc15;">${entry.score} PTS</span>
-      </div>`
-    ).join('');
-  }
+  lbEl.innerHTML = topEntries.map((entry, idx) =>
+    `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #1e293b; padding:3px 0;">
+      <span>#${idx + 1} ${entry.athlete} (${entry.country}) R${entry.round}</span>
+      <span style="color:#facc15;">${entry.score} PTS</span>
+    </div>`
+  ).join('');
 
   document.getElementById('round-end-title').textContent = passed
     ? `ROUND ${GameState.round} CLEARED!`
-    : `GAME OVER!`;
+    : `ROUND ${GameState.round} OVER`;
   document.getElementById('round-end-title').style.color = passed ? '#4ade80' : '#f87171';
 
-  const doOverStatus = GameState.doOverAvailable ? '❤️ 1 DO-OVER LEFT' : '💔 NO DO-OVERS';
-
+  const lifeTag = GameState.sessionDoOverAvailable ? '❤️ 1 DO-OVER LEFT' : '💔 DO-OVER USED';
   document.getElementById('round-end-badge').textContent =
-    `${GameState.selectedCountry.code} • ${GameState.selectedAthlete.name} • ${doOverStatus}`;
+    `${GameState.selectedCountry.code} • ${GameState.selectedAthlete.name} • ${lifeTag}`;
 
   document.getElementById('final-score-table').innerHTML = buildScoreTableHTML(result);
-  document.getElementById('round-verdict-box').innerHTML = buildCompareHTML(result, targetScore);
+  document.getElementById('round-verdict-box').innerHTML = buildCompareHTML(
+    result.total,
+    targetScore,
+    result.completed
+  );
 
   const nextBtn = document.getElementById('btn-next-round');
   if (passed) {
-    nextBtn.textContent = `➡️ ROUND ${GameState.round + 1}`;
+    nextBtn.textContent = `➡️ ROUND ${GameState.round + 1} (GOAL ${getRoundGoal(GameState.round + 1)})`;
     nextBtn.classList.remove('hidden');
   } else {
     nextBtn.classList.add('hidden');
@@ -2942,36 +3380,16 @@ function showFinalRoundSummary(result) {
   modal.classList.remove('hidden');
 }
 
-function resetTournamentToSetup() {
-  SFX.tactileClick();
-  clearAllTouchInputs();
-  GameState.round = 1;
-  GameState.totalTournamentScore = 0;
-  GameState.doOverAvailable = true;
-  GameState.isDoOverAttempt = false;
-  GameState.run1Data = null;
-  document.getElementById('setup-round-badge').textContent = `ROUND 1 • GOAL: ${getRoundGoal(1)} PTS`;
-  document.getElementById('confirm-reset-bar').classList.add('hidden');
-  document.getElementById('screen-round-end').classList.add('hidden');
-  document.getElementById('screen-setup').classList.remove('hidden');
-}
-
-// Wire up all DOM buttons & Tactile Pointer Controls
-window.addEventListener('DOMContentLoaded', () => {
+function bindAppEvents() {
   initSetupUI();
 
-  document.getElementById('btn-fullscreen-toggle').addEventListener('click', () => {
-    SFX.ensureContext();
-    SFX.tactileClick();
-    toggleFullscreen();
-  });
+  document.getElementById('btn-fullscreen-toggle').addEventListener('click', toggleFullScreen);
+  document.addEventListener('fullscreenchange', updateFullScreenButtonIcon);
+  document.addEventListener('webkitfullscreenchange', updateFullScreenButtonIcon);
 
   document.getElementById('btn-start-run').addEventListener('click', () => {
     SFX.ensureContext();
     SFX.triangleHit();
-    GameState.round = 1;
-    GameState.totalTournamentScore = 0;
-    GameState.doOverAvailable = true;
     GameState.run1Data = null;
     startActiveRun(false);
   });
@@ -2984,36 +3402,32 @@ window.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('btn-lock-run1').addEventListener('click', () => {
     SFX.buzzer();
-    showFinalRoundSummary(GameState.run1Data);
+    showFinalRoundSummary(GameState.run1Data, false);
   });
 
   document.getElementById('btn-take-doover').addEventListener('click', () => {
+    if (!GameState.sessionDoOverAvailable) return;
     SFX.doOverWarning();
     startActiveRun(true);
   });
 
   document.getElementById('btn-manual-doover').addEventListener('click', () => {
-    if (!GameState.isDoOverAttempt && GameState.doOverAvailable) {
+    if (GameState.sessionDoOverAvailable && !GameState.isDoOverAttempt) {
       SFX.doOverWarning();
       startActiveRun(true);
     }
   });
 
   document.getElementById('btn-next-round').addEventListener('click', () => {
-    SFX.triangleHit();
     GameState.round++;
     GameState.run1Data = null;
     startActiveRun(false);
   });
 
-  // Two-step inline confirmation for NEW RUN button
+  // Two-step confirmation for subtle NEW RUN button
   document.getElementById('btn-restart-campaign').addEventListener('click', () => {
-    SFX.doOverWarning();
+    SFX.tactileClick();
     document.getElementById('confirm-reset-bar').classList.remove('hidden');
-  });
-
-  document.getElementById('btn-confirm-reset-yes').addEventListener('click', () => {
-    resetTournamentToSetup();
   });
 
   document.getElementById('btn-confirm-reset-no').addEventListener('click', () => {
@@ -3021,58 +3435,87 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('confirm-reset-bar').classList.add('hidden');
   });
 
+  document.getElementById('btn-confirm-reset-yes').addEventListener('click', () => {
+    SFX.tactileClick();
+    clearAllTouchInputs();
+    GameState.round = 1;
+    GameState.totalTournamentScore = 0;
+    GameState.sessionDoOverAvailable = true;
+    GameState.isDoOverAttempt = false;
+    GameState.run1Data = null;
+    document.getElementById('setup-round-badge').textContent = `ROUND 1 • GOAL: ${getRoundGoal(1)} PTS`;
+    document.getElementById('confirm-reset-bar').classList.add('hidden');
+    document.getElementById('screen-round-end').classList.add('hidden');
+    document.getElementById('screen-setup').classList.remove('hidden');
+  });
+
   document.getElementById('btn-mute-toggle').addEventListener('click', (e) => {
     const muted = SFX.toggleMute();
     e.target.textContent = muted ? 'SFX: OFF' : 'SFX: ON';
   });
 
-  // Multi-touch Pointer Event Binding for Mobile Buttons
-  const bindTactileButton = (id, key, isJump = false) => {
-    const el = document.getElementById(id);
-    let activePointerId = null;
+  // Tactile Multi-Touch Pointer Bindings with Anti-Stuck Cleanup
+  const bindTactileControl = (elementId, actionType) => {
+    const el = document.getElementById(elementId);
+    const pointerSet = activePointers[actionType];
 
-    const press = (e) => {
+    const syncState = () => {
+      const isPressed = pointerSet.size > 0;
+      el.classList.toggle('pressed', isPressed);
+      if (actionType === 'left') TouchInput.left = isPressed;
+      if (actionType === 'right') TouchInput.right = isPressed;
+      if (actionType === 'jump') TouchInput.jumpHeld = isPressed;
+    };
+
+    el.addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      if (activePointerId !== null) return;
-      activePointerId = e.pointerId;
-      try { el.setPointerCapture(e.pointerId); } catch (_) {}
-
       SFX.ensureContext();
-      SFX.tactileClick();
-      if (navigator.vibrate) {
-        try { navigator.vibrate(12); } catch (_) {}
+      if (el.setPointerCapture) {
+        try {
+          el.setPointerCapture(e.pointerId);
+        } catch (err) {}
       }
+      const wasEmpty = pointerSet.size === 0;
+      pointerSet.add(e.pointerId);
+      if (wasEmpty) {
+        SFX.tactileClick();
+        if (navigator.vibrate) {
+          try {
+            navigator.vibrate(10);
+          } catch (err) {}
+        }
+        if (actionType === 'jump') {
+          TouchInput.jumpJustPressed = true;
+        }
+      }
+      syncState();
+    });
 
-      el.classList.add('pressed');
-      if (isJump) {
-        TouchInput.jumpHeld = true;
-        TouchInput.jumpJustPressed = true;
-      } else {
-        TouchInput[key] = true;
-      }
+    const releasePointer = (e) => {
+      pointerSet.delete(e.pointerId);
+      syncState();
     };
 
-    const release = (e) => {
-      if (activePointerId !== null && e.pointerId !== activePointerId) return;
-      activePointerId = null;
-      el.classList.remove('pressed');
-      if (isJump) {
-        TouchInput.jumpHeld = false;
-      } else {
-        TouchInput[key] = false;
-      }
-    };
-
-    el.addEventListener('pointerdown', press);
-    el.addEventListener('pointerup', release);
-    el.addEventListener('pointercancel', release);
-    el.addEventListener('lostpointercapture', release);
+    el.addEventListener('pointerup', releasePointer);
+    el.addEventListener('pointercancel', releasePointer);
+    el.addEventListener('lostpointercapture', releasePointer);
   };
 
-  bindTactileButton('touch-left', 'left', false);
-  bindTactileButton('touch-right', 'right', false);
-  bindTactileButton('touch-jump', null, true);
-});
+  bindTactileControl('touch-left', 'left');
+  bindTactileControl('touch-right', 'right');
+  bindTactileControl('touch-jump', 'jump');
+
+  window.addEventListener('blur', clearAllTouchInputs);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) clearAllTouchInputs();
+  });
+}
+
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', bindAppEvents);
+} else {
+  bindAppEvents();
+}
 </script>
 </body>
 </html>
