@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WATSON GAMES // Indie Arcade & Web Games</title>
+  <!-- Google Fonts with rich system fallbacks -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       1. DESIGN TOKENS & RESET (100% Self-Contained Inline CSS)
+       ========================================================================== */
+    :root {
+      --bg-void: #070811;
+      --bg-surface: #0e1122;
+      --bg-card: #12162b;
+      --bg-card-hover: #171c36;
+      --border-subtle: rgba(120, 140, 210, 0.18);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      --neon-pink: #ff2a85;
+      --neon-amber: #ffb800;
+      --neon-cyan: #00f0ff;
+      --neon-emerald: #10b981;
+      --neon-violet: #a855f7;
+
+      --font-arcade: 'Press Start 2P', 'Courier New', monospace;
+      --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-void);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--bg-void);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       2. ANIMATED ARCADE BACKGROUND (Starfield + Retro Perspective Grid + Glows)
+       ========================================================================== */
+    .arcade-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(255, 42, 133, 0.14) 0%, transparent 42%),
+        radial-gradient(circle at 84% 18%, rgba(0, 240, 255, 0.13) 0%, transparent 45%),
+        radial-gradient(circle at 50% 92%, rgba(168, 85, 247, 0.14) 0%, transparent 50%),
+        linear-gradient(180deg, #06070f 0%, #0a0d1c 55%, #070914 100%);
+    }
+
+    /* Subtle CRT scanlines */
+    .arcade-scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 2px,
+        rgba(0, 0, 0, 0.22) 3px,
+        rgba(0, 0, 0, 0.22) 4px
+      );
+      opacity: 0.45;
+    }
+
+    /* Moving retro neon grid floor at the bottom */
+    .arcade-grid-floor {
+      position: absolute;
+      bottom: -80px;
+      left: -25%;
+      width: 150%;
+      height: 360px;
+      background-image:
+        linear-gradient(to right, rgba(0, 240, 255, 0.16) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 42, 133, 0.16) 1px, transparent 1px);
+      background-size: 48px 48px;
+      transform: perspective(360px) rotateX(64deg);
+      transform-origin: center top;
+      mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.85) 45%, rgba(0,0,0,1) 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.85) 45%, rgba(0,0,0,1) 100%);
+      animation: gridScroll 14s linear infinite;
+    }
+
+    @keyframes gridScroll {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 48px; }
+    }
+
+    /* Twinkling ambient star particles */
+    .starfield {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(1.5px 1.5px at 12% 24%, rgba(255,255,255,0.65) 50%, transparent 100%),
+        radial-gradient(1px 1px at 28% 14%, rgba(0,240,255,0.8) 50%, transparent 100%),
+        radial-gradient(2px 2px at 44% 32%, rgba(255,42,133,0.7) 50%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 66% 18%, rgba(255,255,255,0.6) 50%, transparent 100%),
+        radial-gradient(1px 1px at 79% 38%, rgba(0,240,255,0.75) 50%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 91% 22%, rgba(255,184,0,0.75) 50%, transparent 100%),
+        radial-gradient(1px 1px at 19% 64%, rgba(255,255,255,0.45) 50%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 85% 68%, rgba(168,85,247,0.7) 50%, transparent 100%);
+      animation: starPulse 5s ease-in-out infinite alternate;
+    }
+
+    @keyframes starPulse {
+      0% { opacity: 0.55; }
+      100% { opacity: 1; }
+    }
+
+    /* ==========================================================================
+       3. TOP ARCADE HEADER BAR
+       ========================================================================== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(7, 8, 17, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .header-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .brand-logo-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--neon-pink), var(--neon-violet));
+      padding: 2px;
+      box-shadow: 0 0 20px rgba(255, 42, 133, 0.45);
+      flex-shrink: 0;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .brand-group:hover .brand-logo-box {
+      transform: scale(1.06) rotate(-2deg);
+      box-shadow: 0 0 28px rgba(0, 240, 255, 0.55);
+    }
+
+    .brand-logo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      background: #0b0d1b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-text-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .brand-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .brand-title {
+      font-family: var(--font-arcade);
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      color: #ffffff;
+      text-shadow: 0 0 12px rgba(255, 42, 133, 0.5);
+    }
+
+    .brand-title span {
+      color: var(--neon-pink);
+    }
+
+    .domain-pill {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--neon-cyan);
+      background: rgba(0, 240, 255, 0.09);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+    }
+
+    .brand-subtitle {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.55rem 0.9rem;
+      border-radius: 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
+    }
+
+    .pill-btn-info {
+      color: var(--neon-cyan);
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+    }
+
+    .pill-btn-info:hover {
+      background: rgba(0, 240, 255, 0.18);
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .pill-btn-coin {
+      font-family: var(--font-arcade);
+      font-size: 0.64rem;
+      color: var(--neon-amber);
+      background: rgba(255, 184, 0, 0.1);
+      border: 1px solid rgba(255, 184, 0, 0.45);
+      box-shadow: 0 0 16px rgba(255, 184, 0, 0.18);
+    }
+
+    .pill-btn-coin:hover {
+      background: rgba(255, 184, 0, 0.2);
+      box-shadow: 0 0 22px rgba(255, 184, 0, 0.38);
+      transform: translateY(-1px);
+    }
+
+    .pill-btn-coin:active,
+    .pill-btn-info:active {
+      transform: scale(0.96);
+    }
+
+    /* ==========================================================================
+       4. MAIN LAYOUT & HERO SECTION
+       ========================================================================== */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      width: 100%;
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 2.75rem 1.25rem 4rem;
+    }
+
+    .hero-section {
+      text-align: center;
+      max-width: 780px;
+      margin: 0 auto 3.25rem;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      background: rgba(255, 42, 133, 0.12);
+      border: 1px solid rgba(255, 42, 133, 0.38);
+      color: var(--neon-pink);
+      font-family: var(--font-arcade);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 0 24px rgba(255, 42, 133, 0.22);
+      animation: floatBadge 3.5s ease-in-out infinite;
+    }
+
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(2.35rem, 6vw, 4.1rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+      background: linear-gradient(95deg, #00f0ff 0%, #ffffff 48%, #ff2a85 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 26px rgba(0, 240, 255, 0.28));
+    }
+
+    .hero-description {
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto 1.35rem;
+    }
+
+    .hero-description strong {
+      color: #f1f5f9;
+      font-weight: 600;
+    }
+
+    .shortcut-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      background: rgba(18, 22, 43, 0.75);
+      border: 1px solid var(--border-subtle);
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+    }
+
+    .kbd-key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: 6px;
+      background: #0a0d1c;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: #e2e8f0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.6);
+    }
+
+    /* ==========================================================================
+       5. GAME SHOWCASE GRID & 3D NEON CABINET CARDS
+       ========================================================================== */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 1024px) {
+      .games-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .games-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card-perspective {
+      perspective: 1100px;
+      display: flex;
+    }
+
+    .game-card {
+      --card-accent: var(--neon-pink);
+      --card-glow: rgba(255, 42, 133, 0.38);
+
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, rgba(22, 27, 52, 0.94) 0%, rgba(13, 16, 33, 0.98) 100%);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      transform-style: preserve-3d;
+      transition:
+        transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+      box-shadow: 0 14px 36px -10px rgba(0, 0, 0, 0.75);
+    }
+
+    .game-card:hover {
+      border-color: var(--card-accent);
+      box-shadow:
+        0 20px 45px -12px rgba(0, 0, 0, 0.85),
+        0 0 32px var(--card-glow),
+        inset 0 0 18px rgba(255, 255, 255, 0.03);
+    }
+
+    /* Card theme variants */
+    .game-card--beastmaster {
+      --card-accent: #ff2a85;
+      --card-glow: rgba(255, 42, 133, 0.38);
+    }
+
+    .game-card--floorball {
+      --card-accent: #00f0ff;
+      --card-glow: rgba(0, 240, 255, 0.35);
+    }
+
+    .game-card--snorkel {
+      --card-accent: #10b981;
+      --card-glow: rgba(16, 185, 129, 0.36);
+    }
+
+    /* Top SVG Art Banner Link */
+    .card-banner-link {
+      display: block;
+      position: relative;
+      height: 205px;
+      width: 100%;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+      background: #080a16;
+    }
+
+    .card-banner-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .game-card:hover .card-banner-svg {
+      transform: scale(1.06);
+    }
+
+    /* Top overlays inside banner */
+    .card-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.38rem 0.68rem;
+      border-radius: 8px;
+      background: rgba(7, 9, 20, 0.84);
+      backdrop-filter: blur(8px);
+      font-family: var(--font-arcade);
+      font-size: 0.54rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      animation: pulseDot 1.6s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .card-badge--beastmaster {
+      color: #ff4d9a;
+      border: 1px solid rgba(255, 42, 133, 0.65);
+      box-shadow: 0 0 14px rgba(255, 42, 133, 0.35);
+    }
+    .card-badge--beastmaster .badge-dot {
+      background: var(--neon-amber);
+      box-shadow: 0 0 8px var(--neon-amber);
+    }
+
+    .card-badge--floorball {
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.65);
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.3);
+    }
+    .card-badge--floorball .badge-dot {
+      background: var(--neon-cyan);
+      box-shadow: 0 0 8px var(--neon-cyan);
+    }
+
+    .card-badge--snorkel {
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.65);
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.35);
+    }
+    .card-badge--snorkel .badge-dot {
+      background: #a855f7;
+      box-shadow: 0 0 8px #a855f7;
+    }
+
+    .card-slot-num {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: rgba(7, 9, 20, 0.84);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      z-index: 2;
+    }
+
+    /* Card Content Body */
+    .card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.5rem;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.42rem;
+      line-height: 1.25;
+      color: #ffffff;
+      margin-bottom: 0.65rem;
+      transition: color 0.2s ease;
+    }
+
+    .game-card--beastmaster:hover .card-title { color: #ff6ba9; }
+    .game-card--floorball:hover .card-title { color: #5ceeff; }
+    .game-card--snorkel:hover .card-title { color: #34d399; }
+
+    .card-desc {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 1.15rem;
+    }
+
+    /* Genre Tags */
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tag-chip {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.28rem 0.65rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+    }
+
+    /* Card Footer Actions */
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-top: auto;
+    }
+
+    .play-btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.85rem 1.15rem;
+      border-radius: 12px;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.92rem;
+      letter-spacing: 0.04em;
+      transition: transform 0.18s ease, box-shadow 0.25s ease, filter 0.2s ease;
+    }
+
+    .play-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+    }
+
+    .play-btn:active {
+      transform: scale(0.98);
+    }
+
+    .play-btn--beastmaster {
+      background: linear-gradient(135deg, #ff2a85 0%, #ff6b00 100%);
+      color: #ffffff;
+      box-shadow: 0 6px 22px rgba(255, 42, 133, 0.4);
+    }
+    .play-btn--beastmaster:hover {
+      box-shadow: 0 8px 28px rgba(255, 42, 133, 0.62);
+    }
+
+    .play-btn--floorball {
+      background: linear-gradient(135deg, #00f0ff 0%, #3b82f6 100%);
+      color: #050814;
+      box-shadow: 0 6px 22px rgba(0, 240, 255, 0.35);
+    }
+    .play-btn--floorball:hover {
+      box-shadow: 0 8px 28px rgba(0, 240, 255, 0.58);
+    }
+
+    .play-btn--snorkel {
+      background: linear-gradient(135deg, #10b981 0%, #8b5cf6 100%);
+      color: #ffffff;
+      box-shadow: 0 6px 22px rgba(16, 185, 129, 0.35);
+    }
+    .play-btn--snorkel:hover {
+      box-shadow: 0 8px 28px rgba(139, 92, 246, 0.55);
+    }
+
+    .copy-btn {
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #cbd5e1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--neon-cyan);
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.25);
+    }
+
+    .copy-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* ==========================================================================
+       6. FOOTER
+       ========================================================================== */
+    .site-footer {
+      position: relative;
+      z-index: 10;
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(7, 8, 17, 0.88);
+      backdrop-filter: blur(10px);
+      padding: 1.35rem 1.25rem;
+    }
+
+    .footer-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #cbd5e1;
+    }
+
+    .footer-brand span {
+      color: var(--neon-pink);
+    }
+
+    /* ==========================================================================
+       7. MODAL & TOAST NOTIFICATION
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(3, 5, 12, 0.8);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.is-open {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 500px;
+      background: #101428;
+      border: 1px solid rgba(0, 240, 255, 0.45);
+      border-radius: 18px;
+      padding: 1.5rem;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 32px rgba(0, 240, 255, 0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .modal-title {
+      font-family: var(--font-arcade);
+      font-size: 0.75rem;
+      color: var(--neon-cyan);
+    }
+
+    .modal-close {
+      color: var(--text-secondary);
+      padding: 0.35rem;
+      border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .modal-close:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .modal-body {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .tree-box {
+      background: #070914;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.78rem;
+      line-height: 1.55;
+      color: #e2e8f0;
+    }
+
+    .tree-dir { color: var(--neon-emerald); font-weight: 700; }
+    .tree-note { color: var(--text-muted); }
+
+    .modal-footer {
+      margin-top: 1.25rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .modal-confirm-btn {
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      background: var(--neon-cyan);
+      color: #050814;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.85rem;
+      transition: filter 0.2s;
+    }
+
+    .modal-confirm-btn:hover {
+      filter: brightness(1.1);
+    }
+
+    /* Toast */
+    .arcade-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 60;
+      padding: 0.75rem 1.1rem;
+      border-radius: 12px;
+      background: #101428;
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75), 0 0 20px rgba(0, 240, 255, 0.3);
+      opacity: 0;
+      transform: translateY(14px);
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .arcade-toast.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 600px) {
+      .brand-title { font-size: 0.78rem; }
+      .shortcut-bar { display: none; }
+      .header-inner { padding: 0.75rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated Starfield & Perspective Neon Arcade Floor -->
+  <div class="arcade-backdrop" aria-hidden="true">
+    <div class="starfield"></div>
+    <div class="arcade-grid-floor"></div>
+  </div>
+  <div class="arcade-scanlines" aria-hidden="true"></div>
+
+  <!-- Top Arcade Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="https://watsongames.vercel.app/" target="_blank" rel="noopener noreferrer" class="brand-group">
+        <div class="brand-logo-box">
+          <div class="brand-logo-inner">
+            <!-- Custom Arcade Cabinet / Joystick SVG Icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="5.5" r="3.5" fill="#ff2a85" />
+              <circle cx="11" cy="4.5" r="1" fill="#ffb3d1" />
+              <rect x="10.75" y="8.5" width="2.5" height="6.5" rx="1" fill="#00f0ff" />
+              <path d="M5 15.5C5 14.6716 5.67157 14 6.5 14H17.5C18.3284 14 19 14.6716 19 15.5V18H5V15.5Z" fill="#a855f7" />
+              <rect x="3" y="18" width="18" height="3.5" rx="1.5" fill="#1e293b" stroke="#00f0ff" stroke-width="1.2" />
+              <circle cx="16" cy="16" r="1" fill="#ffb800" />
+            </svg>
+          </div>
+        </div>
+        <div class="brand-text-wrap">
+          <div class="brand-title-row">
+            <span class="brand-title">WATSON <span>GAMES</span></span>
+            <span class="domain-pill">watsongames.vercel.app</span>
+          </div>
+          <span class="brand-subtitle">INDIE ARCADE &amp; EXPERIMENTAL WEB GAMES</span>
+        </div>
+      </a>
+
+      <div class="header-controls">
+        <button id="infoBtn" type="button" class="pill-btn pill-btn-info">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span>INFO</span>
+        </button>
+
+        <button id="coinBtn" type="button" class="pill-btn pill-btn-coin" title="Insert Arcade Coin">
+          <span>INSERT COIN</span>
+          <span id="creditCount">[99]</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="main-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-eyebrow">
+        <span>★</span> WATSON GAMES ARCADE HUB <span>★</span>
+      </div>
+      <h1 class="hero-title">CHOOSE YOUR GAME</h1>
+      <p class="hero-description">
+        Welcome to <strong>Watson Games</strong>—a curated collection of fast, zero-install browser arcade experiences. Step up to any cabinet below and launch right into the action.
+      </p>
+      <div class="shortcut-bar">
+        <span>QUICK LAUNCH: Press</span>
+        <kbd class="kbd-key">1</kbd>
+        <kbd class="kbd-key">2</kbd>
+        <kbd class="kbd-key">3</kbd>
+        <span>on your keyboard</span>
+      </div>
+    </section>
+
+    <!-- Game Showcase Grid -->
+    <section class="games-grid" aria-label="Watson Games Library">
+
+      <!-- =================================================================
+           CARD 1: Charlie's Ultimate Beastmaster
+           ================================================================= -->
+      <article class="card-perspective">
+        <div class="game-card game-card--beastmaster">
+          <a href="https://watsongames.vercel.app/beastmaster/" target="_blank" rel="noopener noreferrer" class="card-banner-link" aria-label="Play Charlie's Ultimate Beastmaster">
+            <!-- Custom SVG Artwork: Neon Industrial Obstacle Course & Parkour Runner -->
+            <svg class="card-banner-svg" viewBox="0 0 420 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="bmBg" x1="0" y1="0" x2="420" y2="220" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#19081c" />
+                  <stop offset="55%" stop-color="#260c24" />
+                  <stop offset="100%" stop-color="#0f0714" />
+                </linearGradient>
+                <linearGradient id="bmLaser" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#ff2a85" />
+                  <stop offset="50%" stop-color="#ff8a00" />
+                  <stop offset="100%" stop-color="#ff2a85" />
+                </linearGradient>
+                <radialGradient id="bmGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#ff2a85" stop-opacity="0.45" />
+                  <stop offset="100%" stop-color="#ff2a85" stop-opacity="0" />
+                </radialGradient>
+              </defs>
+
+              <!-- Background -->
+              <rect width="420" height="220" fill="url(#bmBg)" />
+              <circle cx="230" cy="105" r="115" fill="url(#bmGlow)" />
+
+              <!-- Industrial Background Trusses -->
+              <g stroke="#3b163a" stroke-width="2">
+                <line x1="0" y1="36" x2="420" y2="36" />
+                <line x1="0" y1="196" x2="420" y2="196" />
+                <path d="M20 36 L60 196 L100 36 L140 196 L180 36 L220 196 L260 36 L300 196 L340 36 L380 196" opacity="0.55" />
+              </g>
+
+              <!-- Glowing Red/Orange Laser Beams -->
+              <line x1="125" y1="36" x2="125" y2="196" stroke="#ff2a85" stroke-width="6" opacity="0.28" />
+              <line x1="125" y1="36" x2="125" y2="196" stroke="#ff6b9d" stroke-width="2" />
+
+              <line x1="295" y1="36" x2="295" y2="196" stroke="#ff6b00" stroke-width="6" opacity="0.28" />
+              <line x1="295" y1="36" x2="295" y2="196" stroke="#ffb800" stroke-width="2" />
+
+              <!-- Swinging Wrecking Pendulum -->
+              <line x1="210" y1="0" x2="242" y2="66" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="4 3" />
+              <circle cx="242" cy="72" r="14" fill="#1e1026" stroke="#ffb800" stroke-width="3" />
+              <circle cx="242" cy="72" r="5" fill="#ff2a85" />
+
+              <!-- Suspended Neon Platforms -->
+              <rect x="24" y="152" width="84" height="14" rx="4" fill="#140c1f" stroke="#ff2a85" stroke-width="2.5" />
+              <rect x="30" y="156" width="72" height="3" rx="1.5" fill="#ffb800" />
+
+              <rect x="165" y="138" width="90" height="14" rx="4" fill="#140c1f" stroke="#ff6b00" stroke-width="2.5" />
+              <rect x="172" y="142" width="76" height="3" rx="1.5" fill="#ff2a85" />
+
+              <rect x="316" y="114" width="84" height="14" rx="4" fill="#140c1f" stroke="#ffb800" stroke-width="2.5" />
+              <rect x="322" y="118" width="72" height="3" rx="1.5" fill="#ff2a85" />
+
+              <!-- Motion Arc Trail -->
+              <path d="M98 142 Q152 72 204 106" stroke="url(#bmLaser)" stroke-width="3" stroke-dasharray="6 5" fill="none" />
+
+              <!-- Silhouetted Parkour Runner Mid-Leap -->
+              <g transform="translate(178, 72)">
+                <!-- Aura -->
+                <circle cx="18" cy="18" r="22" fill="#ff2a85" opacity="0.25" />
+                <!-- Head -->
+                <circle cx="22" cy="7" r="5.5" fill="#ffffff" />
+                <!-- Headband tail -->
+                <path d="M17 6 L6 3 L10 9 Z" fill="#ffb800" />
+                <!-- Torso -->
+                <path d="M20 13 L14 27 L21 29 L26 15 Z" fill="#ffffff" />
+                <!-- Leading Arm -->
+                <path d="M24 15 L35 10 L36 13 L25 18 Z" fill="#ffffff" />
+                <!-- Trailing Arm -->
+                <path d="M19 16 L8 22 L10 25 L20 19 Z" fill="#e2e8f0" />
+                <!-- Leading Bent Leg -->
+                <path d="M20 27 L31 25 L34 35 L30 36 L28 29 L19 30 Z" fill="#ffffff" />
+                <!-- Trailing Extended Leg -->
+                <path d="M15 27 L4 36 L7 39 L18 30 Z" fill="#e2e8f0" />
+              </g>
+            </svg>
+
+            <span class="card-badge card-badge--beastmaster">
+              <span class="badge-dot"></span>
+              <span>FEATURED // NEW</span>
+            </span>
+            <span class="card-slot-num">#1</span>
+          </a>
+
+          <div class="card-body">
+            <div>
+              <h2 class="card-title">Charlie's Ultimate Beastmaster</h2>
+              <p class="card-desc">
+                Leap, swing, and conquer a relentless neon obstacle course built for speed and precision.
+              </p>
+              <div class="card-tags">
+                <span class="tag-chip">2D Platformer</span>
+                <span class="tag-chip">Obstacle Course</span>
+                <span class="tag-chip">Time Trial</span>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <a
+                href="https://watsongames.vercel.app/beastmaster/"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-game-key="1"
+                class="play-btn play-btn--beastmaster"
+              >
+                <span>PLAY NOW</span>
+                <span>▶</span>
+              </a>
+              <button
+                type="button"
+                class="copy-btn"
+                data-copy-url="https://watsongames.vercel.app/beastmaster/"
+                title="Copy Game URL"
+                aria-label="Copy Charlie's Ultimate Beastmaster URL"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- =================================================================
+           CARD 2: Floorball Frenzy
+           ================================================================= -->
+      <article class="card-perspective">
+        <div class="game-card game-card--floorball">
+          <a href="https://floorball-frenzy.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-banner-link" aria-label="Play Floorball Frenzy">
+            <!-- Custom SVG Artwork: Top-Down Neon Floorball Rink, Sticks & Perforated Ball -->
+            <svg class="card-banner-svg" viewBox="0 0 420 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="fbBg" x1="0" y1="0" x2="420" y2="220" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#051626" />
+                  <stop offset="50%" stop-color="#08243b" />
+                  <stop offset="100%" stop-color="#04101d" />
+                </linearGradient>
+                <linearGradient id="fbTrail" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#00f0ff" stop-opacity="0" />
+                  <stop offset="100%" stop-color="#00f0ff" stop-opacity="0.75" />
+                </linearGradient>
+              </defs>
+
+              <!-- Rink Surface -->
+              <rect width="420" height="220" fill="url(#fbBg)" />
+
+              <!-- Outer Rink Boards -->
+              <rect x="18" y="16" width="384" height="188" rx="34" stroke="#00f0ff" stroke-width="3" fill="rgba(0, 240, 255, 0.03)" />
+              <rect x="24" y="22" width="372" height="176" rx="28" stroke="#38bdf8" stroke-width="1" opacity="0.4" />
+
+              <!-- Center Line & Face-off Circle -->
+              <line x1="210" y1="18" x2="210" y2="202" stroke="#00f0ff" stroke-width="2" stroke-dasharray="6 6" opacity="0.65" />
+              <circle cx="210" cy="110" r="38" stroke="#00f0ff" stroke-width="2" opacity="0.55" />
+              <circle cx="210" cy="110" r="5" fill="#00f0ff" />
+
+              <!-- Right Goal Crease & Net -->
+              <path d="M352 72 H382 V148 H352" stroke="#ff2a85" stroke-width="2.5" fill="rgba(255, 42, 133, 0.12)" />
+              <rect x="374" y="84" width="16" height="52" rx="3" fill="#0f172a" stroke="#ffffff" stroke-width="2.5" />
+
+              <!-- Left Goal Crease -->
+              <path d="M68 72 H38 V148 H68" stroke="#00f0ff" stroke-width="2" opacity="0.55" />
+
+              <!-- Player 1 Curved Floorball Stick (Cyan) -->
+              <g transform="translate(105, 58) rotate(24)">
+                <rect x="0" y="0" width="7" height="78" rx="3.5" fill="#e2e8f0" />
+                <path d="M0 74 Q2 92 24 92 L28 85 Q10 85 7 74 Z" fill="#00f0ff" />
+              </g>
+
+              <!-- Defender Curved Floorball Stick (Pink) -->
+              <g transform="translate(305, 155) rotate(-145)">
+                <rect x="0" y="0" width="7" height="72" rx="3.5" fill="#cbd5e1" />
+                <path d="M0 68 Q2 86 24 86 L28 79 Q10 79 7 68 Z" fill="#ff2a85" />
+              </g>
+
+              <!-- Shot Motion Trail -->
+              <polygon points="150,126 278,96 282,118 152,134" fill="url(#fbTrail)" />
+
+              <!-- Detailed Perforated Floorball -->
+              <g transform="translate(284, 106)">
+                <circle cx="0" cy="0" r="16" fill="#00f0ff" opacity="0.28" />
+                <circle cx="0" cy="0" r="12" fill="#ffffff" stroke="#00f0ff" stroke-width="2" />
+                <!-- Floorball holes -->
+                <circle cx="-4" cy="-4" r="1.8" fill="#08243b" />
+                <circle cx="4" cy="-4" r="1.8" fill="#08243b" />
+                <circle cx="0" cy="0" r="2" fill="#08243b" />
+                <circle cx="-4" cy="4" r="1.8" fill="#08243b" />
+                <circle cx="4" cy="4" r="1.8" fill="#08243b" />
+              </g>
+            </svg>
+
+            <span class="card-badge card-badge--floorball">
+              <span class="badge-dot"></span>
+              <span>MULTIPLAYER</span>
+            </span>
+            <span class="card-slot-num">#2</span>
+          </a>
+
+          <div class="card-body">
+            <div>
+              <h2 class="card-title">Floorball Frenzy</h2>
+              <p class="card-desc">
+                Fast-paced top-down arcade floorball action. Deke past defenders and fire top-corner rockets.
+              </p>
+              <div class="card-tags">
+                <span class="tag-chip">Sports Arcade</span>
+                <span class="tag-chip">Multiplayer</span>
+                <span class="tag-chip">Pixel Action</span>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <a
+                href="https://floorball-frenzy.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-game-key="2"
+                class="play-btn play-btn--floorball"
+              >
+                <span>PLAY NOW</span>
+                <span>▶</span>
+              </a>
+              <button
+                type="button"
+                class="copy-btn"
+                data-copy-url="https://floorball-frenzy.vercel.app/"
+                title="Copy Game URL"
+                aria-label="Copy Floorball Frenzy URL"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- =================================================================
+           CARD 3: Snorkel to the Bottom
+           ================================================================= -->
+      <article class="card-perspective">
+        <div class="game-card game-card--snorkel">
+          <a href="https://snorkel-to-the-bottom.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-banner-link" aria-label="Play Snorkel to the Bottom">
+            <!-- Custom SVG Artwork: Deep Ocean Abyss, Sunbeams, Snorkeler & Bioluminescent Jellyfish -->
+            <svg class="card-banner-svg" viewBox="0 0 420 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="snBg" x1="210" y1="0" x2="210" y2="220" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#064e59" />
+                  <stop offset="45%" stop-color="#07253d" />
+                  <stop offset="100%" stop-color="#060818" />
+                </linearGradient>
+                <linearGradient id="snBeam" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#34d399" stop-opacity="0.35" />
+                  <stop offset="100%" stop-color="#34d399" stop-opacity="0" />
+                </linearGradient>
+                <linearGradient id="headlamp" x1="0" y1="0" x2="1" y2="0.4">
+                  <stop offset="0%" stop-color="#a7f3d0" stop-opacity="0.65" />
+                  <stop offset="100%" stop-color="#34d399" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+
+              <!-- Deep Sea Gradient -->
+              <rect width="420" height="220" fill="url(#snBg)" />
+
+              <!-- Volumetric Surface Sunbeams -->
+              <polygon points="75,0 135,0 185,180 45,180" fill="url(#snBeam)" />
+              <polygon points="215,0 280,0 330,195 190,195" fill="url(#snBeam)" />
+
+              <!-- Surface Water Ripples -->
+              <path d="M0 14 Q35 8 70 14 T140 14 T210 14 T280 14 T350 14 T420 14" stroke="#6ee7b7" stroke-width="2" opacity="0.65" />
+
+              <!-- Abyssal Trench Silhouettes -->
+              <path d="M0 175 L55 155 L95 192 L145 182 L185 220 L0 220 Z" fill="#040612" />
+              <path d="M265 220 L315 178 L362 150 L420 168 L420 220 Z" fill="#040612" />
+
+              <!-- Headlamp Cone Beam -->
+              <polygon points="168,104 315,72 300,152" fill="url(#headlamp)" />
+
+              <!-- Snorkeler Silhouette Descending -->
+              <g transform="translate(115, 78) rotate(18)">
+                <!-- Fins -->
+                <path d="M0 14 L-16 6 L-13 15 Z" fill="#10b981" />
+                <path d="M0 20 L-16 26 L-13 17 Z" fill="#059669" />
+                <!-- Body & Limbs -->
+                <ellipse cx="22" cy="17" rx="18" ry="6.5" fill="#040814" />
+                <circle cx="44" cy="16" r="7" fill="#040814" />
+                <!-- Goggles & Snorkel -->
+                <rect x="46" y="12" width="5" height="6" rx="1.5" fill="#34d399" />
+                <path d="M44 9 L44 1 L50 1" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" />
+              </g>
+
+              <!-- Rising Oxygen Bubbles -->
+              <circle cx="152" cy="64" r="3.5" stroke="#a7f3d0" stroke-width="1.5" fill="rgba(167,243,208,0.18)" />
+              <circle cx="144" cy="46" r="5" stroke="#a7f3d0" stroke-width="1.5" fill="rgba(167,243,208,0.18)" />
+              <circle cx="156" cy="28" r="2.5" stroke="#a7f3d0" stroke-width="1.5" />
+
+              <!-- Bioluminescent Jellyfish (Violet/Emerald) -->
+              <g transform="translate(308, 102)">
+                <circle cx="0" cy="0" r="30" fill="#a855f7" opacity="0.22" />
+                <path d="M-18 4 C-18 -14, 18 -14, 18 4 Z" fill="#c084fc" stroke="#f3e8ff" stroke-width="1.5" />
+                <path d="M-11 4 Q-14 18 -9 28" stroke="#34d399" stroke-width="2" stroke-linecap="round" />
+                <path d="M-3 4 Q0 20 -4 32" stroke="#e879f9" stroke-width="2" stroke-linecap="round" />
+                <path d="M5 4 Q9 19 4 30" stroke="#34d399" stroke-width="2" stroke-linecap="round" />
+                <path d="M12 4 Q16 16 11 26" stroke="#e879f9" stroke-width="2" stroke-linecap="round" />
+              </g>
+            </svg>
+
+            <span class="card-badge card-badge--snorkel">
+              <span class="badge-dot"></span>
+              <span>DEEP SEA</span>
+            </span>
+            <span class="card-slot-num">#3</span>
+          </a>
+
+          <div class="card-body">
+            <div>
+              <h2 class="card-title">Snorkel to the Bottom</h2>
+              <p class="card-desc">
+                Dive into the sunlit shallows and descend into the mysterious midnight zone—watch your oxygen!
+              </p>
+              <div class="card-tags">
+                <span class="tag-chip">Exploration</span>
+                <span class="tag-chip">Survival</span>
+                <span class="tag-chip">Endless Dive</span>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <a
+                href="https://snorkel-to-the-bottom.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-game-key="3"
+                class="play-btn play-btn--snorkel"
+              >
+                <span>PLAY NOW</span>
+                <span>▶</span>
+              </a>
+              <button
+                type="button"
+                class="copy-btn"
+                data-copy-url="https://snorkel-to-the-bottom.vercel.app/"
+                title="Copy Game URL"
+                aria-label="Copy Snorkel to the Bottom URL"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span>◆</span>
+        <strong>WATSON GAMES // watsongames.vercel.app</strong>
+      </div>
+      <div>PRESS [1–3] OR CLICK PLAY NOW TO LAUNCH CABINET</div>
+    </div>
+  </footer>
+
+  <!-- Info & Vercel Folder Structure Modal -->
+  <div id="infoModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle" class="modal-title">WATSON GAMES // ARCADE INFO</h3>
+        <button id="closeModalBtn" type="button" class="modal-close" aria-label="Close modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Welcome to <strong>Watson Games</strong>! All game links open in a new browser tab. Note that sandboxed preview panes sometimes restrict external popups—once deployed to Vercel, every link opens directly.
+        </p>
+        <div class="tree-box">
+          <div class="tree-dir">watsongames/</div>
+          <div>├── index.html <span class="tree-note">(This Arcade Hub)</span></div>
+          <div>└── <span class="tree-dir">beastmaster/</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;└── index.html <span class="tree-note">(watsongames.vercel.app/beastmaster/)</span></div>
+        </div>
+        <p style="font-size: 0.8rem; color: #94a3b8;">
+          Tip: Click the copy icon next to any <strong>PLAY NOW</strong> button to copy the direct link to your clipboard.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button id="confirmModalBtn" type="button" class="modal-confirm-btn">BACK TO ARCADE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="arcadeToast" class="arcade-toast" role="status" aria-live="polite">
+    COPIED!
+  </div>
+
+  <!-- Interactive Tilt, Copy Link, Coin Counter & Keyboard Shortcuts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. 3D Perspective Card Tilt on Desktop Hover
+      const cards = document.querySelectorAll('.game-card');
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (!prefersReducedMotion) {
+        cards.forEach((card) => {
+          card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -5;
+            const rotateY = ((x - centerX) / centerX) * 5;
+
+            card.style.transform = `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-5px)`;
+          });
+
+          card.addEventListener('mouseleave', () => {
+            card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0px)';
+          });
+        });
+      }
+
+      // 2. Toast Notification Helper
+      const toastEl = document.getElementById('arcadeToast');
+      let toastTimer = null;
+
+      function showToast(msg) {
+        if (!toastEl) return;
+        toastEl.textContent = msg;
+        toastEl.classList.add('is-visible');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toastEl.classList.remove('is-visible');
+        }, 1900);
+      }
+
+      // 3. Copy URL Buttons (using execCommand for universal iFrame/browser support)
+      document.querySelectorAll('[data-copy-url]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const url = btn.getAttribute('data-copy-url');
+          if (!url) return;
+          const temp = document.createElement('input');
+          temp.value = url;
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand('copy');
+          document.body.removeChild(temp);
+          showToast('COPIED! ' + url.replace('https://', ''));
+        });
+      });
+
+      // 4. Insert Coin Counter
+      const coinBtn = document.getElementById('coinBtn');
+      const creditCount = document.getElementById('creditCount');
+      let credits = 99;
+
+      if (coinBtn && creditCount) {
+        coinBtn.addEventListener('click', () => {
+          credits = credits >= 99 ? 1 : credits + 1;
+          creditCount.textContent = `[${String(credits).padStart(2, '0')}]`;
+          showToast('+1 CREDIT INSERTED!');
+        });
+      }
+
+      // 5. Info Modal Controls
+      const infoModal = document.getElementById('infoModal');
+      const infoBtn = document.getElementById('infoBtn');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const confirmModalBtn = document.getElementById('confirmModalBtn');
+
+      function openModal() {
+        if (infoModal) infoModal.classList.add('is-open');
+      }
+      function closeModal() {
+        if (infoModal) infoModal.classList.remove('is-open');
+      }
+
+      if (infoBtn) infoBtn.addEventListener('click', openModal);
+      if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+      if (confirmModalBtn) confirmModalBtn.addEventListener('click', closeModal);
+      if (infoModal) {
+        infoModal.addEventListener('click', (e) => {
+          if (e.target === infoModal) closeModal();
+        });
+      }
+
+      // 6. Keyboard Shortcuts (1, 2, 3 to launch games; Esc to close modal)
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeModal();
+          return;
+        }
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const link = document.querySelector(`a[data-game-key="${e.key}"]`);
+        if (link) {
+          window.open(link.href, '_blank', 'noopener,noreferrer');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
