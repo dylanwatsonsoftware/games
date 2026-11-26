@@ -250,6 +250,12 @@
     </div>
   </div>
 
+  <!-- ==================== CINEMATIC CUTSCENE LETTERBOX ==================== -->
+  <div id="cinema-bar-top" class="pointer-events-none fixed top-0 left-0 right-0 h-14 sm:h-16 bg-black z-40 transform -translate-y-full transition-transform duration-300"></div>
+  <div id="cinema-bar-bottom" class="pointer-events-none fixed bottom-0 left-0 right-0 h-16 sm:h-20 bg-black z-40 transform translate-y-full transition-transform duration-300 flex items-center justify-center px-4">
+    <div id="cinema-caption" class="text-xs sm:text-base font-black tracking-widest uppercase text-amber-300 text-center"></div>
+  </div>
+
   <!-- ==================== GAME OVER / VICTORY MODAL ==================== -->
   <div id="result-modal" class="hidden absolute inset-0 z-40 bg-slate-950/75 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-700">
@@ -812,7 +818,7 @@
   worldGroup.visible = false;
   scene.add(worldGroup);
 
-  const ARENA_RADIUS = 240;
+  const ARENA_RADIUS = 380;
   const obstacles = [];
   const rings = [];
   const clouds = [];
@@ -1137,6 +1143,33 @@
   let enemyProjectiles = [];
   let particles = [];
   let boss = null;
+  let cutscene = { type: null, timer: 0, burstCooldown: 0, pos: new THREE.Vector3() };
+
+  function startCutscene(type, pos, duration, caption) {
+    mode = 'CUTSCENE';
+    cutscene.type = type;
+    cutscene.timer = duration;
+    cutscene.burstCooldown = 0;
+    cutscene.pos.copy(pos);
+    flightHUD.classList.add('hidden');
+    document.getElementById('cinema-caption').textContent = caption;
+    document.getElementById('cinema-bar-top').classList.remove('-translate-y-full');
+    document.getElementById('cinema-bar-bottom').classList.remove('translate-y-full');
+  }
+
+  function endCutscene() {
+    document.getElementById('cinema-bar-top').classList.add('-translate-y-full');
+    document.getElementById('cinema-bar-bottom').classList.add('translate-y-full');
+    if (cutscene.type === 'BOSS_EXPLODE') {
+      if (boss) { scene.remove(boss.mesh); boss = null; }
+      document.getElementById('boss-bar-wrap').classList.add('hidden');
+      endGame(true);
+    } else {
+      mode = 'FLIGHT';
+      flightHUD.classList.remove('hidden');
+    }
+    cutscene.type = null;
+  }
 
   const input = {
     joyX: 0, joyY: 0,
@@ -1421,6 +1454,7 @@
       spawnBoss();
       for (let i = 0; i < 2; i++) spawnEnemy('ace');
       spawnEnemy('cruiser');
+      startCutscene('BOSS_INTRO', boss.mesh.position, 2.6, '⚠ WARNING: GREAT DANE DREADNOUGHT APPROACHING!');
     }
   }
 
@@ -1550,6 +1584,8 @@
   }
   joyZone.addEventListener('pointerup', endJoystick);
   joyZone.addEventListener('pointercancel', endJoystick);
+  joyZone.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+  joyZone.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
 
   function bindHoldButton(id, onStart, onEnd) {
     const el = document.getElementById(id);
@@ -1739,18 +1775,16 @@
   }
 
   function damageBoss(dmg) {
-    if (!boss) return;
+    if (!boss || mode === 'CUTSCENE') return;
     boss.hp = Math.max(0, boss.hp - dmg);
     updateBossHUD();
     if (boss.hp <= 0) {
-      AudioFX.playExplosion(true);
-      spawnBurst(boss.mesh.position, 0xfacc15, 45, 3.2);
-      scene.remove(boss.mesh);
-      boss = null;
       player.kills++;
       player.score += 2500;
-      document.getElementById('boss-bar-wrap').classList.add('hidden');
-      endGame(true);
+      AudioFX.playExplosion(true);
+      spawnShockwave(boss.mesh.position, new THREE.Quaternion(), 0xfacc15);
+      spawnBurst(boss.mesh.position, 0xf97316, 30, 2.8);
+      startCutscene('BOSS_EXPLODE', boss.mesh.position, 3.4, '★ DREADNOUGHT DESTROYED! +2500 ★');
     }
   }
 
@@ -1903,6 +1937,57 @@
       return;
     }
 
+    if (mode === 'CUTSCENE') {
+      cutscene.timer -= dt;
+      clouds.forEach(c => { c.mesh.position.x += c.speed * dt; if (c.mesh.position.x > 280) c.mesh.position.x = -280; });
+
+      if (boss) {
+        cutscene.pos.copy(boss.mesh.position);
+        boss.mesh.rotation.y += dt * (cutscene.type === 'BOSS_EXPLODE' ? 1.8 : 0.6);
+        boss.core.rotation.x += dt * 2.5;
+        if (cutscene.type === 'BOSS_EXPLODE') {
+          boss.mesh.rotation.z += dt * 0.45;
+          cutscene.burstCooldown -= dt;
+          if (cutscene.burstCooldown <= 0) {
+            cutscene.burstCooldown = 0.28;
+            AudioFX.playExplosion(cutscene.timer < 0.7);
+            const off = new THREE.Vector3((Math.random() - 0.5) * 18, (Math.random() - 0.5) * 9, (Math.random() - 0.5) * 18);
+            const bPos = boss.mesh.position.clone().add(off);
+            spawnBurst(bPos, Math.random() > 0.4 ? 0xfacc15 : 0xf97316, 20, 2.4);
+            spawnShockwave(bPos, new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.random()*3, Math.random()*3, 0)), 0xfde047);
+          }
+          if (cutscene.timer < 0.45) {
+            boss.mesh.scale.setScalar(Math.max(0.01, cutscene.timer * 2.2));
+          }
+        }
+      }
+
+      // Update active particles & shockwaves during cutscene
+      for (let i = shockwaves.length - 1; i >= 0; i--) {
+        const sw = shockwaves[i]; sw.life -= dt;
+        const t = 1 - sw.life / sw.maxLife;
+        sw.mesh.scale.setScalar(1 + t * 3.2);
+        sw.mesh.material.opacity = Math.max(0, 1 - t);
+        if (sw.life <= 0) { scene.remove(sw.mesh); shockwaves.splice(i, 1); }
+      }
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const pt = particles[i]; pt.life -= dt;
+        pt.mesh.position.addScaledVector(pt.vel, dt);
+        pt.mesh.scale.setScalar(Math.max(0.01, pt.life * 2.5));
+        if (pt.life <= 0) { scene.remove(pt.mesh); particles.splice(i, 1); }
+      }
+
+      // Orbiting Cinematic Camera
+      const ang = now * 0.0014;
+      const shake = cutscene.type === 'BOSS_EXPLODE' ? (Math.random() - 0.5) * 1.1 : 0;
+      camera.position.set(cutscene.pos.x + Math.cos(ang) * 34 + shake, cutscene.pos.y + 10 + shake, cutscene.pos.z + Math.sin(ang) * 34);
+      camera.lookAt(cutscene.pos);
+      renderer.render(scene, camera);
+
+      if (cutscene.timer <= 0) endCutscene();
+      return;
+    }
+
     if (mode !== 'FLIGHT') {
       renderer.render(scene, camera);
       return;
@@ -1930,13 +2015,26 @@
       }
     }
 
+    // Normalize yaw cleanly
+    while (player.yaw > Math.PI) player.yaw -= Math.PI * 2;
+    while (player.yaw < -Math.PI) player.yaw += Math.PI * 2;
+
+    // Gentle, progressive arena boundary turn-back only when flying outward
     const distFromCenter = Math.hypot(player.pos.x, player.pos.z);
     if (distFromCenter > ARENA_RADIUS) {
-      const targetYaw = Math.atan2(player.pos.x, player.pos.z);
-      let diff = targetYaw - player.yaw;
-      while (diff > Math.PI) diff -= Math.PI * 2;
-      while (diff < -Math.PI) diff += Math.PI * 2;
-      player.yaw += diff * Math.min(1, dt * 3.0);
+      const outX = player.pos.x / distFromCenter;
+      const outZ = player.pos.z / distFromCenter;
+      const fwdX = -Math.sin(player.yaw);
+      const fwdZ = -Math.cos(player.yaw);
+      const outwardDot = fwdX * outX + fwdZ * outZ;
+      if (outwardDot > 0.05) {
+        const targetYaw = Math.atan2(player.pos.x, player.pos.z);
+        let diff = targetYaw - player.yaw;
+        while (diff > Math.PI) diff -= Math.PI * 2;
+        while (diff < -Math.PI) diff += Math.PI * 2;
+        const strength = Math.min(1, (distFromCenter - ARENA_RADIUS) / 60) * 1.1;
+        player.yaw += diff * Math.min(1, dt * strength);
+      }
     }
 
     player.quat.setFromEuler(new THREE.Euler(player.pitch, player.yaw, 0, 'YXZ'));
