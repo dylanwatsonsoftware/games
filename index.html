@@ -7,7 +7,7 @@
   <!-- Google Fonts with rich system fallbacks -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Press+Start+2P&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <style>
     /* ==========================================================================
@@ -28,10 +28,11 @@
       --neon-cyan: #00f0ff;
       --neon-emerald: #10b981;
       --neon-violet: #a855f7;
+      --neon-fuchsia: #e879f9;
 
       --font-arcade: 'Press Start 2P', 'Courier New', monospace;
-      --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-display: 'Orbitron', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-body: 'Rajdhani', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     *, *::before, *::after {
@@ -352,27 +353,29 @@
     }
 
     .hero-description {
-      font-size: 1.05rem;
-      line-height: 1.65;
+      font-size: 1.15rem;
+      font-weight: 500;
+      line-height: 1.6;
       color: var(--text-secondary);
-      max-width: 620px;
+      max-width: 640px;
       margin: 0 auto 1.35rem;
     }
 
     .hero-description strong {
       color: #f1f5f9;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .shortcut-bar {
       display: inline-flex;
       align-items: center;
       gap: 0.45rem;
-      font-size: 0.76rem;
+      font-size: 0.85rem;
+      font-weight: 600;
       color: var(--text-muted);
       background: rgba(18, 22, 43, 0.75);
       border: 1px solid var(--border-subtle);
-      padding: 0.4rem 0.9rem;
+      padding: 0.4rem 0.95rem;
       border-radius: 999px;
     }
 
@@ -394,22 +397,18 @@
     }
 
     /* ==========================================================================
-       5. GAME SHOWCASE GRID & 3D NEON CABINET CARDS
+       5. GAME SHOWCASE GRID & 3D NEON CABINET CARDS (2x2 Desktop, 1-Col Mobile)
        ========================================================================== */
     .games-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.75rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.85rem;
       align-items: stretch;
+      max-width: 1060px;
+      margin: 0 auto;
     }
 
-    @media (max-width: 1024px) {
-      .games-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 680px) {
+    @media (max-width: 760px) {
       .games-grid {
         grid-template-columns: 1fr;
       }
@@ -452,6 +451,11 @@
     .game-card--beastmaster {
       --card-accent: #ff2a85;
       --card-glow: rgba(255, 42, 133, 0.38);
+    }
+
+    .game-card--origami {
+      --card-accent: #c084fc;
+      --card-glow: rgba(168, 85, 247, 0.42);
     }
 
     .game-card--floorball {
@@ -528,6 +532,16 @@
       box-shadow: 0 0 8px var(--neon-amber);
     }
 
+    .card-badge--origami {
+      color: #f0abfc;
+      border: 1px solid rgba(192, 132, 252, 0.7);
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
+    }
+    .card-badge--origami .badge-dot {
+      background: var(--neon-amber);
+      box-shadow: 0 0 8px var(--neon-amber);
+    }
+
     .card-badge--floorball {
       color: var(--neon-cyan);
       border: 1px solid rgba(0, 240, 255, 0.65);
@@ -579,21 +593,24 @@
 
     .card-title {
       font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 1.42rem;
+      font-weight: 800;
+      font-size: 1.32rem;
       line-height: 1.25;
+      letter-spacing: 0.01em;
       color: #ffffff;
       margin-bottom: 0.65rem;
       transition: color 0.2s ease;
     }
 
     .game-card--beastmaster:hover .card-title { color: #ff6ba9; }
+    .game-card--origami:hover .card-title { color: #e879f9; }
     .game-card--floorball:hover .card-title { color: #5ceeff; }
     .game-card--snorkel:hover .card-title { color: #34d399; }
 
     .card-desc {
-      font-size: 0.92rem;
-      line-height: 1.6;
+      font-size: 1.02rem;
+      font-weight: 500;
+      line-height: 1.55;
       color: var(--text-secondary);
       margin-bottom: 1.15rem;
     }
@@ -607,12 +624,13 @@
     }
 
     .tag-chip {
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 0.28rem 0.65rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 0.26rem 0.65rem;
       border-radius: 6px;
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       color: #cbd5e1;
     }
 
@@ -655,6 +673,15 @@
     }
     .play-btn--beastmaster:hover {
       box-shadow: 0 8px 28px rgba(255, 42, 133, 0.62);
+    }
+
+    .play-btn--origami {
+      background: linear-gradient(135deg, #a855f7 0%, #ec4899 55%, #f59e0b 100%);
+      color: #ffffff;
+      box-shadow: 0 6px 22px rgba(168, 85, 247, 0.42);
+    }
+    .play-btn--origami:hover {
+      box-shadow: 0 8px 28px rgba(232, 121, 249, 0.62);
     }
 
     .play-btn--floorball {
@@ -941,11 +968,12 @@
         <kbd class="kbd-key">1</kbd>
         <kbd class="kbd-key">2</kbd>
         <kbd class="kbd-key">3</kbd>
+        <kbd class="kbd-key">4</kbd>
         <span>on your keyboard</span>
       </div>
     </section>
 
-    <!-- Game Showcase Grid -->
+    <!-- Game Showcase Grid (2x2 on Desktop) -->
     <section class="games-grid" aria-label="Watson Games Library">
 
       <!-- =================================================================
@@ -1044,9 +1072,9 @@
                 Leap, swing, and conquer a relentless neon obstacle course built for speed and precision.
               </p>
               <div class="card-tags">
-                <span class="tag-chip">2D Platformer</span>
-                <span class="tag-chip">Obstacle Course</span>
-                <span class="tag-chip">Time Trial</span>
+                <span class="tag-chip">2D PLATFORMER</span>
+                <span class="tag-chip">OBSTACLE COURSE</span>
+                <span class="tag-chip">TIME TRIAL</span>
               </div>
             </div>
 
@@ -1079,7 +1107,133 @@
       </article>
 
       <!-- =================================================================
-           CARD 2: Floorball Frenzy
+           CARD 2: Origami Wing
+           ================================================================= -->
+      <article class="card-perspective">
+        <div class="game-card game-card--origami">
+          <a href="https://watsongames.vercel.app/origamiwing/" target="_blank" rel="noopener noreferrer" class="card-banner-link" aria-label="Play Origami Wing">
+            <!-- Custom SVG Artwork: Geometric Folded-Paper Origami Wing Gliding Over Neon Peaks & Clouds -->
+            <svg class="card-banner-svg" viewBox="0 0 420 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="owBg" x1="0" y1="0" x2="420" y2="220" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#14092a" />
+                  <stop offset="52%" stop-color="#251047" />
+                  <stop offset="100%" stop-color="#100821" />
+                </linearGradient>
+                <radialGradient id="owSun" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.85" />
+                  <stop offset="45%" stop-color="#ec4899" stop-opacity="0.35" />
+                  <stop offset="100%" stop-color="#a855f7" stop-opacity="0" />
+                </radialGradient>
+                <linearGradient id="owWind" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#f0abfc" stop-opacity="0" />
+                  <stop offset="50%" stop-color="#e879f9" stop-opacity="0.85" />
+                  <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.95" />
+                </linearGradient>
+                <linearGradient id="owWingTop" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="100%" stop-color="#f3e8ff" />
+                </linearGradient>
+                <linearGradient id="owWingFold" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#d8b4fe" />
+                  <stop offset="100%" stop-color="#a855f7" />
+                </linearGradient>
+              </defs>
+
+              <!-- Twilight Sky Backdrop -->
+              <rect width="420" height="220" fill="url(#owBg)" />
+
+              <!-- Glowing Golden/Fuchsia Horizon Sun -->
+              <circle cx="318" cy="76" r="78" fill="url(#owSun)" />
+              <circle cx="318" cy="76" r="24" fill="#fde68a" opacity="0.9" />
+
+              <!-- Geometric Faceted Origami Mountain Peaks -->
+              <polygon points="0,220 78,128 156,220" fill="#170b30" stroke="#7e22ce" stroke-width="1.5" />
+              <polygon points="78,128 112,220 156,220" fill="#110724" />
+              <polygon points="118,220 212,114 304,220" fill="#1e0f3d" stroke="#a855f7" stroke-width="1.5" />
+              <polygon points="212,114 256,220 304,220" fill="#130829" />
+              <polygon points="262,220 356,134 420,206 420,220" fill="#180c33" stroke="#ec4899" stroke-width="1.5" />
+
+              <!-- Low-Poly Neon Cloud Clusters -->
+              <g opacity="0.88">
+                <polygon points="26,74 52,58 84,62 98,78 20,78" fill="#2e1065" stroke="#c084fc" stroke-width="1.4" />
+                <polygon points="315,152 344,136 382,140 398,156 306,156" fill="#3b0764" stroke="#f0abfc" stroke-width="1.4" />
+              </g>
+
+              <!-- Swirling Wind Slipstream Ribbons -->
+              <path d="M18 138 Q95 112 168 124" stroke="url(#owWind)" stroke-width="2.5" stroke-linecap="round" fill="none" />
+              <path d="M36 154 Q112 132 184 138" stroke="#fbbf24" stroke-width="1.6" stroke-dasharray="8 6" stroke-linecap="round" opacity="0.8" fill="none" />
+              <path d="M254 88 Q322 68 394 78" stroke="#f0abfc" stroke-width="1.8" stroke-dasharray="6 6" stroke-linecap="round" opacity="0.7" fill="none" />
+
+              <!-- Geometric Folded-Paper Origami Crane / Glider -->
+              <g transform="translate(152, 54) rotate(-8)">
+                <!-- Soft Outer Aura -->
+                <polygon points="14,56 124,36 48,78" fill="#e879f9" opacity="0.24" />
+                <!-- Far Rear Wing -->
+                <polygon points="44,44 68,4 82,42" fill="#c084fc" stroke="#f5d0fe" stroke-width="1.4" stroke-linejoin="round" />
+                <!-- Tail Fin -->
+                <polygon points="6,64 38,44 44,56" fill="#e879f9" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" />
+                <!-- Main Fuselage & Fold Crease -->
+                <polygon points="24,56 124,36 52,66" fill="url(#owWingTop)" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round" />
+                <polygon points="32,61 124,36 56,74" fill="url(#owWingFold)" stroke="#f0abfc" stroke-width="1.4" stroke-linejoin="round" />
+                <!-- Foreground Swept Origami Wing -->
+                <polygon points="46,56 96,46 62,94" fill="#ffffff" stroke="#fbbf24" stroke-width="1.8" stroke-linejoin="round" />
+                <polygon points="46,56 76,50 62,94" fill="#f3e8ff" opacity="0.85" />
+                <!-- Golden Nose Tip Highlight -->
+                <polygon points="104,40 124,36 106,44" fill="#fbbf24" />
+              </g>
+            </svg>
+
+            <span class="card-badge card-badge--origami">
+              <span class="badge-dot"></span>
+              <span>NEW // FLIGHT</span>
+            </span>
+            <span class="card-slot-num">#2</span>
+          </a>
+
+          <div class="card-body">
+            <div>
+              <h2 class="card-title">Origami Wing</h2>
+              <p class="card-desc">
+                Catch rising thermals, thread needle-sharp canyons, and glide a precision-folded paper glider through neon skies.
+              </p>
+              <div class="card-tags">
+                <span class="tag-chip">ARCADE</span>
+                <span class="tag-chip">FLIGHT</span>
+                <span class="tag-chip">PAPER CRAFT</span>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <a
+                href="https://watsongames.vercel.app/origamiwing/"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-game-key="2"
+                class="play-btn play-btn--origami"
+              >
+                <span>PLAY NOW</span>
+                <span>▶</span>
+              </a>
+              <button
+                type="button"
+                class="copy-btn"
+                data-copy-url="https://watsongames.vercel.app/origamiwing/"
+                title="Copy Game URL"
+                aria-label="Copy Origami Wing URL"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- =================================================================
+           CARD 3: Floorball Frenzy
            ================================================================= -->
       <article class="card-perspective">
         <div class="game-card game-card--floorball">
@@ -1149,7 +1303,7 @@
               <span class="badge-dot"></span>
               <span>MULTIPLAYER</span>
             </span>
-            <span class="card-slot-num">#2</span>
+            <span class="card-slot-num">#3</span>
           </a>
 
           <div class="card-body">
@@ -1159,9 +1313,9 @@
                 Fast-paced top-down arcade floorball action. Deke past defenders and fire top-corner rockets.
               </p>
               <div class="card-tags">
-                <span class="tag-chip">Sports Arcade</span>
-                <span class="tag-chip">Multiplayer</span>
-                <span class="tag-chip">Pixel Action</span>
+                <span class="tag-chip">SPORTS ARCADE</span>
+                <span class="tag-chip">MULTIPLAYER</span>
+                <span class="tag-chip">PIXEL ACTION</span>
               </div>
             </div>
 
@@ -1170,7 +1324,7 @@
                 href="https://floorball-frenzy.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                data-game-key="2"
+                data-game-key="3"
                 class="play-btn play-btn--floorball"
               >
                 <span>PLAY NOW</span>
@@ -1194,7 +1348,7 @@
       </article>
 
       <!-- =================================================================
-           CARD 3: Snorkel to the Bottom
+           CARD 4: Snorkel to the Bottom
            ================================================================= -->
       <article class="card-perspective">
         <div class="game-card game-card--snorkel">
@@ -1267,7 +1421,7 @@
               <span class="badge-dot"></span>
               <span>DEEP SEA</span>
             </span>
-            <span class="card-slot-num">#3</span>
+            <span class="card-slot-num">#4</span>
           </a>
 
           <div class="card-body">
@@ -1277,9 +1431,9 @@
                 Dive into the sunlit shallows and descend into the mysterious midnight zone—watch your oxygen!
               </p>
               <div class="card-tags">
-                <span class="tag-chip">Exploration</span>
-                <span class="tag-chip">Survival</span>
-                <span class="tag-chip">Endless Dive</span>
+                <span class="tag-chip">EXPLORATION</span>
+                <span class="tag-chip">SURVIVAL</span>
+                <span class="tag-chip">ENDLESS DIVE</span>
               </div>
             </div>
 
@@ -1288,7 +1442,7 @@
                 href="https://snorkel-to-the-bottom.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                data-game-key="3"
+                data-game-key="4"
                 class="play-btn play-btn--snorkel"
               >
                 <span>PLAY NOW</span>
@@ -1321,7 +1475,7 @@
         <span>◆</span>
         <strong>WATSON GAMES // watsongames.vercel.app</strong>
       </div>
-      <div>PRESS [1–3] OR CLICK PLAY NOW TO LAUNCH CABINET</div>
+      <div>PRESS [1–4] OR CLICK PLAY NOW TO LAUNCH CABINET</div>
     </div>
   </footer>
 
@@ -1344,11 +1498,13 @@
         <div class="tree-box">
           <div class="tree-dir">watsongames/</div>
           <div>├── index.html <span class="tree-note">(This Arcade Hub)</span></div>
-          <div>└── <span class="tree-dir">beastmaster/</span></div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;└── index.html <span class="tree-note">(watsongames.vercel.app/beastmaster/)</span></div>
+          <div>├── <span class="tree-dir">beastmaster/</span></div>
+          <div>│&nbsp;&nbsp;&nbsp;└── index.html <span class="tree-note">(watsongames.vercel.app/beastmaster/)</span></div>
+          <div>└── <span class="tree-dir">origamiwing/</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;└── index.html <span class="tree-note">(watsongames.vercel.app/origamiwing/)</span></div>
         </div>
-        <p style="font-size: 0.8rem; color: #94a3b8;">
-          Tip: Click the copy icon next to any <strong>PLAY NOW</strong> button to copy the direct link to your clipboard.
+        <p style="font-size: 0.85rem; color: #94a3b8;">
+          Tip: Press keys <strong>1–4</strong> on your keyboard or click the copy icon next to any <strong>PLAY NOW</strong> button to copy the direct link.
         </p>
       </div>
       <div class="modal-footer">
